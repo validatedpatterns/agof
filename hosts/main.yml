@@ -1,0 +1,6 @@
+---
+- name: "Configure controller"
+  hosts: aap_controllers
+  gather_facts: true
+  become: true
+  tasks: []

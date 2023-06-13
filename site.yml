@@ -1,0 +1,10 @@
+---
+- name: "Phase 1 - initialize the environment"
+  ansible.builtin.import_playbook: ./init_env/main.yml
+  tags:
+  - tags_phase_1
+
+- name: "Phase 2 - bootstrap ansible controller and automation hub"
+  ansible.builtin.import_playbook: ./hosts/main.yml
+  tags:
+  - tags_phase_2
