@@ -24,7 +24,7 @@
   become: false
   gather_facts: false
   vars_files:
-    - "~/rhisbuilder_vault.yml"
+    - "~/agof_vault.yml"
     - "vars/aws_vars.yml"
   vars:
     ec2_wait: false

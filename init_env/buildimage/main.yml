@@ -7,7 +7,7 @@
   vars_files:
     - ../vars/builder_vars.yml
     - ../vars/builder_vault.yml
-    - ~/rhisbuilder_vault.yml
+    - ~/agof_vault.yml
 
   tasks:
     - name: "Get the imagebuilder image"

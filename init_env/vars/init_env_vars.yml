@@ -5,7 +5,7 @@ bootstrap_allowable_values:
   - "vmware"
   - "aws"
 
-rhisbuilder_bootstrap_target: "vmware"
+agof_bootstrap_target: "aws"
 
 ansible_cfg_log_path: '~/lab_builder_ansible.log'
 ansible_cfg_vault_password_path: '~/.ansible/vault.txt'

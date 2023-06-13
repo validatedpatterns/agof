@@ -6,7 +6,7 @@
   gather_facts: false
   vars_files:
     - "./vars/init_env_vars.yml"
-    - "~/rhisbuilder_vault.yml"
+    - "~/agof_vault.yml"
   tasks:
     - name: "Write ansible.cfg"
       ansible.builtin.template:
@@ -31,11 +31,11 @@
     - name: "Assert that we have a valid target platform"
       ansible.builtin.assert:
         that:
-          - rhisbuilder_bootstrap_target | length > 0
-          - rhisbuilder_bootstrap_target in bootstrap_allowable_values
-        fail_msg: "{{ rhisbuilder_bootstrap_target }} is not a supported bootstrap target"
-        success_msg: "Assertion passed: bootstrapping on {{ rhisbuilder_bootstrap_target }}"
+          - agof_bootstrap_target | length > 0
+          - agof_bootstrap_target in bootstrap_allowable_values
+        fail_msg: "{{ agof_bootstrap_target }} is not a supported bootstrap target"
+        success_msg: "Assertion passed: bootstrapping on {{ agof_bootstrap_target }}"
 
     - name: "Set our target bootstrap platform"
       ansible.builtin.set_fact:
-        bootstrap_target: "{{ rhisbuilder_bootstrap_target }}"
+        bootstrap_target: "{{ agof_bootstrap_target }}"
