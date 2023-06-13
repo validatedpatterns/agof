@@ -1,0 +1,29 @@
+- name: "Initialize the environment"
+  hosts: localhost
+  connection: local
+  become: false
+  gather_facts: false
+  vars_files:
+    - "./vars/init_env_vars.yml"
+    - "~/rhisbuilder_vault.yml"
+- name: "Set variables"
+  ansible.builtin.import_playbook: "./pre_init_env.yml"
+  tags:
+    - tags_pre_init
+
+- name: "Build the image"
+  ansible.builtin.import_playbook: "./buildimage/main.yml"
+  tags:
+    - tags_buildimage
+
+- name: "Initialize the environment on vmware"
+  ansible.builtin.import_playbook: "./vmware/main.yml"
+  tags:
+    - tags_vmware_init_env
+  when: rhisbuilder_bootstrap_target == "vmware"
+
+- name: "Initialize the environment on aws"
+  ansible.builtin.import_playbook: "./aws/main.yml"
+  tags:
+    - tags_aws_init_env
+  when: rhisbuilder_bootstrap_target == "aws"

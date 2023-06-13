@@ -1,0 +1,88 @@
+---
+# AWS specific initialization starts here
+- name: "AWS specific initialization"
+  hosts: build_control
+  connection: local
+  become: false
+  vars_files:
+    - "~/agof_vault.yml"
+    - "vars/aws_vars.yml"
+  vars:
+    ec2_wait: true
+  tasks:
+    - name: collection final check
+      block:
+        - name: run AWS check setup if using AWS
+          ansible.builtin.include_role:
+            name: roles/aws_check_setup
+
+      rescue:
+        - name: Error with setup
+          fail:
+            msg: The provisioner has failed during initial check_setup, please scroll up to see exact error.
+
+    - name: Provision network stuff
+      ansible.builtin.include_role:
+        name: roles/manage_ec2_infra
+
+    - name: Build idm and satellite VMs
+      ansible.builtin.include_role:
+        name: roles/build_initial_servers
+
+      # This also provides idm_instance and sat_instance facts
+    - name: Build inventory for subsequent plays
+      ansible.builtin.include_role:
+        name: roles/build_bootstrap_inventory
+
+    - name: Manage DNS entries
+      ansible.builtin.include_role:
+        name: roles/manage_route53_dns
+      when: manage_public_dns
+
+    - name: Wait for EC2 servers to be available
+      ansible.builtin.wait_for:
+        host: "{{ item }}"
+        port: 22
+      loop:
+        - "{{ aap_instance['public_ip_address'] }}"
+        - "{{ hub_instance['public_ip_address'] }}"
+
+- name: Post-provisioning tasks
+  hosts: aws_nodes
+  become: true
+  gather_facts: true
+  vars_files:
+    - "vars/aws_vars.yml"
+    - "~/agof_vault.yml"
+  vars:
+    aap_info: "{{ hostvars['localhost']['aap_instance'] }}"
+    hub_info: "{{ hostvars['localhost']['hub_instance'] }}"
+  tasks:
+    - name: Set facts
+      ansible.builtin.set_fact:
+        idm_ip: "{{ idm_info.private_ip_address }}"
+        ipaserver_ip_addresses: "{{ idm_info.private_ip_address }}"
+        ipaclient_configure_dns_resolver: false
+
+    - name: 'Ensure hostname-setting can persist (thanks, cloud-init)'
+      ansible.builtin.lineinfile:
+        path: '/etc/cloud/cloud.cfg'
+        regexp: '^\s*preserve_hostname:'
+        line: 'preserve_hostname: true'
+
+    - name: Set hostnames
+      ansible.builtin.hostname:
+        name: '{{ short_hostname }}.{{ ipa_server_domain }}'
+
+    - name: Set /etc/hosts
+      ansible.builtin.copy:
+        content: |
+          127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+          ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+          {{ aap_info.private_ip_address }}       aap.{{ ipa_server_domain }} aap tower
+          {{ hub_info.private_ip_address }}       hub.{{ ipa_server_domain }} hub
+        dest: /etc/hosts
+        owner: root
+        group: root
+        mode: '0644'

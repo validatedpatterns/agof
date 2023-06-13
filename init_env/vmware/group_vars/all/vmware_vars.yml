@@ -1,0 +1,19 @@
+---
+# These are the necessary vmware vcenter parameters.
+# We are providing for a minimal cluster configuration
+# More complicated VMware configurations are left as an exercise for the user
+vcenter_hostname: "vcenter.parmstrong.ca"
+vcenter_username: "{{ vcenter_username_vault }}"
+vcenter_password: "{{ vcenter_password_vault }}"
+vcenter_datacenter: "parmstrong.ca"
+vcenter_cluster: "NUCLab"
+vcenter_datastore: "NAS1_VMS"
+vcenter_system_datastore: "NAS1_VCENTER"
+vcenter_base_folder_path: "base"
+vcenter_resource_pool: "/parmstrong.ca/host/NUCLab/Resources"
+vcenter_network: "VM Network"
+vcenter_skip_certs: 1
+
+build_gateway: "192.168.252.1"
+build_netmask: "255.255.252.0"
+

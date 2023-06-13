@@ -1,0 +1,23 @@
+#cloud-config
+password: pa553ord
+ssh_pwauth: True
+users:
+  - default
+  - name: ansiblerunner 
+    groups: users,wheel
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    ssh_pwauth: True
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB... ansiblerunner@example.ca
+chpasswd:
+  list: |
+    root:pa553ord
+    cloud-user:pa553ord
+    ansiblerunner:pa553ord
+  expire: False
+runcmd:
+  - nmcli conn mod "System eth0" ipv4.method static ipv4.address 192.168.254.12/22 ipv4.gateway 192.168.252.1 ipv4.dns 8.8.8.8
+  - hostnamectl set-hostname sat.example.ca
+  - nmcli conn up "System eth0"
+  - echo idm.example.ca 192.168.254.5 >> /etc/hosts
+  - echo sat.example.ca 192.168.254.12 >> /etc/hosts

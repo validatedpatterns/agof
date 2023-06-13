@@ -1,0 +1,20 @@
+---
+# Create you idm_metadata.yml and idm_userdata.yml files to configure your vm via cloud-init
+
+# NOTE: Copying to the target folder takes time as the system flatens the image by default
+# Some enterprising individual will figure out a way to speed this up, but as we intend to use this process only once, we aren't worrying about it
+
+idm_ip: "192.168.254.5"
+idm_fqdn: "idm.example.ca"
+
+idm_cpu_cores_per_socket: 1
+idm_cpu_sockets: 1
+idm_memory_mb: 8192
+idm_network_device_type: "vmxnet3"
+idm_network_config_type: "static"
+idm_hot_cpu_add: true
+idm_hot_memory_add: true
+
+idm_cloud_init_metadata: "{{ idm_cloud_init_metadata_vault }}"
+idm_cloud_init_userdata: "{{ idm_cloud_init_userdata_vault }}"
+idm_rootdisk_size_gb: "150"

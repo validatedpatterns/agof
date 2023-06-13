@@ -1,0 +1,24 @@
+#cloud-config
+password: Legend2013
+ssh_pwauth: True
+users:
+  - default
+  - name: ansiblerunner 
+    groups: users,wheel
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    ssh_pwauth: True
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDBBBV7Yz0pjDyAiivaq/zclINW0SpQgc4Alz+X8o8EWLA5K/myoJLTiGN9Bt/jd6JMwLzH2B14b72zQ1VzpY8qw8vXccr16xzsIAqeh0P1M82Pa+dB0UjDZHOA97AZZPz8PVr8081XGMWmvTtmdt5nWDiJRTV+cpXyhhdBZT4GOV+XkzJH9L6ShoG2nHwfFuy+o4HjYxFmxJ8qEghGdPsQXeApqDDiFC8x8DhjeAaunLguY3yc0enjZoRyJngpAcdLfDuCQF1I7z5TND/VNT2uIxGiC52z/qH/JgvSEQ07VudpQRCh0HHfA08XuOUHTZOIcUjxRZvKdxy0Ur/x6GQ5 ansiblerunner@parmstrong.ca
+chpasswd:
+  list: |
+    root:Legend2013
+    cloud-user:Legend2013
+    ansiblerunner:Legend2013
+  expire: False
+runcmd:
+  - nmcli conn mod "System eth0" ipv4.method static ipv4.address 192.168.254.12/22 ipv4.gateway 192.168.252.1 ipv4.dns 8.8.8.8
+  - hostnamectl set-hostname sat.example.ca
+  - nmcli conn up "System eth0"
+  - echo idm.example.ca 192.168.254.5 >> /etc/hosts
+  - echo sat.example.ca 192.168.254.12 >> /etc/hosts
+  - subscription-manager register --force --org=6856506 --activationkey=build_control

@@ -1,0 +1,41 @@
+---
+# Create you idm_metadata.yml and idm_userdata.yml files to configure your vm via cloud-init
+# There are bugs that we work around - see the sample files
+# The commands below will inject the appropriate values into the end of this file.
+# Make sure to comment out or delete the existing ones first.
+
+
+sat_ip: "192.168.254.12"
+sat_fqdn: "sat.example.ca"
+
+sat_cpu_cores_per_socket: 1
+sat_cpu_sockets: 2
+sat_memory_mb: 24576
+sat_network_device_type: "vmxnet3"
+sat_network_config_type: "static"
+sat_hot_cpu_add: true
+sat_hot_memory_add: true
+
+sat_cloud_init_metadata: "{{ sat_cloud_init_metadata_vault }}"
+sat_cloud_init_userdata: "{{ sat_cloud_init_userdata_vault }}"
+
+# the imagebuilder image will always have rootvg with /dev/sda3 as the first pv
+# our code adds disks starting with /dev/sdb
+sat_data_disk_size_mb: 524288
+sat_data_disk_scsi_controller: 0
+sat_data_disk_unit_number: 1
+sat_data_disk_type: "thick"
+sat_data_disk_scsi_type: "paravirtual"
+sat_data_disk_disk_mode: "persistent"
+
+sat_pv_list:
+  - "/dev/sda3" 
+  - "/dev/sdb"
+
+sat_rootdisk_size_gb: "400"
+sat_var_size_gb: "300G"
+sat_var_log_size_gb: "4G"
+sat_var_log_audit_size_gb: "4G"
+sat_var_tmp_size_gb: "4G"
+sat_tmp_size_gb: "4G"
+sat_home_size_gb: "20G"
