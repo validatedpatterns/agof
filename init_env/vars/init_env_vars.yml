@@ -2,7 +2,6 @@
 # variables controlling environment initialization
 # control the target platform for first 2 nodes
 bootstrap_allowable_values:
-  - "vmware"
   - "aws"
 
 agof_bootstrap_target: "aws"
@@ -18,5 +17,4 @@ automation_hub_token: '{{ automation_hub_token_vault }}'
 init_env_collection_install: true
 init_env_collection_install_force: false
 
-special_collection_installs:
-  - 'redhat-satellite-3.9.0-dev.tar.gz'
+special_collection_installs: []

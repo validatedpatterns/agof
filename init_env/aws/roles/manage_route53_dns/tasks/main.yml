@@ -10,7 +10,5 @@
     value: "{{ item.public_ip_address }}"
     wait: true
   loop:
-    - '{{ idm_instance }}'
-    - '{{ sat_instance }}'
     - '{{ aap_instance }}'
     - '{{ hub_instance }}'

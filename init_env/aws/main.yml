@@ -58,11 +58,18 @@
     aap_info: "{{ hostvars['localhost']['aap_instance'] }}"
     hub_info: "{{ hostvars['localhost']['hub_instance'] }}"
   tasks:
-    - name: Set facts
-      ansible.builtin.set_fact:
-        idm_ip: "{{ idm_info.private_ip_address }}"
-        ipaserver_ip_addresses: "{{ idm_info.private_ip_address }}"
-        ipaclient_configure_dns_resolver: false
+#    - name: Set facts
+#      ansible.builtin.set_fact:
+#        idm_ip: "{{ idm_info.private_ip_address }}"
+#        ipaserver_ip_addresses: "{{ idm_info.private_ip_address }}"
+#        ipaclient_configure_dns_resolver: false
+
+    - name: "Ensure remote tmp directory"
+      ansible.builtin.file:
+        path: '{{ aws_remote_tmp }}'
+        mode: '0700'
+        owner: '{{ ansible_user }}'
+        recurse: true
 
     - name: 'Ensure hostname-setting can persist (thanks, cloud-init)'
       ansible.builtin.lineinfile:

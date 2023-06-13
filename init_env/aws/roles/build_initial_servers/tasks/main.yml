@@ -1,10 +1,4 @@
 ---
-- name: Provision idm machine
-  ansible.builtin.include_tasks: create_idm_ec2.yml
-
-- name: Provision satellite machine
-  ansible.builtin.include_tasks: create_sat_ec2.yml
-
 - name: Provision aap machine
   ansible.builtin.include_tasks: create_aap_ec2.yml
 

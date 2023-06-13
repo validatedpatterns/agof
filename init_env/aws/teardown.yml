@@ -46,8 +46,6 @@
         wait: true
       when: manage_public_dns
       loop:
-        - 'idm'
-        - 'sat'
         - 'aap'
         - 'hub'
 
