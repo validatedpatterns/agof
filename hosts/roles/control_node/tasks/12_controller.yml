@@ -74,6 +74,12 @@
 
 ## Execution environments
 
+- name: Remove ansible tmpdir
+  ansible.builtin.file:
+    path: '{{ ansible_remote_tmp }}'
+    state: absent
+    recurse: true
+
 - name: Login to redhat registry
   containers.podman.podman_login:
     username: '{{ redhat_username }}'
@@ -97,6 +103,12 @@
   until: podman_pull_supported is not failed
   retries: 5
   delay: 15
+
+- name: Remove ansible tmpdir
+  ansible.builtin.file:
+    path: '{{ ansible_remote_tmp }}'
+    state: absent
+    recurse: true
 
 - name: create container registry credential
   awx.awx.credential:
