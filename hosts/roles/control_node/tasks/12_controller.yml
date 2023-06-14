@@ -35,12 +35,13 @@
     msg: '{{ check2.json }}'
 
 - name: load license block
+  when: manifest_content is not defined
   block:
     - name: check for base64 variable first
-      copy:
+      local_action:
+        module: copy
         dest: '{{ playbook_dir }}/manifest.zip'
         content: '{{ base64_manifest | b64decode }}'
-      delegate_to: localhost
       become: false
       when: base64_manifest is defined
     - name: unable to load base64_manifest
@@ -53,6 +54,9 @@
         src: "{{ playbook_dir }}/manifest.zip"
       register: manifest_file
       become: false
+    - name: set manifest content
+      set_fact:
+        manifest_content: '{{ manifest_file.content }}'
 
 - name: Post manifest file
   uri:
@@ -60,7 +64,7 @@
     method: POST
     user: admin
     password: "{{ admin_password }}"
-    body: '{ "eula_accepted": true, "manifest": "{{ manifest_file.content }}" }'
+    body: '{ "eula_accepted": true, "manifest": "{{ manifest_content }}" }'
     body_format: json
     validate_certs: false
     force_basic_auth: true
