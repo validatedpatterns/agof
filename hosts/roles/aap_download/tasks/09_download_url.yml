@@ -1,6 +1,5 @@
 ---
 - name: Download aap.tar.gz from specified URL
-  delegate_to: localhost
   block:
     - name: Enforce use of user/password for AAP download
       ansible.builtin.assert:

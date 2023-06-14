@@ -22,13 +22,12 @@
 # curl -H "Authorization: Bearer $token"  "https://api.access.redhat.com/management/v1/images/{{ provided_sha_value }}/download"
 # curl -H "Authorization: Bearer $token"  "https://api.access.redhat.com/management/v1/images/0046367b76d7c3aca0d311a05935acd667438dfe9640db16f5027952d46dc470/download"
 - name: Download aap.tar.gz
-  delegate_to: localhost
   get_url:
     url: "https://api.access.redhat.com/management/v1/images/{{ provided_sha_value }}/download"
     headers:
       accept: "application/json"
       Authorization: "Bearer {{ temp_token.json.access_token }}"
-    dest: "{{ playbook_dir }}/aap.tar.gz"
+    dest: "/root/aap.tar.gz"
     checksum: "sha256: {{ provided_sha_value }}"
   register: download_aap_tarball
   until: download_aap_tarball is not failed

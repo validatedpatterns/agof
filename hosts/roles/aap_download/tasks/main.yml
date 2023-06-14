@@ -33,7 +33,7 @@
 
 - name: check if aap.tar.gz again (post download)
   stat:
-    path: "{{ playbook_dir }}/aap.tar.gz"
+    path: "/root/aap.tar.gz"
     checksum_algorithm: sha256
   register: stat_var
 
