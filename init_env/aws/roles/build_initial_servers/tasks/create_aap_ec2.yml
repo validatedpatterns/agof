@@ -22,7 +22,7 @@
       owner: "{{ aws_user }}"
       Info: "AWS_USERNAME that provisioned this-> {{ aws_user }}"
       short_name: "aap"
-      username: "{{ ec2_info['rhel'].username }}"
+      username: "{{ ec2_info['aap'].username | default('ec2-user') }}"
     wait: "{{ ec2_wait }}"
     vpc_subnet_id: "{{ ec2_vpc_subnet_id }}"
     volumes:
