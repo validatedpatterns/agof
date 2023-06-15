@@ -1,7 +1,6 @@
 ---
 # These are the collections required by the builder
 collections:
-
 - awx.awx
 - ansible.controller
 - ansible.netcommon
