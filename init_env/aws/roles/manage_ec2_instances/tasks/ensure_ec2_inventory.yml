@@ -1,0 +1,31 @@
+---
+- name: 'Grab instance ids to tag {{ inst.name }}'
+  amazon.aws.ec2_instance_info:
+    region: "{{ ec2_region }}"
+    filters:
+      instance-state-name: running
+      "tag:avpname": '{{ inst.name }}'
+  register: instance_info
+
+- name: display instance_info
+  ansible.builtin.debug:
+    msg: "{{ instance_info }}"
+
+- name: 'Add {{ inst.name }} host to inventory'
+  ansible.builtin.add_host:
+    groups: "{{ [ 'aws_nodes' ] + (inst.ansible_extra_groups | default([])) }}"
+    hostname: '{{ inst.name }}'
+    ansible_ssh_host: '{{ item.public_dns_name }}'
+    ansible_ssh_private_key_file: '{{ playbook_dir }}/{{ ec2_name_prefix }}/{{ ec2_name_prefix }}-private.pem'
+    ansible_user: '{{ aws_ansible_user | default("ec2-user") }}'
+    ansible_remote_tmp: "{{ aws_remote_tmp | default('/tmp/.ansible/tmp') }}"
+    aliases: '{{ inst.host_aliases | default([]) }}'
+    short_hostname: '{{ inst.name }}'
+    fqdn: '{{ inst.name }}.{{ pattern_domain }}'
+  loop: '{{ instance_info.instances }}'
+
+- name: Save facts for later
+  ansible.builtin.set_fact:
+    ec2_instances_built: '{{ (ec2_instances_built | default([])) + ([ instance_info.instances ] | flatten) }}'
+    subnet_id: '{{ ec2_vpc_subnet_id }}'
+    sg_id: '{{ create_sg.group_id }}'

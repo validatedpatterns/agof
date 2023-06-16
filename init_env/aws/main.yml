@@ -6,7 +6,6 @@
   become: false
   vars_files:
     - "~/agof_vault.yml"
-    - "vars/aws_vars.yml"
   vars:
     ec2_wait: true
   tasks:
@@ -25,27 +24,17 @@
       ansible.builtin.include_role:
         name: roles/manage_ec2_infra
 
-    - name: Build idm and satellite VMs
+    - name: Build VMs and manage DNS entries
       ansible.builtin.include_role:
-        name: roles/build_initial_servers
+        name: roles/manage_ec2_instances
 
-      # This also provides idm_instance and sat_instance facts
-    - name: Build inventory for subsequent plays
-      ansible.builtin.include_role:
-        name: roles/build_bootstrap_inventory
-
-    - name: Manage DNS entries
-      ansible.builtin.include_role:
-        name: roles/manage_route53_dns
-      when: manage_public_dns
-
-    - name: Wait for EC2 servers to be available
-      ansible.builtin.wait_for:
-        host: "{{ item }}"
-        port: 22
-      loop:
-        - "{{ aap_instance['public_ip_address'] }}"
-        - "{{ hub_instance['public_ip_address'] }}"
+#    - name: Wait for EC2 servers to be available
+#      ansible.builtin.wait_for:
+#        host: "{{ item }}"
+#        port: 22
+#      loop:
+#        - "{{ aap_instance['public_ip_address'] }}"
+#        - "{{ hub_instance['public_ip_address'] }}"
 
 - name: Post-provisioning tasks
   hosts: aws_nodes
@@ -55,8 +44,8 @@
     - "vars/aws_vars.yml"
     - "~/agof_vault.yml"
   vars:
-    aap_info: "{{ hostvars['localhost']['aap_instance'] }}"
-    hub_info: "{{ hostvars['localhost']['hub_instance'] }}"
+    ec2_instances_built: "{{ hostvars['localhost']['ec2_instances_built'] }}"
+    ipaclient_configure_dns_resolver: false
   tasks:
 #    - name: Set facts
 #      ansible.builtin.set_fact:
@@ -79,7 +68,7 @@
 
     - name: Set hostnames
       ansible.builtin.hostname:
-        name: '{{ short_hostname }}.{{ ipa_server_domain }}'
+        name: '{{ short_hostname }}.{{ pattern_domain }}'
 
     - name: Set /etc/hosts
       ansible.builtin.copy:
@@ -87,8 +76,9 @@
           127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
           ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 
-          {{ aap_info.private_ip_address }}       aap.{{ ipa_server_domain }} aap tower
-          {{ hub_info.private_ip_address }}       hub.{{ ipa_server_domain }} hub
+          {% for ib in ec2_instances_built %}
+          {{ ib.private_ip_address }}        {{ ib.tags.avpname }}.{{ pattern_domain }} {{ ec2_instances[ib.tags.avpname]['host_aliases'] | default([]) |  join(' ') }}
+          {% endfor %}
         dest: /etc/hosts
         owner: root
         group: root

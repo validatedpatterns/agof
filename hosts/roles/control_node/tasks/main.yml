@@ -24,7 +24,7 @@
   when:
     - controllerinstall is defined
     - controllerinstall|bool
-    - check_controller.status != 200
+    #- check_controller.status != 200
 
 - name: Install packages
   include_tasks: 15_package_dependencies.yml

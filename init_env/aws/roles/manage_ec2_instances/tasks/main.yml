@@ -1,0 +1,19 @@
+---
+- name: Provision machines
+  ansible.builtin.include_tasks: ensure_ec2_instance.yml
+  loop: '{{ ec2_instances }}'
+  loop_control:
+    loop_var: inst
+
+- name: Gather Inventory of built machines
+  ansible.builtin.include_tasks: ensure_ec2_inventory.yml
+  loop: '{{ ec2_instances }}'
+  loop_control:
+    loop_var: inst
+
+- name: Manage Route53 DNS entries
+  ansible.builtin.include_tasks: ensure_route53.yml
+  when: manage_public_dns
+  loop: '{{ ec2_instances_built }}'
+  loop_control:
+    loop_var: ec2_inst

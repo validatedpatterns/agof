@@ -18,6 +18,27 @@
           fail:
             msg: The provisioner has failed during initial check_setup, please scroll up to see exact error.  Open an issue on https://github.com/ansible/workshops/issues
 
+- name: "Get info on the elements built"
+  hosts: localhost
+  connection: local
+  become: false
+  gather_facts: false
+  vars_files:
+    - "~/agof_vault.yml"
+    - "vars/aws_vars.yml"
+  tasks:
+    - name: "Retrieve info on built infrastructure"
+      ansible.builtin.include_role:
+        name: roles/manage_ec2_infra
+
+    - name: "Get info on VMs and Remove DNS info"
+      ansible.builtin.include_role:
+        name: roles/manage_ec2_instances
+
+    - name: "Remember instances for later"
+      ansible.builtin.set_fact:
+        built_instances: '{{ ec2_instances_built }}'
+
 - name: Destroy instances in AWS
   hosts: localhost
   connection: local
@@ -34,7 +55,9 @@
     debug_teardown: false
 
   tasks:
-    - {include_role: {name: roles/manage_ec2_infra}}
+    - name: "Retrieve info on built infrastructure"
+      ansible.builtin.include_role:
+        name: roles/manage_ec2_infra
 
     - name: Remove route53 dns entries
       become: false
@@ -45,9 +68,7 @@
         type: A
         wait: true
       when: manage_public_dns
-      loop:
-        - 'aap'
-        - 'hub'
+      loop: "{{ built_instances | selectattr('tags.avpname') | list }}"
 
     - name: Remove workshop local files
       file:

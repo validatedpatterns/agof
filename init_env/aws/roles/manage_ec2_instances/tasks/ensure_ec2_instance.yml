@@ -1,0 +1,38 @@
+---
+- name: "Provision {{ inst.name }} VM"
+  block:
+    - name: 'provision {{ inst.name }} server'
+      amazon.aws.ec2_instance:
+        name: "{{ ec2_name_prefix }}-{{ inst.name }}"
+        network:
+          assign_public_ip: true
+        #  assign_public_ip: '{{ inst.assign_public_ip | default(False) }}'
+        key_name: "{{ ec2_name_prefix }}-key"
+        security_group: "{{ inst.security_group_id | default(ec2_security_group) }}"
+        instance_type: "{{ inst.instance_type | default('m4.large') }}"
+        image_id: "{{ inst.image_id | default(imagebuilder_ami) }}"
+        region: "{{ inst.region_id | default(ec2_region) }}"
+        state: running
+        filters:
+          instance-state-name: running
+          "tag:avpname": "{{ inst.name }}"
+        tags:
+          avp: "{{ ec2_name_prefix }}"
+          uuid: "{{ ec2_name_prefix }}"
+          guid: "{{ ec2_name_prefix }}"
+          AWS_USERNAME: "{{ aws_user }}"
+          owner: "{{ aws_user }}"
+          Info: "AWS_USERNAME that provisioned this-> {{ aws_user }}"
+          username: "{{ inst.username | default('ec2-user') }}"
+          avpname: '{{ inst.name }}'
+        wait: "{{ ec2_wait }}"
+        vpc_subnet_id: "{{ inst.vpc_subnet_id | default(ec2_vpc_subnet_id) }}"
+        volumes:
+          - device_name: /dev/sda1
+            ebs:
+              volume_type: "{{ inst.disk_volume_type | default('gp3') }}"
+              volume_size: "{{ inst.disk_space | default(20) }}"
+              iops: "{{ inst.disk_iops | default(3000) }}"
+              throughput: "{{ inst.disk_throughput | default(125) }}"
+              delete_on_termination: true
+        ebs_optimized: "{{ ebs_optimized_capable | default(false) }}"
