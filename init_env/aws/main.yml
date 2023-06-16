@@ -77,7 +77,7 @@
           ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 
           {% for ib in ec2_instances_built %}
-          {{ ib.private_ip_address }}        {{ ib.tags.avpname }}.{{ pattern_domain }} {{ ec2_instances[ib.tags.avpname]['host_aliases'] | default([]) |  join(' ') }}
+          {{ ib.private_ip_address }}        {{ ib.tags.avpname }}.{{ pattern_domain }} {{ ib.tags.avpaliases }}
           {% endfor %}
         dest: /etc/hosts
         owner: root

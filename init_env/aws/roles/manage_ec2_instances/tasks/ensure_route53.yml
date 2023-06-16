@@ -1,7 +1,7 @@
 ---
 - name: 'Configure public DNS for bootstrap server set'
   community.aws.route53:
-    state: "{% if- teardown -%}absent{%- else -%}present{%- endif -%}"
+    state: "{%- if teardown -%}absent{%- else -%}present{%- endif -%}"
     zone: "{{ workshop_dns_zone }}"
     record: "{{ item.tags.avpname }}.{{ ec2_name_prefix|lower }}.{{ workshop_dns_zone }}"
     type: A

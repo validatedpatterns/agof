@@ -64,11 +64,11 @@
       community.aws.route53:
         state: absent
         zone: "{{ workshop_dns_zone }}"
-        record: "{{ item }}.{{ ec2_name_prefix|lower }}.{{ workshop_dns_zone }}"
+        record: "{{ item.tags.avpfqdn }}"
         type: A
         wait: true
       when: manage_public_dns
-      loop: "{{ built_instances | selectattr('tags.avpname') | list }}"
+      loop: "{{ built_instances }}"
 
     - name: Remove workshop local files
       file:
