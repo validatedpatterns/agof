@@ -3,20 +3,18 @@
   hosts: aap_controllers
   gather_facts: true
   become: true
-  vars:
-    ee_registry_name: 'quay.io'
   vars_files:
     - '~/agof_vault.yml'
   tasks:
-    - name: "Download AAP"
-      ansible.builtin.include_role:
-        name: roles/aap_download
-
-    - name: "Install AAP"
-      ansible.builtin.include_role:
-        name: roles/control_node
-      vars:
-        controllerinstall: true
+#    - name: "Download AAP"
+#      ansible.builtin.include_role:
+#        name: roles/aap_download
+#
+#    - name: "Install AAP"
+#      ansible.builtin.include_role:
+#        name: roles/control_node
+#      vars:
+#        controllerinstall: true
 
         #    - name: "Configure AAP"
         #ansible.builtin.include_role:
@@ -29,6 +27,10 @@
   vars_files:
     - '~/agof_vault.yml'
   tasks:
+    - name: "Download AAP"
+      ansible.builtin.include_role:
+        name: roles/aap_download
+
     - name: "Configure Automation Hub"
       ansible.builtin.include_role:
         name: roles/private_automation_hub

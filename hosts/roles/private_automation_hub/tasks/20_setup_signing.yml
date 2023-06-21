@@ -20,10 +20,14 @@
     chdir: "{{ aap_dir }}"
 
 - name: GPG export private key
-  ansible.builtin.shell: "gpg --output {{ aap_dir }}/galaxy_signing_service.gpg --armor --export-secret-key"
+  ansible.builtin.shell:
+    cmd: "gpg --output {{ aap_dir }}/galaxy_signing_service.gpg --armor --export-secret-key"
+    creates: '{{ aap_dir }}/galaxy_signing_service.gpg'
 
 - name: GPG export public key
-  ansible.builtin.shell: "gpg --output /home/{{ username }}/galaxy_signing_service.asc --armor --export"
+  ansible.builtin.shell:
+    cmd: "gpg --output /home/{{ username }}/galaxy_signing_service.asc --armor --export"
+    creates: '/home/{{ username }}/galaxy_signing_service.asc'
 
 - name: Delete default gpg vault
   file:

@@ -10,6 +10,12 @@
 
 - ansible.builtin.import_tasks: ensure_idm_registered.yml
   tags:
-    - mandatory
     - idmclient
     - idm_setup
+  when:
+    - ipa_server_domain is defined
+    - ipa_admin_principal is defined
+    - ipa_admin_password is defined
+    - ipa_server_realm is defined
+    - ipaadmin_principal is defined
+    - ipaadmin_password is defined

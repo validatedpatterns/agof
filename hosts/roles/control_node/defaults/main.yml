@@ -5,3 +5,16 @@ output_dir: "{{ playbook_dir }}/{{ ec2_name_prefix }}"
 
 # Controller install command
 controller_install_command: "./setup.sh -e gpgcheck=0"
+
+# EE registry name used in installer and EE controller credential
+ee_registry_name: "registry.redhat.io"
+
+
+# List of execution environments to download during controller installation:
+ee_images:
+   - "{{ ee_registry_name }}/ansible-automation-platform-23/ee-29-rhel8:latest"
+   - "{{ ee_registry_name }}/ansible-automation-platform-23/ee-supported-rhel8:latest"
+   - "{{ ee_registry_name }}/ansible-automation-platform-23/ee-minimal-rhel8:latest"
+
+# And the default image is...
+ee_default_image: "{{ ee_registry_name }}/ansible-automation-platform-23/ee-supported-rhel8:latest"
