@@ -24,6 +24,11 @@
     fqdn: '{{ inst.name }}.{{ pattern_domain }}'
   loop: '{{ instance_info.instances }}'
 
+- name: Special handling for IDM instance if provided
+  ansible.builtin.set_fact:
+    idm_instance: '{{ instance_info.instances | first }}'
+  when: inst.name == 'idm'
+
 - name: Save facts for later
   ansible.builtin.set_fact:
     ec2_instances_built: '{{ (ec2_instances_built | default([])) + ([ instance_info.instances ] | flatten) }}'

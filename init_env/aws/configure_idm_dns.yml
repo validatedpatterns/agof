@@ -20,23 +20,20 @@
             name: roles/manage_ec2_infra
           when: ec2_vpc_id is not defined
 
-        - name: Build inventory for subsequent tasks
+        - name: Get instances and inventory
           ansible.builtin.include_role:
-            name: roles/build_bootstrap_inventory
-
-        - name: Manage public DNS entries
-          ansible.builtin.include_role:
-            name: roles/manage_route53_dns
-          when: manage_public_dns
+            name: roles/manage_ec2_instances
+          when: ec2_instances_built is not defined
 
         - name: "AWS-specific configuration to configure IDM as DNS Server for VPC"
           amazon.aws.ec2_vpc_dhcp_option:
             vpc_id: '{{ ec2_vpc_id }}'
             region: '{{ ec2_region }}'
             inherit_existing: true
-            domain_name: '{{ ipa_server_domain }}'
+            domain_name: '{{ pattern_domain }}'
             dns_servers:
               - "{{ idm_instance['private_ip_address'] }}"
+          when: idm_instance is defined
 
 - name: Restart NetworkManager to get nodes to pick up new DHCP options
   hosts: aws_nodes

@@ -4,22 +4,13 @@ ec2_wait: true
 ebs_optimized_capable: false
 
 ec2_instances:
-  - name: test
-    ansible_extra_groups:
-      - test
-
-  - name: test-2
-    assign_public_ip: false
-    ansible_extra_groups:
-      - test
-
   - name: aap
     # region_id:
     # security_group_id:
     # vpc_subnet_id:
     # image_id:
     # filter:
-    # username: 
+    # username:
     host_aliases:
       - aap
       - tower
@@ -27,7 +18,7 @@ ec2_instances:
       - aap_controllers
     instance_type: 'm4.xlarge'
     # disk_type:
-    # 
+    #
   - name: hub
     assign_public_ip: true
     host_aliases:
