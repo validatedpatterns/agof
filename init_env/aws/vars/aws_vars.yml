@@ -1,18 +1,19 @@
 ---
-ec2_info:
-  aap:
-    instance_type: m4.xlarge
-    architecture: x86_64
-    disk_volume_type: gp3
-    disk_space: 40
-    disk_iops: 3000
-    disk_throughput: 125
-  hub:
-    instance_type: m4.xlarge
-    architecture: x86_64
-    disk_volume_type: gp3
-    disk_space: 40
-    disk_iops: 3000
-    disk_throughput: 125
-  rhel:
-    username: 'ec2-user'
+agof_bootstrap_target: 'aws'
+imagebuilder_image_type: 'aws'
+aws_remote_tmp: '/tmp/.ansible'
+
+pattern_domain: "{{ ec2_name_prefix }}.example.com"
+pattern_state_rootdir: "{{ '~' | expandvars }}"
+
+build_aap_from_image: true
+
+imagebuilder_include_filesystem: false
+skip_imagebuilder_build: false
+
+skip_imagebuilder_build: true
+
+manage_public_dns: true
+
+timeserver1: "0.pool.ntp.org"
+timeserver2: "1.pool.ntp.org"

@@ -34,6 +34,8 @@
     - name: "Get info on VMs and Remove DNS info"
       ansible.builtin.include_role:
         name: roles/manage_ec2_instances
+      vars:
+        teardown: true
 
     - name: "Remember instances for later"
       ansible.builtin.set_fact:
