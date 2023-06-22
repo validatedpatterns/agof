@@ -5,6 +5,7 @@
   connection: local
   become: false
   vars_files:
+    - "vars/aws_vars.yml"
     - "~/agof_vault.yml"
   vars:
     ec2_wait: true
@@ -28,12 +29,11 @@
       ansible.builtin.include_role:
         name: roles/manage_ec2_instances
 
-    - name: Wait for EC2 servers to be available
-      ansible.builtin.wait_for:
-        host: "{{ item['public_ip_address'] }}"
-        port: 22
-      loop:
-        - "{{ ec2_instances_built }}"
+#    - name: Wait for EC2 servers to be available
+#      ansible.builtin.wait_for:
+#        host: "{{ item['public_ip_address'] }}"
+#        port: 22
+#      loop: "{{ ec2_instances_built }}"
 
 - name: Post-provisioning tasks
   hosts: aws_nodes

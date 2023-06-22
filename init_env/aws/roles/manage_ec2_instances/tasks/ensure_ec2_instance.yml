@@ -1,5 +1,6 @@
 ---
 - name: "Provision {{ inst.name }} VM"
+  when: not teardown|bool
   block:
     - name: 'provision {{ inst.name }} server'
       amazon.aws.ec2_instance:
