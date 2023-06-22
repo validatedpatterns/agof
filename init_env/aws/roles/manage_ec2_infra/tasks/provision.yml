@@ -1,7 +1,7 @@
 ---
 - name: ensure workshop folder {{ ec2_name_prefix }} exists
   file:
-    path: "{{ playbook_dir }}/{{ ec2_name_prefix }}"
+    path: "{{ pattern_state_rootdir }}/{{ ec2_name_prefix }}"
     state: directory
 
 ## These AWS resources are used for every workshop type

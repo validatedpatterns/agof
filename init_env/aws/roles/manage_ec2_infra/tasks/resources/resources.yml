@@ -17,12 +17,12 @@
 - name: create file for all AWS security group rules
   template:
     src: vpc_rules.j2
-    dest: "{{playbook_dir}}/{{ec2_name_prefix}}/aws_rules.yml"
+    dest: "{{pattern_state_rootdir}}/{{ec2_name_prefix}}/aws_rules.yml"
   delegate_to: localhost
   run_once: true
 
 - include_vars:
-    file: "{{playbook_dir}}/{{ec2_name_prefix}}/aws_rules.yml"
+    file: "{{pattern_state_rootdir}}/{{ec2_name_prefix}}/aws_rules.yml"
 
 - name: Create EC2 security group for VPC named {{ ec2_name_prefix }}-vpc
   amazon.aws.ec2_group:
@@ -106,7 +106,7 @@
 - name: save private key
   copy:
     content: "{{ create_key.key.private_key }}"
-    dest: "{{ playbook_dir }}/{{ ec2_name_prefix }}/{{ ec2_name_prefix }}-private.pem"
+    dest: "{{ pattern_state_rootdir }}/{{ ec2_name_prefix }}/{{ ec2_name_prefix }}-private.pem"
     mode: '0400'
   when: create_key.changed
 
@@ -115,7 +115,7 @@
 
 - name: Ensure key file has proper permissions
   file:
-    dest: "{{ playbook_dir }}/{{ ec2_name_prefix }}/{{ ec2_name_prefix }}-private.pem"
+    dest: "{{ pattern_state_rootdir }}/{{ ec2_name_prefix }}/{{ ec2_name_prefix }}-private.pem"
     mode: 0600
 
 - name: debugging all variables for ec2 instance creation VPC-1

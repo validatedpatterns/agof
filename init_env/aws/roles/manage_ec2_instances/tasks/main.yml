@@ -1,4 +1,9 @@
 ---
+- name: overwrite select ec2_instaces vars if ec2_instances_xtra vars are provided
+  set_fact:
+    ec2_instances: '{{ ec2_instances|combine(ec2_instances_xtra) }}'
+  when: (ec2_instances_xtra is defined) and (ec2_instances_xtra is not none)
+
 - name: Provision machines
   ansible.builtin.include_tasks: ensure_ec2_instance.yml
   loop: '{{ ec2_instances }}'

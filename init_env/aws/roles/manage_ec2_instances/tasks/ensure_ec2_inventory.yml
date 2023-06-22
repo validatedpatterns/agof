@@ -16,7 +16,7 @@
     groups: "{{ [ 'aws_nodes' ] + (inst.ansible_extra_groups | default([])) }}"
     hostname: '{{ inst.name }}'
     ansible_ssh_host: '{{ item.public_dns_name }}'
-    ansible_ssh_private_key_file: '{{ playbook_dir }}/{{ ec2_name_prefix }}/{{ ec2_name_prefix }}-private.pem'
+    ansible_ssh_private_key_file: '{{ pattern_state_rootdir }}/{{ ec2_name_prefix }}/{{ ec2_name_prefix }}-private.pem'
     ansible_user: '{{ aws_ansible_user | default("ec2-user") }}'
     ansible_remote_tmp: "{{ aws_remote_tmp | default('/tmp/.ansible/tmp') }}"
     aliases: '{{ inst.host_aliases | default([]) }}'

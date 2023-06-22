@@ -72,5 +72,5 @@
 
     - name: Remove workshop local files
       file:
-        dest: "{{ playbook_dir }}/{{ ec2_name_prefix }}"
+        dest: "{{ pattern_state_rootdir }}/{{ ec2_name_prefix }}"
         state: absent
