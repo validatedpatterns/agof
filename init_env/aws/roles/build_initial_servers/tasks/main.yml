@@ -1,6 +1,0 @@
----
-- name: Provision aap machine
-  ansible.builtin.include_tasks: create_aap_ec2.yml
-
-- name: Provision hub machine
-  ansible.builtin.include_tasks: create_hub_ec2.yml
