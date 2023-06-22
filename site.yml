@@ -12,9 +12,6 @@
       ansible.builtin.debug:
         msg: 'build_aap: {{ build_aap }} / build_idm: {{ build_idm }} / build_sat: {{ build_sat }} / build_hub: {{ build_hub }} / aap_boostrap: {{ aap_bootstrap }}'
 
-    - name: fail
-      ansible.builtin.fail:
-
 - name: "Phase 1 - initialize the environment"
   ansible.builtin.import_playbook: ./init_env/main.yml
   tags:
