@@ -28,13 +28,12 @@
       ansible.builtin.include_role:
         name: roles/manage_ec2_instances
 
-#    - name: Wait for EC2 servers to be available
-#      ansible.builtin.wait_for:
-#        host: "{{ item }}"
-#        port: 22
-#      loop:
-#        - "{{ aap_instance['public_ip_address'] }}"
-#        - "{{ hub_instance['public_ip_address'] }}"
+    - name: Wait for EC2 servers to be available
+      ansible.builtin.wait_for:
+        host: "{{ item['public_ip_address'] }}"
+        port: 22
+      loop:
+        - "{{ ec2_instances_built }}"
 
 - name: Post-provisioning tasks
   hosts: aws_nodes
@@ -47,12 +46,6 @@
     ec2_instances_built: "{{ hostvars['localhost']['ec2_instances_built'] }}"
     ipaclient_configure_dns_resolver: false
   tasks:
-#    - name: Set facts
-#      ansible.builtin.set_fact:
-#        idm_ip: "{{ idm_info.private_ip_address }}"
-#        ipaserver_ip_addresses: "{{ idm_info.private_ip_address }}"
-#        ipaclient_configure_dns_resolver: false
-
     - name: "Ensure remote tmp directory"
       ansible.builtin.file:
         path: '{{ aws_remote_tmp }}'
