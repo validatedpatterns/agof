@@ -3,7 +3,7 @@ argument_specs:
   main:
     short_description: Verify prerequisites for deploying on AWS.
     options:
-      workshop_dns_zone:
+      pattern_dns_zone:
         description: The base DNS zone for the workshop.
         type: str
         required: true

@@ -1,0 +1,7 @@
+---
+build_aap: true
+build_idm: true
+build_sat: false
+build_hub: false
+
+aap_bootstrap: "~/{{ pattern_name | default('agof') }}_pattern_controller_config.yml"

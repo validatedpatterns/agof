@@ -51,17 +51,17 @@
     - name: does route53 zone exist
       check_mode: true
       community.aws.route53_zone:
-        zone: "{{ workshop_dns_zone }}"
+        zone: "{{ pattern_dns_zone }}"
         state: present
       register: test
 
-    - name: make sure workshop_dns_zone is owned by your account
+    - name: make sure pattern_dns_zone is owned by your account
       assert:
         that:
           - test.zone_id is not none
         msg:
-          - "You must have a valid route53 zone configured for workshop_dns_zone"
-          - "Right now the workshop_dns_zone is {{workshop_dns_zone}}"
+          - "You must have a valid route53 zone configured for pattern_dns_zone"
+          - "Right now the pattern_dns_zone is {{pattern_dns_zone}}"
 
 - name: Find available AZ for region {{ ec2_region }}
   amazon.aws.aws_az_info:

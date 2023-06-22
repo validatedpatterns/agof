@@ -331,7 +331,7 @@
 
 - name: delete s3 bucket for persistent storage of ec2 key
   amazon.aws.s3_bucket:
-    name: "{{ ec2_name_prefix|lower }}.{{ workshop_dns_zone|lower }}.private"
+    name: "{{ ec2_name_prefix|lower }}.{{ pattern_dns_zone|lower }}.private"
     state: absent
     region: "{{ ec2_region }}"
     force: true

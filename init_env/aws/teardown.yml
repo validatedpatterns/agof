@@ -7,6 +7,7 @@
   vars_files:
     - "~/agof_vault.yml"
     - "vars/aws_vars.yml"
+    - "../../vars/main.yml"
   tasks:
     - name: collection final check
       block:
@@ -65,7 +66,7 @@
       become: false
       community.aws.route53:
         state: absent
-        zone: "{{ workshop_dns_zone }}"
+        zone: "{{ pattern_dns_zone }}"
         record: "{{ item.tags.avpfqdn }}"
         type: A
         wait: true

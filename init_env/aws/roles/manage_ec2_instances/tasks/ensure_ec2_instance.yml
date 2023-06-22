@@ -24,7 +24,7 @@
           Info: "AWS_USERNAME that provisioned this-> {{ aws_user }}"
           username: "{{ inst.username | default('ec2-user') }}"
           avpname: '{{ inst.name }}'
-          avpfqdn: '{{ inst.name }}.{{ ec2_name_prefix|lower }}.{{ workshop_dns_zone }}'
+          avpfqdn: '{{ inst.name }}.{{ ec2_name_prefix|lower }}.{{ pattern_dns_zone }}'
           avpaliases: "{{ inst.host_aliases | default([]) | join(' ') }}"
         wait: "{{ ec2_wait }}"
         vpc_subnet_id: "{{ inst.vpc_subnet_id | default(ec2_vpc_subnet_id) }}"
