@@ -4,12 +4,12 @@
   tags:
     - tags_phase_1
 
-- name: "Phase 1a - configure the environment"
-  ansible.builtin.import_playbook: ./init_env/aws/configure_idm_dns.yml
-  when: agof_bootstrap_target == "aws"
-  tags:
-    - tags_phase_1
-    - tags_phase_1a
+#- name: "Phase 1a - configure the environment"
+#  ansible.builtin.import_playbook: ./init_env/aws/configure_idm_dns.yml
+#  when: agof_bootstrap_target == "aws"
+#  tags:
+#    - tags_phase_1
+#    - tags_phase_1a
 
 - name: "Phase 2 - bootstrap ansible controller and automation hub"
   ansible.builtin.import_playbook: ./hosts/main.yml
