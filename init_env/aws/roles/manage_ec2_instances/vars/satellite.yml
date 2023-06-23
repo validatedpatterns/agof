@@ -1,0 +1,12 @@
+---
+satellite_instance:
+  name: satellite
+  instance_type: r5a.xlarge
+  disk_volume_type: gp3
+  disk_space: 500
+  disk_iops: 4000
+  disk_throughput: 375
+  host_aliases:
+    - sat
+  ansible_extra_groups:
+    - sat_primary

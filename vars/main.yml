@@ -1,7 +1,6 @@
 ---
-build_idm: true
+build_idm: false
 build_sat: false
-build_hub: false
 automation_hub: false
 
 aap_bootstrap_repo: null

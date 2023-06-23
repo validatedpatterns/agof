@@ -1,7 +1,12 @@
 ---
 teardown: false
+
 ec2_wait: true
 ebs_optimized_capable: false
+
+automation_hub: false
+build_idm: false
+build_sat: false
 
 ec2_instances:
   - name: aap
@@ -18,7 +23,6 @@ ec2_instances:
       - aap_controllers
     instance_type: 'm4.xlarge'
     # disk_type:
-    #
   - name: hub
     assign_public_ip: true
     host_aliases:

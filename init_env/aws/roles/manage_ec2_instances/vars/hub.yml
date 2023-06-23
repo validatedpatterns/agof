@@ -1,0 +1,13 @@
+---
+hub_instance:
+  - name: hub
+    instance_type: m4.xlarge
+    disk_volume_type: gp3
+    disk_space: 40
+    disk_iops: 3000
+    disk_throughput: 125
+    host_aliases:
+      - hub
+      - pah
+    ansible_extra_groups:
+      - automation_hub

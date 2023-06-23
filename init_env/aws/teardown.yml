@@ -5,9 +5,9 @@
   become: false
   gather_facts: true
   vars_files:
-    - "~/agof_vault.yml"
-    - "vars/aws_vars.yml"
     - "../../vars/main.yml"
+    - "vars/aws_vars.yml"
+    - "~/agof_vault.yml"
   tasks:
     - name: collection final check
       block:

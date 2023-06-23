@@ -6,6 +6,7 @@
   become: false
   vars_files:
     - "vars/aws_vars.yml"
+    - "../../vars/main.yml"
     - "~/agof_vault.yml"
   vars:
     ec2_wait: true

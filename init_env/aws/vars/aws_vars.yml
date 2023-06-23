@@ -11,8 +11,6 @@ build_aap_from_image: true
 imagebuilder_include_filesystem: false
 skip_imagebuilder_build: false
 
-skip_imagebuilder_build: true
-
 manage_public_dns: true
 
 timeserver1: "0.pool.ntp.org"

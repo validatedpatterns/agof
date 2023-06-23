@@ -1,4 +1,39 @@
 ---
+# Note: we always build AAP. It is in the defaults
+
+- name: Add hub instance if desired
+  when: automation_hub
+  block:
+    - name: Include hub parameters
+      ansible.builtin.include_vars:
+        file: hub.yml
+
+    - name: Include hub parameters
+      ansible.builtin.set_fact:
+        ec2_instances: '{{ ec2_instances + hub_instance }}'
+
+- name: Add idm instance if desired
+  when: build_idm
+  block:
+    - name: Include idm parameters
+      ansible.builtin.include_vars:
+        file: idm.yml
+
+    - name: Include idm parameters
+      ansible.builtin.set_fact:
+        ec2_instances: '{{ ec2_instances + idm_instance }}'
+
+- name: Add satellite instance if desired
+  when: build_sat
+  block:
+    - name: Include satellite parameters
+      ansible.builtin.include_vars:
+        file: satellite.yml
+
+    - name: Include satellite parameters
+      ansible.builtin.set_fact:
+        ec2_instances: '{{ ec2_instances + satellite_instance }}'
+
 - name: overwrite select ec2_instaces vars if ec2_instances_xtra vars are provided
   set_fact:
     ec2_instances: '{{ ec2_instances|combine(ec2_instances_xtra) }}'
