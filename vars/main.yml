@@ -3,5 +3,7 @@ build_idm: false
 build_sat: false
 automation_hub: false
 
+pattern_name: '{{ ec2_name_prefix }}'
+
 aap_bootstrap_repo: null
 aap_bootstrap_config: "~/{{ pattern_name | default('agof') }}_pattern_controller_config.yml"
