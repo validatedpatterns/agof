@@ -12,13 +12,13 @@
       - dns_type in valid_dns_type
     msg: "dns_type must be defined and be one of: {{ valid_dns_type }}"
 
-- name: make sure we are not running with TESTWORKSHOP as the name so no overlap
+- name: make sure we are not running with TESTPATTERN as the name so no overlap
   assert:
     that:
-      - ec2_name_prefix != "TESTWORKSHOP"
+      - ec2_name_prefix != "TESTPATTERN"
     msg:
-      - "ec2_name_prefix cannot be set to TESTWORKSHOP"
-      - "please set a unique name for your workshop"
+      - "ec2_name_prefix cannot be set to TESTPATTERN"
+      - "please set a unique name for your pattern"
 
 - name: make sure we are not using `ansible` as the password
   assert:
@@ -26,7 +26,7 @@
       - admin_password != "ansible"
     msg:
       - "admin_password cannot be set to ansible"
-      - "please set a unique password for your workshop"
+      - "please set a unique password for your pattern"
 
 - name: grab boto version
   command: "{{ansible_python['executable']}} -c 'import boto3; print(boto3.__version__)'"
@@ -42,7 +42,7 @@
 - name: check route53 information
   when: dns_type == "aws"
   block:
-    - name: check for underscores in workshop name
+    - name: check for underscores in pattern name
       fail:
         msg: "Amazon AWS does not allow underscores _ for s3 websites, please see https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html"
       when:
