@@ -2,7 +2,7 @@
 # Note: we always build AAP. It is in the defaults
 
 - name: Add hub instance if desired
-  when: automation_hub
+  when: automation_hub|bool
   block:
     - name: Include hub parameters
       ansible.builtin.include_vars:
@@ -13,7 +13,7 @@
         ec2_instances: '{{ ec2_instances + hub_instance }}'
 
 - name: Add idm instance if desired
-  when: build_idm
+  when: build_idm|bool
   block:
     - name: Include idm parameters
       ansible.builtin.include_vars:
@@ -24,7 +24,7 @@
         ec2_instances: '{{ ec2_instances + idm_instance }}'
 
 - name: Add satellite instance if desired
-  when: build_sat
+  when: build_sat|bool
   block:
     - name: Include satellite parameters
       ansible.builtin.include_vars:

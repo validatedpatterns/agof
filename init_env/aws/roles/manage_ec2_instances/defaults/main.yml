@@ -16,17 +16,10 @@ ec2_instances:
     # image_id:
     # filter:
     # username:
+    # disk_type:
     host_aliases:
       - aap
       - tower
     ansible_extra_groups:
       - aap_controllers
     instance_type: 'm4.xlarge'
-    # disk_type:
-  - name: hub
-    assign_public_ip: true
-    host_aliases:
-      - hub
-      - pah
-    ansible_extra_groups:
-      - automation_hub
