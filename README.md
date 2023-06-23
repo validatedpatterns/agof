@@ -14,7 +14,17 @@ The thinking behind this effort is documented in the [Ansible Pattern Theory](ht
 
 ## How to Use It
 
-In Progress
+### Installation
+
+```shell
+$ ./pattern.sh make install
+```
+
+### Uninstallation
+
+```shell
+$ ./pattern.sh make uninstall
+```
 
 ## Acknowledgements
 
