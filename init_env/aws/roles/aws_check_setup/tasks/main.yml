@@ -50,7 +50,7 @@
 
     - name: does route53 zone exist
       check_mode: true
-      community.aws.route53_zone:
+      amazon.aws.route53_zone:
         zone: "{{ pattern_dns_zone }}"
         state: present
       register: test

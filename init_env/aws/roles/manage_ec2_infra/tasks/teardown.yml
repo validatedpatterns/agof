@@ -190,30 +190,3 @@
     cidr_block: "{{ ec2_subnet }}"
     region: "{{ ec2_region }}"
     state: absent
-
-- name: Remove IAM roles & policy block
-  block:
-    - name: Remove IAM policy for control node IAM instance role
-      community.aws.iam_policy:
-        iam_type: role
-        iam_name: "ControlNode_{{ ec2_name_prefix }}_student{{ item }}"
-        policy_name: "IAMPolicy_{{ ec2_name_prefix }}_student{{ item }}"
-        state: absent
-      loop: "{{ range(1, student_total + 1)|list }}"
-
-    - name: Remove VPC Lock Down role
-      community.aws.iam_role:
-        name: "VPCLockDown_{{ ec2_name_prefix }}_student{{ item }}"
-        state: absent
-        delete_instance_profile: true
-      loop: "{{ range(1, student_total + 1)|list }}"
-
-    - name: Remove control node instance role
-      community.aws.iam_role:
-        name: "ControlNode_{{ ec2_name_prefix }}_student{{ item }}"
-        state: absent
-        delete_instance_profile: true
-      loop: "{{ range(1, student_total + 1)|list }}"
-
-  when: tower_node_aws_api_access|default(false)|bool
-  ignore_errors: true

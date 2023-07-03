@@ -1,6 +1,7 @@
 ---
 # These are the collections required by the builder
 collections:
+- amazon.aws
 - awx.awx
 - ansible.controller
 - ansible.netcommon
@@ -8,7 +9,6 @@ collections:
 - ansible.utils
 - azure.azcollection
 - community.general
-- community.aws
 - containers.podman
 - redhat_cop.controller_configuration
 - redhat.rhel_idm

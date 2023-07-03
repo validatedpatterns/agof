@@ -64,7 +64,7 @@
 
     - name: Remove route53 dns entries
       become: false
-      community.aws.route53:
+      amazon.aws.route53:
         state: absent
         zone: "{{ pattern_dns_zone }}"
         record: "{{ item.tags.avpfqdn }}"

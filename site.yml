@@ -10,7 +10,8 @@
   tasks:
     - name: "Show vars"
       ansible.builtin.debug:
-        msg: 'build_idm: {{ build_idm }} / build_sat: {{ build_sat }} / automation_hub: {{ automation_hub }} / aap_boostrap_repo: {{ aap_bootstrap_repo }} / aap_bootstrap_config: {{ aap_bootstrap_config }}'
+        msg: 'build_idm: {{ build_idm }} / build_sat: {{ build_sat }} / automation_hub: {{ automation_hub }}'
+        #msg: 'build_idm: {{ build_idm }} / build_sat: {{ build_sat }} / automation_hub: {{ automation_hub }} / aap_boostrap_repo: {{ aap_bootstrap_repo }} / aap_bootstrap_config: {{ aap_bootstrap_config }}'
 
 - name: "Phase 1 - initialize the environment"
   ansible.builtin.import_playbook: ./init_env/main.yml
