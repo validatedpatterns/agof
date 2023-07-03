@@ -1,0 +1,22 @@
+---
+- name: "Configure AAP"
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: false
+  collections:
+    - redhat_cop.controller_configuration
+  vars_files:
+    - "~/agof_vault.yml"
+  tasks:
+    - name: Include vars from configs directory
+      ansible.builtin.include_vars:
+        dir: "{{ controller_configs_dir }}"
+        ignore_files: [controller_config.yml.template]
+        extensions: ["yml"]
+      tags:
+        - always
+
+    - name: "Configure AAP"
+      ansible.builtin.include_role:
+        name: dispatch

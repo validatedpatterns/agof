@@ -23,10 +23,6 @@
       vars:
         controllerinstall: true
 
-        #    - name: "Configure AAP"
-        #ansible.builtin.include_role:
-        #name: roles/populate_controller
-
 - name: "Configure Automation Hub"
   hosts: automation_hub
   gather_facts: true
@@ -37,4 +33,3 @@
     - name: "Configure Automation Hub"
       ansible.builtin.include_role:
         name: roles/private_automation_hub
-
