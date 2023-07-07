@@ -10,7 +10,7 @@
 
     - name: Include hub parameters
       ansible.builtin.set_fact:
-        ec2_instances: '{{ ec2_instances + hub_instance }}'
+        ec2_instances: '{{ ec2_instances + [ hub_instance ] }}'
 
 - name: Add idm instance if desired
   when: build_idm|bool
@@ -21,7 +21,7 @@
 
     - name: Include idm parameters
       ansible.builtin.set_fact:
-        ec2_instances: '{{ ec2_instances + idm_instance }}'
+        ec2_instances: '{{ ec2_instances + [ idm_instance ] }}'
 
 - name: Add satellite instance if desired
   when: build_sat|bool
@@ -32,7 +32,7 @@
 
     - name: Include satellite parameters
       ansible.builtin.set_fact:
-        ec2_instances: '{{ ec2_instances + satellite_instance }}'
+        ec2_instances: '{{ ec2_instances + [ satellite_instance ] }}'
 
 - name: overwrite select ec2_instaces vars if ec2_instances_xtra vars are provided
   set_fact:
