@@ -39,6 +39,10 @@
     ec2_instances: '{{ ec2_instances|combine(ec2_instances_xtra) }}'
   when: (ec2_instances_xtra is defined) and (ec2_instances_xtra is not none)
 
+- name: See what machines we are building
+  ansible.builtin.debug:
+    var: ec2_instances
+
 - name: Provision machines
   ansible.builtin.include_tasks: ensure_ec2_instance.yml
   loop: '{{ ec2_instances }}'
