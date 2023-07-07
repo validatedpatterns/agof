@@ -8,6 +8,9 @@ help: ## This help message
 preinit: ## Setup ansible environemnt - configure ansible.cfg and download collections
 	ansible-playbook init_env/pre_init_env.yml $(EXTRA_PLAYBOOK_OPTS)
 
+fix_aws_dns: ## Update public DNS for AWS - needed when a VM cold starts
+	ansible-playbook init_env/aws/fix_aws_dns.yml $(EXTRA_PLAYBOOK_OPTS)
+
 install: preinit ## Install the pattern - including bootstrapping an AWS environment to run it in
 	ansible-playbook site.yml $(EXTRA_PLAYBOOK_OPTS)
 

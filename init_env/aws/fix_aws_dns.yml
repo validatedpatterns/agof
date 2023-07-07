@@ -6,6 +6,7 @@
   connection: local
   become: false
   vars_files:
+    - 'vars/aws_vars.yml'
     - '~/agof_vault.yml'
   tasks:
     - name: "AWS inventory and DHCP option setting"
@@ -23,4 +24,3 @@
         - name: Include setup code for VMs and DNS
           ansible.builtin.include_role:
             name: roles/manage_ec2_instances
-          when: ec2_vpc_id is not defined
