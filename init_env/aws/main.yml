@@ -30,11 +30,20 @@
       ansible.builtin.include_role:
         name: roles/manage_ec2_instances
 
-#    - name: Wait for EC2 servers to be available
-#      ansible.builtin.wait_for:
-#        host: "{{ item['public_ip_address'] }}"
-#        port: 22
-#      loop: "{{ ec2_instances_built }}"
+    - name: Save variables for later if desired
+      ansible.builtin.copy:
+        content: |-
+           ---
+           ec2_name_prefix: '{{ ec2_name_prefix }}'
+           ec2_region: '{{ ec2_region }}'
+           ec2_vpc_id: '{{ ec2_vpc_id }}'
+           ec2_vpc_subnet_id: '{{ ec2_vpc_subnet_id }}'
+
+           pattern_dns_zone: '{{ pattern_dns_zone }}'
+
+           imagebuilder_ami: '{{ imagebuilder_ami }}'
+        dest: '{{ pattern_state_rootdir }}/{{ ec2_name_prefix }}/aws_state_vars.yml'
+      when: save_aws_vars
 
 - name: Post-provisioning tasks
   hosts: aws_nodes
