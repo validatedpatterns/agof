@@ -1,0 +1,12 @@
+[build_control]
+localhost
+
+[sat_primary]
+sat.mhjacks-avp-agoftest.example.com
+
+[idm_primary]
+idm.mhjacks-avp-agoftest.example.com
+
+[aws_nodes]
+sat.mhjacks-avp-agoftest.example.com
+idm.mhjacks-avp-agoftest.example.com
