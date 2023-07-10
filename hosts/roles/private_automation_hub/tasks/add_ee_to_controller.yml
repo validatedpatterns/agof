@@ -25,4 +25,4 @@
     pull: "{{ ee.pull | default(omit) }}"
     organization: "{{ ee.organization | default(omit) }}"
     description: "{{ ee.description | default(omit) }}"
-    credential: "Private Automation Hub"
+    credential: '{{ ee.credential | default("Private Automation Hub") }}'
