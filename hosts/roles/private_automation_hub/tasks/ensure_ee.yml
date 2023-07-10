@@ -25,12 +25,19 @@
     remote_src: true
   when: ca_stat.stat.exists
 
+- name: "Check on {{ ee.name }} local image"
+  containers.podman.podman_image_info:
+    name: '{{ ee.name }}'
+  register: ee_rc
+  failed_when: false
+
 - name: "Build ee {{ ee.name }} on the target os"
   ansible.builtin.command: "ansible-builder build -t {{ ee.name }} --prune-images"
   args:
     chdir: "{{ ee.git_dest }}/{{ ee.name }}"
   async: 7200
   poll: 15
+  when: ee_rc is not succeeded
 
 - name: "Push the finished container for {{ ee.name }} to the hub"
   containers.podman.podman_image:
