@@ -1,0 +1,8 @@
+---
+# Build the ansible execution environments.
+
+- name: "Add the execution environments to the controller"
+  ansible.builtin.include_tasks: "add_ee_to_controller.yml"
+  loop: "{{ custom_execution_environments }}"
+  loop_control:
+    loop_var: ee

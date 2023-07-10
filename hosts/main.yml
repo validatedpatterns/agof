@@ -22,6 +22,8 @@
         name: roles/control_node
       vars:
         controllerinstall: true
+      when:
+        - not teardown|bool
 
 - name: "Configure Automation Hub"
   hosts: automation_hub
@@ -33,3 +35,6 @@
     - name: "Configure Automation Hub"
       ansible.builtin.include_role:
         name: roles/private_automation_hub
+      when:
+        - automation_hub|bool
+        - not teardown|bool

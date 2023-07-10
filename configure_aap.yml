@@ -25,3 +25,4 @@
     - name: "Configure AAP"
       ansible.builtin.include_role:
         name: dispatch
+      when: not teardown|bool

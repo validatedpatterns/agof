@@ -7,4 +7,9 @@
     name: podman
     state: present
     disable_gpg_check: true
-  when: automation_hub | bool and not teardown|bool
+
+- name: "Build Execution Environments"
+  ansible.builtin.include_tasks: "tasks/build_ees.yml"
+
+- name: "Register Execution Environments"
+  ansible.builtin.include_tasks: "tasks/add_ees.yml"
