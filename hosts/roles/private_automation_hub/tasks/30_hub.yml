@@ -3,12 +3,12 @@
   set_fact:
     __host_private_ip: '{{ ansible_default_ipv4["address"] }}'
 
-- name: template inventory file for Ansible Controller Install
+- name: template inventory file for Ansible Hub Install
   template:
     src: "hub_install.j2"
     dest: "{{ aap_dir }}/inventory"
 
-- name: check to see if automation controller is already up and running
+- name: check to see if hub is already up and running
   uri:
     url: https://localhost/ui
     method: GET
