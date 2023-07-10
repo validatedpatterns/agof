@@ -23,14 +23,6 @@
     tlsverify: false
   no_log: true
 
-- name: "Log in to {{ ansible_fqdn }}"
-  containers.podman.podman_login:
-    username: "{{ admin_user | default('admin') }}"
-    password: "{{ admin_password }}"
-    registry: "{{ ansible_fqdn }}"
-    tlsverify: false
-  no_log: true
-
 - name: "Build the custom_execution environments"
   ansible.builtin.include_tasks: "ensure_ee.yml"
   loop: "{{ custom_execution_environments }}"

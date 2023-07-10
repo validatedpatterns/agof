@@ -18,3 +18,4 @@ redhat_registry_password: '{{ redhat_registry_password_vault }}'
 redhat_container_registry_url: 'registry.redhat.io'
 pattern_domain: '{{ ec2_name_prefix }}.example.com'
 active_controller: 'aap.{{ pattern_domain }}'
+aap_validate_controller_certs: false
