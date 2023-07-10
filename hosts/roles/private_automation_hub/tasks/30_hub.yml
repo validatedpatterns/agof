@@ -8,10 +8,23 @@
     src: "hub_install.j2"
     dest: "{{ aap_dir }}/inventory"
 
-# sean note to self... should I remove the gpgcheck=0?
+- name: check to see if automation controller is already up and running
+  uri:
+    url: https://localhost/ui
+    method: GET
+    user: admin
+    password: "{{ admin_password }}"
+    validate_certs: false
+    force_basic_auth: true
+  register: check_hub
+  ignore_errors: true
+  failed_when: false
+
 - name: run the Automation Hub installer
   shell: "./setup.sh -e gpgcheck=0"
   args:
     chdir: "{{ aap_dir }}"
   async: 5000
   poll: 15
+  when:
+    - check_hub.status != 200

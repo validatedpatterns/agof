@@ -1,12 +1,5 @@
 - name: Configure Hub node
   include_tasks: "1_configurehub.yml"
-  when: not teardown|bool
-
-- name: install podman
-  dnf:
-    name: podman
-    state: present
-    disable_gpg_check: true
 
 - name: "Build Execution Environments"
   ansible.builtin.include_tasks: "tasks/build_ees.yml"

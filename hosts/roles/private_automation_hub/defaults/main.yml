@@ -10,3 +10,4 @@ gpg_key_user_name: "Joe Tester"
 gpg_key_user_email: "joe@foo.bar"
 seed_validated_content: false
 pre_build: false
+custom_execution_environments: []
