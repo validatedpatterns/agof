@@ -96,10 +96,12 @@
 - name: Mod containers.conf to trust private automation hub
   become_user: "awx"
   ansible.builtin.blockinfile:
-    path: /var/lib/awx/.config/containers/containers.conf
+    path: /var/lib/awx/.config/containers/registries.conf
+    create: true
     block: |-
-      [registries.insecure]
-      registries = [ 'hub.{{ pattern_domain }}' ]
+      [[registry]]
+      location = [ 'hub.{{ pattern_domain }}' ]
+      insecure = true
     marker: '# ANSIBLE MANAGED BLOCK'
     insertafter: EOF
   when: automation_hub|bool
