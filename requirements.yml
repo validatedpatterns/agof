@@ -7,7 +7,6 @@ collections:
 - ansible.netcommon
 - ansible.posix
 - ansible.utils
-- azure.azcollection
 - community.general
 - containers.podman
 - redhat_cop.controller_configuration
