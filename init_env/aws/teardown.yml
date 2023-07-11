@@ -73,7 +73,7 @@
       when: manage_public_dns
       loop: "{{ built_instances }}"
 
-    - name: Remove workshop local files
+    - name: Remove pattern local files
       file:
         dest: "{{ pattern_state_rootdir }}/{{ ec2_name_prefix }}"
         state: absent
