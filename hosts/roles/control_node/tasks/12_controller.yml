@@ -100,7 +100,7 @@
     create: true
     block: |-
       [[registry]]
-      location = [ 'hub.{{ pattern_domain }}' ]
+      location = "hub.{{ pattern_domain }}"
       insecure = true
     marker: '# ANSIBLE MANAGED BLOCK'
     insertafter: EOF
