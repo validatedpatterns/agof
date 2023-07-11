@@ -18,3 +18,5 @@ ee_images:
 
 # And the default image is...
 ee_default_image: "{{ ee_registry_name }}/ansible-automation-platform-23/ee-supported-rhel8:latest"
+
+pattern_domain: '{{ ec2_name_prefix }}.example.com'
