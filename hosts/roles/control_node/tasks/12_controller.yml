@@ -93,6 +93,17 @@
     line: 'image_parallel_copies=10'
     insertafter: EOF
 
+- name: Mod containers.conf to trust private automation hub
+  become_user: "awx"
+  ansible.builtin.blockinfile:
+    path: /var/lib/awx/.config/containers/containers.conf
+    block: |-
+      [registries.insecure]
+      registries = [ 'hub.{{ pattern_domain }}' ]
+    marker: '# ANSIBLE MANAGED BLOCK'
+    insertafter: EOF
+  when: automation_hub|bool
+
 - name: Pull supported images
   become_user: "awx"
   containers.podman.podman_image:
