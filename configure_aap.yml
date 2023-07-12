@@ -22,6 +22,36 @@
       tags:
         - always
 
+    - name: wait for Automation Controller to be up
+      uri:
+        url: '{{ controller_hostname }}/api/v2/ping/'
+        method: GET
+        user: admin
+        password: "{{ admin_password }}"
+        validate_certs: false
+      register: check2
+      until: check2.json is defined and check2.json.instances[0].capacity > 0 and check2.json.instance_groups[0].capacity > 0
+      retries: 60
+      delay: 10
+
+    - name: Display /api/v2/ping results
+      debug:
+        msg: '{{ check2.json }}'
+
+    - name: Post manifest file
+      uri:
+        url: '{{ controller_hostname }}/api/v2/config/'
+        method: POST
+        user: admin
+        password: "{{ admin_password }}"
+        body: '{ "eula_accepted": true, "manifest": "{{ manifest_content }}" }'
+        body_format: json
+        validate_certs: false
+        force_basic_auth: true
+      register: license_controller
+      until: license_controller is not failed
+      retries: 5
+
     - name: "Configure AAP"
       ansible.builtin.include_role:
         name: dispatch
