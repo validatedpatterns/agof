@@ -16,3 +16,6 @@ install: preinit ## Install the pattern - including bootstrapping an AWS environ
 
 uninstall: ## Uninstall the AWS environment for the pattern, including its DNS entries
 	ansible-playbook init_env/aws/teardown.yml $(EXTRA_PLAYBOOK_OPTS)
+
+bareinstall: preinit ## Install assuming *just* an AAP endpoint
+	ansible-playbook configure_aap.yml $(EXTRA_PLAYBOOK_OPTS)
