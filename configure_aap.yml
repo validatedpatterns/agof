@@ -26,7 +26,7 @@
       uri:
         url: '{{ controller_hostname }}/api/v2/ping/'
         method: GET
-        user: admin
+        user: '{{ admin_user | default("admin") }}'
         password: "{{ admin_password }}"
         validate_certs: false
       register: check2
@@ -42,7 +42,7 @@
       uri:
         url: '{{ controller_hostname }}/api/v2/config/'
         method: POST
-        user: admin
+        user: '{{ admin_user | default("admin") }}'
         password: "{{ admin_password }}"
         body: '{ "eula_accepted": true, "manifest": "{{ manifest_content }}" }'
         body_format: json
