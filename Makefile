@@ -15,7 +15,7 @@ fix_aws_dns: ## Update public DNS for AWS - needed when a VM cold starts
 install: preinit ## Install the pattern - including bootstrapping an AWS environment to run it in
 	ansible-playbook site.yml $(EXTRA_PLAYBOOK_OPTS)
 
-uninstall: ## Uninstall the AWS environment for the pattern, including its DNS entries
+aws_uninstall: ## Uninstall the AWS environment for the pattern, including its DNS entries
 	ansible-playbook init_env/aws/teardown.yml $(EXTRA_PLAYBOOK_OPTS)
 
 from_os_install: preinit ## Install assuming registered RHEL VM(s)

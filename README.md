@@ -23,7 +23,7 @@ $ ./pattern.sh make install
 ### Uninstallation
 
 ```shell
-$ ./pattern.sh make uninstall
+$ ./pattern.sh make aws_uninstall
 ```
 
 ## What this is
