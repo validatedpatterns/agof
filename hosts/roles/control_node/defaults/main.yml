@@ -1,22 +1,24 @@
 ---
 username: "ec2-user"
-aap_dir: "/home/{{ username }}/aap_install"
+admin_user: 'admin'
+aap_dir: "/opt/ansible-platform/installer"
 output_dir: "{{ playbook_dir }}/{{ ec2_name_prefix }}"
+aap_version: '2.3'
+aap_version_short: '{{ aap_version | regex_replace("\.") }}'
 
 # Controller install command
-controller_install_command: "./setup.sh -e gpgcheck=0"
+controller_install_command: "./setup.sh"
 
 # EE registry name used in installer and EE controller credential
 ee_registry_name: "registry.redhat.io"
 
-
 # List of execution environments to download during controller installation:
 ee_images:
-   - "{{ ee_registry_name }}/ansible-automation-platform-23/ee-29-rhel8:latest"
-   - "{{ ee_registry_name }}/ansible-automation-platform-23/ee-supported-rhel8:latest"
-   - "{{ ee_registry_name }}/ansible-automation-platform-23/ee-minimal-rhel8:latest"
+   - "{{ ee_registry_name }}/ansible-automation-platform-{{ aap_version_short }}/ee-29-rhel{{ ansible_distribution_major_version }}:latest"
+   - "{{ ee_registry_name }}/ansible-automation-platform-{{ aap_version_short }}/ee-supported-rhel{{ ansible_distribution_major_verison }}:latest"
+   - "{{ ee_registry_name }}/ansible-automation-platform-{{ aap_version_short }}/ee-minimal-rhel{{ ansible_distribution_major_version }}:latest"
 
 # And the default image is...
-ee_default_image: "{{ ee_registry_name }}/ansible-automation-platform-23/ee-supported-rhel8:latest"
+ee_default_image: "{{ ee_registry_name }}/ansible-automation-platform-{{ aap_version_short }}/ee-supported-rhel{{ ansible_distribution_major_version }}:latest"
 
 pattern_domain: '{{ ec2_name_prefix }}.example.com'

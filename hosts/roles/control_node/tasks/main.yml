@@ -8,7 +8,7 @@
   uri:
     url: https://localhost/api/v2/ping/
     method: GET
-    user: admin
+    user: "{{ admin_user | default('admin') }}"
     password: "{{ admin_password }}"
     validate_certs: false
     force_basic_auth: true

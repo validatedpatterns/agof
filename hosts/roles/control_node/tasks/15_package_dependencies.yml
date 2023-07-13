@@ -2,6 +2,8 @@
 - name: Install base packages
   dnf:
     name:
+      - podman
+      - ansible-builder
       - vim
       - git
       - wget
