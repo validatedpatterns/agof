@@ -1,4 +1,9 @@
 ---
+- name: "Remove ansible tmpdir"
+  ansible.builtin.file:
+    path: '{{ ansible_remote_tmp }}'
+    state: absent
+
 - name: "Ensure the AAP repository is enabled"
   community.general.rhsm_repository:
     name: "{{ aap_repo }}"
