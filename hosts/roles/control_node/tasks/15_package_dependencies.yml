@@ -3,7 +3,6 @@
   dnf:
     name:
       - podman
-      - ansible-builder
       - vim
       - git
       - wget

@@ -30,19 +30,52 @@ $ ./pattern.sh make uninstall
 
 This is a framework for building Validated Patterns that use Ansible Automation Platform (AAP) as their underlying GitOps engine. To that end, the framework has three deployment models (in increasing level of complexity):
 
-### "Bare" Install
+### "API" Install (aka "Bare")
 
-In this model, you provide a configured AAP instance. It does not need to be entitled, the configuration just needs an
-API endpoint. You supply the manifest contents, endpoint hostname, admin username (defaults to "admin"), and admin password, and then hands off to a controller_config_dir. This is provided for users who have their own AAP installations on
-bare metal or on-prem or do not want to run on AWS.
+```shell
+$ ./pattern.sh make api_install
+```
+
+In this model, you provide an AAP endpoint. It does not need to be entitled, it just needs to be running the AAP Controller. You supply the manifest contents, endpoint hostname, admin username (defaults to "admin"), and admin password, and then the installation hands off to a `controller_config_dir` you define. This is provided for users who have their own AAP installations on bare metal or on-prem or do not want to run on AWS.
+
+### "From OS" Install
+
+```shell
+$ ./pattern.sh make from_os_install INVENTORY=(your_inventory_file)
+```
+
+In this model, you provide an inventory file with fresh RHEL installations. The model is tested with one AAP and one Hub instance, each standalone. (Many other topologies are possible; see the Ansible Automation Platform Planning and Installation guides for details.) If you need to install a pattern on a cluster with a different topology than this, use the API install mechanism. This mechanism will run a (slightly) opinionated install of the AAP and Hub components, and will add some conveniences like default execution environments and credentials. Like the "API" install, the install will then be handed over to a `controller_config_dir` you define.
+
+The reason for making this a separate option is to make it easy for those who are not used to installing AAP to get up and running with it given a couple of VMs (or baremetal instances). Requirements for this mode are as follows:
+
+* Must be running a version of RHEL that AAP supports
+* Must be properly entitled with a subscription that makes the appropriate AAP repository available
+
+It is not possible to test all possible scenarios in this mode, and we do not try.
+
+Note that INVENTORY defaults to '~/inventory_agof' if you do not specify one.
 
 ### Default Install
+
+```shell
+$ ./pattern.sh make install
+```
 
 In this model, you provide AWS credentials in addition to the other components needed in the "bare" install. The framework will build an AWS image using Red Hat's ImageBuilder, deploy that image onto a new AWS VPC and subnet, and deploy AAP on that image using the command line installer. It will then hand over the configuration of the AAP installation to the specified `controller_config_dir`.
 
 ### Convenience Features Install
 
+```shell
+$ ./pattern.sh make install
+```
+
 This model builds on the Default installation by adding the options for building extra VMs besides AAP - the configured VM options include Private Automation Hub (hub), Identity Management (idm), and Satellite (satellite). The framework will configure Automation Hub in this mode, and configure AAP to use it; it will not configure idm or satellite beyond what they need to be managed by AAP. (The configuration of idm and satellite is the subject of the first pattern to use this framework.)
+
+The variables to include builds for the extra components are all Ansible booleans that can be included in your configuration:
+
+`automation_hub`
+`build_idm`
+`build_sat`
 
 ## Acknowledgements
 
