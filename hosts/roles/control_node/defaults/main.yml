@@ -1,7 +1,7 @@
 ---
 username: "ec2-user"
 admin_user: 'admin'
-aap_dir: "/opt/ansible-platform/installer"
+aap_dir: "/opt/ansible-automation-platform/installer"
 output_dir: "{{ playbook_dir }}/{{ ec2_name_prefix }}"
 aap_version: '2.3'
 aap_version_short: '{{ aap_version | regex_replace("\.") }}'

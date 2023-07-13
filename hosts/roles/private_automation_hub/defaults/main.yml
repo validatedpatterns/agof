@@ -2,7 +2,7 @@
 admin_user: 'admin'
 automation_hub: true
 username: 'ec2-user'
-aap_dir: "/opt/automation-platform/installer"
+aap_dir: "/opt/ansible-automation-platform/installer"
 output_dir: "{{ playbook_dir }}/{{ ec2_name_prefix }}"
 state: present
 teardown: false
