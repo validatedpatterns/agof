@@ -12,7 +12,7 @@
   uri:
     url: https://localhost/ui
     method: GET
-    user: admin
+    user: "{{ admin_user | default('admin') }}"
     password: "{{ admin_password }}"
     validate_certs: false
     force_basic_auth: true
@@ -21,7 +21,7 @@
   failed_when: false
 
 - name: run the Automation Hub installer
-  shell: "./setup.sh -e gpgcheck=0"
+  shell: "./setup.sh"
   args:
     chdir: "{{ aap_dir }}"
   async: 5000

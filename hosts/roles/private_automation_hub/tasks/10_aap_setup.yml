@@ -1,17 +1,4 @@
 ---
-- name: Create installation directory
-  ansible.builtin.file:
-    path: "{{ aap_dir }}"
-    owner: "{{ username }}"
-    state: directory
-
-- name: Extract AAP tar.gz install
-  unarchive:
-    src: "/root/aap.tar.gz"
-    dest: "{{ aap_dir }}"
-    remote_src: true
-    extra_opts: ['--strip-components=1', '--show-stored-names']
-
 - name: Read group vars file
   ansible.builtin.shell: "cat {{ aap_dir }}/group_vars/all"
   register: __read_results
