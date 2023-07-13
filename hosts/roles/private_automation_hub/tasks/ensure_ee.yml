@@ -13,23 +13,17 @@
     src: "../templates/builder_ansible.cfg.j2"
     dest: "{{ ee.git_dest }}/{{ ee.name }}/ansible.cfg"
 
-- name: "Look for a CA certificate"
+- name: "Look for an IPA CA certificate"
   ansible.builtin.stat:
     path: /etc/ipa/ca.crt
   register: ca_stat
 
-- name: "Add our ca certficate to the image"
+- name: "Add our IPA CA certficate to the image (if found)"
   ansible.builtin.copy:
     src: "/etc/ipa/ca.crt"
     dest: "{{ ee.git_dest }}/{{ ee.name }}/context"
     remote_src: true
   when: ca_stat.stat.exists
-
-- name: "Check on {{ ee.name }} local image"
-  containers.podman.podman_image_info:
-    name: '{{ ee.name }}'
-  register: ee_rc
-  failed_when: false
 
 - name: "Build ee {{ ee.name }} on the target os"
   ansible.builtin.command: "ansible-builder build -t {{ ee.name }} --prune-images"

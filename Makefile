@@ -20,7 +20,7 @@ uninstall: ## Uninstall the AWS environment for the pattern, including its DNS e
 
 from_os_install: preinit ## Install assuming registered RHEL VM(s)
 	ansible-playbook -i $(INVENTORY) hosts/main.yml $(EXTRA_PLAYBOOK_OPTS)
-	make api_iinstall
+	make api_install
 
 api_install: preinit ## Install assuming *just* an AAP endpoint
 	ansible-playbook configure_aap.yml $(EXTRA_PLAYBOOK_OPTS)
