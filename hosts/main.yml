@@ -1,5 +1,5 @@
 ---
-- name: "Download AAP tarball"
+- name: "Prepare AAP Installation"
   hosts: aap_controllers:automation_hub
   gather_facts: true
   become: true

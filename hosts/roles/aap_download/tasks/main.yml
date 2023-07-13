@@ -3,7 +3,6 @@
   community.general.rhsm_repository:
     name: "{{ aap_repo }}"
     state: enabled
-    purge: true
 
 - name: "Install AAP installer package"
   ansible.builtin.package:
