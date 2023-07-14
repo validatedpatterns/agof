@@ -44,7 +44,7 @@ In this model, you provide an AAP endpoint. It does not need to be entitled, it 
 $ ./pattern.sh make from_os_install INVENTORY=(your_inventory_file)
 ```
 
-In this model, you provide an inventory file with fresh RHEL installations. The model is tested with one AAP and one Hub instance, each standalone. (Many other topologies are possible; see the Ansible Automation Platform Planning and Installation guides for details.) If you need to install a pattern on a cluster with a different topology than this, use the API install mechanism. This mechanism will run a (slightly) opinionated install of the AAP and Hub components, and will add some conveniences like default execution environments and credentials. Like the "API" install, the install will then be handed over to a `controller_config_dir` you define.
+In this model, you provide an inventory file with up to two fresh RHEL installations. The model is tested with one AAP and one Hub instance. (Many other topologies are possible with the AAP installation framework; see the Ansible Automation Platform Planning and Installation guides for details.) If you need to install a pattern on a cluster with a different topology than this, use the API install mechanism. This mechanism will run a (slightly) opinionated install of the AAP and Hub components, and will add some conveniences like default execution environments and credentials. Like the "API" install, the install will then be handed over to a `controller_config_dir` you define.
 
 The reason for making this a separate option is to make it easy for those who are not used to installing AAP to get up and running with it given a couple of VMs (or baremetal instances). Requirements for this mode are as follows:
 
@@ -54,6 +54,53 @@ The reason for making this a separate option is to make it easy for those who ar
 It is not possible to test all possible scenarios in this mode, and we do not try.
 
 Note that INVENTORY defaults to '~/inventory_agof' if you do not specify one.
+
+Your inventory *must* define an `aap_controllers` group (which will be configured as the AAP node) and an `automation_hub` group which will be configured as the automation hub, if you want one.
+
+Example `~/agof_inventory` (for just AAP, which is the default):
+
+```ini
+[build_control]
+localhost
+
+[aap_controllers]
+192.168.5.207
+
+[automation_hub]
+
+[aap_controllers:vars]
+
+[automation_hub:vars]
+
+[all:vars]
+ansible_user=myuser
+ansible_ssh_pass=mypass
+ansible_become_pass=mypass
+ansible_remote_tmp=/tmp/.ansible
+```
+
+Example `~/agof_inventory` (including both AAP and Hub):
+
+```ini
+[build_control]
+localhost
+
+[aap_controllers]
+192.168.5.207
+
+[automation_hub]
+192.168.5.209
+
+[aap_controllers:vars]
+
+[automation_hub:vars]
+
+[all:vars]
+ansible_user=myuser
+ansible_ssh_pass=mypass
+ansible_become_pass=mypass
+ansible_remote_tmp=/tmp/.ansible
+```
 
 ### Default Install
 
