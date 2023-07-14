@@ -1,5 +1,9 @@
 ---
 admin_user: 'admin'
+aap_admin_username: '{{ admin_user }}'
+aap_admin_password: '{{ admin_password }}'
+private_hub_username: '{{ admin_user }}'
+private_hub_password: '{{ admin_password }}'
 automation_hub: true
 username: 'ec2-user'
 aap_dir: "/opt/ansible-automation-platform/installer"

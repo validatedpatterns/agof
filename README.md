@@ -8,7 +8,7 @@ This repository is part of Red Hat's [Hybrid Cloud Patterns](https://hybrid-clou
 aims to provide Reference Architectures that can be run through CI/CD systems.
 
 The goal of this project in particular is to provide an extensible framework to do GitOps with Ansible Automation
-Platform, and as such to provide useful facilities for developing Patterns (community and validated) that function with Ansible as the GitOps engine.
+Platform, and as such to provide useful facilities for developing Patterns (community and validated) that function with Ansible Automation Platform as the GitOps engine.
 
 The thinking behind this effort is documented in the [Ansible Pattern Theory](https://github.com/mhjacks/ansible-pattern-theory) repository.
 
@@ -63,7 +63,7 @@ $ ./pattern.sh make install
 
 In this model, you provide AWS credentials in addition to the other components needed in the "bare" install. The framework will build an AWS image using Red Hat's ImageBuilder, deploy that image onto a new AWS VPC and subnet, and deploy AAP on that image using the command line installer. It will then hand over the configuration of the AAP installation to the specified `controller_config_dir`.
 
-### Convenience Features Install
+### Convenience Features Install (defined by options in the "default" install)
 
 ```shell
 $ ./pattern.sh make install
@@ -76,6 +76,50 @@ The variables to include builds for the extra components are all Ansible boolean
 `automation_hub`
 `build_idm`
 `build_sat`
+
+## agof_vault.yml Configuration
+
+### Common Configuration
+
+| Name                      | Description                          | Required | Optional | Default            |
+| ------------------------- | ------------------------------------ | -------- | -------- | ------------------ |
+| admin_user                | Admin User (for AAP and/or Hub)      |    x     | true     | 'admin'            |
+| admin_password            | Admin Password (for AAP and/or Hub)  |    x     | false    |                    |
+| aap_admin_username        | Admin User (for AAP)                 |          | false     | ''            |
+| admin_password            | Admin Password (for AAP and/or Hub)  |    x     | false    |                    |
+| offline_token             | Red Hat Offline Token                |    x     | false    |                    |
+| redhat_username           | Red Hat Subscriber Username          |    x     | false    |                    |
+| redhat_password           | Red Hat Subscriber Password          |    x     | false    |                    |
+| redhat_registry_username_vault  | Red Hat Subscriber Username    |    x     | false    |              |
+| redhat_registry_password_vault  | Red Hat Subscriber Password    |    x     | false    |              |
+| manifest_content          | Base64 encoded Manifest to Entitle   |    x     | false    |                    |
+| automation_hub_url_vault  | Subscriber-specific URL for Content  |    x     | false    |                    |
+| automation_hub_token_vault| Subscriber-specific token for Content |    x     | false    |                    |
+| controller_configs_dir    | Directory to pass to controller_configuration |    x     | false    |                    |
+| automation_hub            | Flag to build an enable Automation Hub |        | true     | false              |
+| custom_execution_environments | Array of Execution Environments to build on Hub |        | true     |  []     |
+
+### AWS-Specific Configuration
+
+| Name                      | Description                          | Required | Optional | Default            |
+| ------------------------- | ------------------------------------ | -------- | -------- | ------------------ |
+| aws_account_nbr_vault     | AWS Account Number                   |    x     | false    |                    |
+| aws_access_key_vault      | AWS Access Key String                |    x     | false    |                    |
+| aws_secret_key_vault      | AWS Secret Key String                |    x     | false    |                    |
+| ec2_region                | EC2 region to use for builds         |    x     | false     |                   |
+| ec2_name_prefix           | Text to add for EC2                  |    x     | false     |                   |
+| pattern_dns_zone          | Zone to use for route53 updates      |    x     | false     |                   |
+| build_idm                 | Flag to build an idm VM on AWS       |          | true     | false              |
+| build_sat                 | Flag to build a Satellite VM on AWS  |          | true     | false              |
+
+### ImageBuilder-Specific Configuration
+
+| Name                      | Description                          | Required | Optional | Default            |
+| ------------------------- | ------------------------------------ | -------- | -------- | ------------------ |
+| org_number_vault          | Red Hat Subscriber Organization Number |         | true     |                   |
+| activation_key_vault      | Activation Key Name to embed in image  |         | true     |                   |
+| skip_imagebuilder_build   | Flag to skip imagebuilder build (also set `imagebuilder_ami` if true)  |         | true     |    false               |
+| imagebuilder_ami   | AMI to use for VM creation in AWS  |         | true     |       |
 
 ## Acknowledgements
 
