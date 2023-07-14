@@ -141,10 +141,16 @@ The variables to include builds for the extra components are all Ansible boolean
 | manifest_content          | Base64 encoded Manifest to Entitle   |    x     | false    |                    |
 | automation_hub_url_vault  | Subscriber-specific URL for Content  |    x     | false    |                    |
 | automation_hub_token_vault| Subscriber-specific token for Content |    x     | false    |                    |
-| init_env_collection_install | Whether to install collections required by the framework |  | true | true |
-| init_env_collection_install_force | Whether to use the `force` argument when installing collections |  | true | false |
 | controller_configs_dir    | Directory to pass to controller_configuration |    x     | false    |                    |
 | automation_hub            | Flag to build an enable Automation Hub |        | true     | false              |
+
+### Initialization Environment Configuration
+
+| Name                      | Description                          | Required | Optional | Default            |
+| ------------------------- | ------------------------------------ | -------- | -------- | ------------------ |
+| init_env_collection_install | Whether to install collections required by the framework |  | false | true |
+| init_env_collection_install_force | Whether to use the `force` argument when installing collections | false | false |
+| special_collection_installs | "Bundled" collection installations (references files in repodir) | false | true | `[]` |
 
 ### Automation Hub Specific Configuration
 
