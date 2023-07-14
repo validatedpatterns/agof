@@ -128,25 +128,25 @@ The variables to include builds for the extra components are all Ansible boolean
 
 ### Common Configuration
 
-| Name                      | Description                          | Required | Optional | Default            |
-| ------------------------- | ------------------------------------ | -------- | -------- | ------------------ |
-| admin_user                | Admin User (for AAP and/or Hub)      |    x     | true     | 'admin'            |
-| admin_password            | Admin Password (for AAP and/or Hub)  |    x     | false    |                    |
-| aap_verison               | AAP Version to Use                   |          | true     | '2.3'              |
-| offline_token             | Red Hat Offline Token                |    x     | false    |                    |
-| redhat_username           | Red Hat Subscriber Username          |    x     | false    |                    |
-| redhat_password           | Red Hat Subscriber Password          |    x     | false    |                    |
-| redhat_registry_username_vault  | Red Hat Subscriber Username    |    x     | false    |              |
-| redhat_registry_password_vault  | Red Hat Subscriber Password    |    x     | false    |              |
-| manifest_content          | Base64 encoded Manifest to Entitle   |    x     | false    |                    |
-| automation_hub_url_vault  | Subscriber-specific URL for Content  |    x     | false    |                    |
-| automation_hub_token_vault| Subscriber-specific token for Content |    x     | false    |                    |
-| controller_configs_dir    | Directory to pass to controller_configuration |    x     | false    |                    |
-| automation_hub            | Flag to build an enable Automation Hub |        | true     | false              |
+| Name                      | Description                          | Required | Default  |
+| ------------------------- | ------------------------------------ | -------- | -------- | 
+| admin_user                | Admin User (for AAP and/or Hub)      | false     | 'admin'            |
+| admin_password            | Admin Password (for AAP and/or Hub)  | true    |                    |
+| aap_verison               | AAP Version to Use                   | true     | '2.3'              |
+| offline_token             | Red Hat Offline Token                | false    |                    |
+| redhat_username           | Red Hat Subscriber Username          | true    |                    |
+| redhat_password           | Red Hat Subscriber Password          | true    |                    |
+| redhat_registry_username_vault  | Red Hat Subscriber Username    | true    |              |
+| redhat_registry_password_vault  | Red Hat Subscriber Password    | true    |              |
+| manifest_content          | Base64 encoded Manifest to Entitle   | true    |                    |
+| automation_hub_url_vault  | Subscriber-specific URL for Content  | true    |                    |
+| automation_hub_token_vault| Subscriber-specific token for Content | true    |                    |
+| controller_configs_dir    | Directory to pass to controller_configuration | true  |     |
+| automation_hub            | Flag to build an enable Automation Hub | false     | false              |
 
 ### Initialization Environment Configuration
 
-| Name                      | Description                          | Required | Optional | Default            |
+| Name                      | Description                          | Required | Default            |
 | ------------------------- | ------------------------------------ | -------- | -------- | ------------------ |
 | init_env_collection_install | Whether to install collections required by the framework |  | false | true |
 | init_env_collection_install_force | Whether to use the `force` argument when installing collections | false | false |
@@ -154,35 +154,35 @@ The variables to include builds for the extra components are all Ansible boolean
 
 ### Automation Hub Specific Configuration
 
-| Name                      | Description                          | Required | Optional | Default            |
-| ------------------------- | ------------------------------------ | -------- | -------- | ------------------ |
-| aap_admin_username        | Admin User (for AAP)                 |          | true     | '{{ admin_user }}' |
-| aap_admin_password        | Admin Password (for AAP)             |          | true     | '{{ admin_password }} ' |
-| private_hub_username        | Admin User (for Automation Hub)    |          | true     | '{{ admin_user }}' |
-| private_hub_password        | Admin Password (for Automation Hub) |          | true     | '{{ admin_password }} ' |
-| custom_execution_environments | Array of Execution Environments to build on Hub |        | true     |  []     |
+| Name                      | Description                          | Required | Default            |
+| ------------------------- | ------------------------------------ | -------- | ------------------ |
+| aap_admin_username        | Admin User (for AAP)                 | false    | '{{ admin_user }}' |
+| aap_admin_password        | Admin Password (for AAP)             | true     | '{{ admin_password }} ' |
+| private_hub_username        | Admin User (for Automation Hub)    | true     | '{{ admin_user }}' |
+| private_hub_password        | Admin Password (for Automation Hub) |true     | '{{ admin_password }} ' |
+| custom_execution_environments | Array of Execution Environments to build on Hub | true     |  []     |
 
 ### AWS-Specific Configuration
 
-| Name                      | Description                          | Required | Optional | Default            |
-| ------------------------- | ------------------------------------ | -------- | -------- | ------------------ |
-| aws_account_nbr_vault     | AWS Account Number                   |    x     | false    |                    |
-| aws_access_key_vault      | AWS Access Key String                |    x     | false    |                    |
-| aws_secret_key_vault      | AWS Secret Key String                |    x     | false    |                    |
-| ec2_region                | EC2 region to use for builds         |    x     | false     |                   |
-| ec2_name_prefix           | Text to add for EC2                  |    x     | false     |                   |
-| pattern_dns_zone          | Zone to use for route53 updates      |    x     | false     |                   |
-| build_idm                 | Flag to build an idm VM on AWS       |          | true     | false              |
-| build_sat                 | Flag to build a Satellite VM on AWS  |          | true     | false              |
+| Name                      | Description                          | Required | Default            |
+| ------------------------- | ------------------------------------ | -------- | ------------------ |
+| aws_account_nbr_vault     | AWS Account Number                   | false    |                    |
+| aws_access_key_vault      | AWS Access Key String                | false    |                    |
+| aws_secret_key_vault      | AWS Secret Key String                | false    |                    |
+| ec2_region                | EC2 region to use for builds         | false    |                   |
+| ec2_name_prefix           | Text to add for EC2                  | false    |                   |
+| pattern_dns_zone          | Zone to use for route53 updates      | false    |                   |
+| build_idm                 | Flag to build an idm VM on AWS       | false    | false             |
+| build_sat                 | Flag to build a Satellite VM on AWS  | false    | false             |
 
 ### ImageBuilder-Specific Configuration
 
-| Name                      | Description                          | Required | Optional | Default            |
-| ------------------------- | ------------------------------------ | -------- | -------- | ------------------ |
-| org_number_vault          | Red Hat Subscriber Organization Number |         | true     |                   |
-| activation_key_vault      | Activation Key Name to embed in image  |         | true     |                   |
-| skip_imagebuilder_build   | Flag to skip imagebuilder build (also set `imagebuilder_ami` if true)  |         | true     |    false               |
-| imagebuilder_ami   | AMI to use for VM creation in AWS  |         | true     |       |
+| Name                      | Description                          | Required | Default            |
+| ------------------------- | ------------------------------------ | -------- | ------------------ |
+| org_number_vault          | Red Hat Subscriber Organization Number | false  | true               |
+| activation_key_vault      | Activation Key Name to embed in image  | false  |                    |
+| skip_imagebuilder_build   | Flag to skip imagebuilder build (also set `imagebuilder_ami` if true)  flase | true     |
+| imagebuilder_ami   | AMI to use for VM creation in AWS  | false             | true     |
 
 ## Acknowledgements
 
