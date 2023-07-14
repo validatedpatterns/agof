@@ -85,8 +85,7 @@ The variables to include builds for the extra components are all Ansible boolean
 | ------------------------- | ------------------------------------ | -------- | -------- | ------------------ |
 | admin_user                | Admin User (for AAP and/or Hub)      |    x     | true     | 'admin'            |
 | admin_password            | Admin Password (for AAP and/or Hub)  |    x     | false    |                    |
-| aap_admin_username        | Admin User (for AAP)                 |          | false     | ''            |
-| admin_password            | Admin Password (for AAP and/or Hub)  |    x     | false    |                    |
+| aap_verison               | AAP Version to Use                   |          | true     | '2.3'              |
 | offline_token             | Red Hat Offline Token                |    x     | false    |                    |
 | redhat_username           | Red Hat Subscriber Username          |    x     | false    |                    |
 | redhat_password           | Red Hat Subscriber Password          |    x     | false    |                    |
@@ -97,6 +96,15 @@ The variables to include builds for the extra components are all Ansible boolean
 | automation_hub_token_vault| Subscriber-specific token for Content |    x     | false    |                    |
 | controller_configs_dir    | Directory to pass to controller_configuration |    x     | false    |                    |
 | automation_hub            | Flag to build an enable Automation Hub |        | true     | false              |
+
+### Automation Hub Specific Configuration
+
+| Name                      | Description                          | Required | Optional | Default            |
+| ------------------------- | ------------------------------------ | -------- | -------- | ------------------ |
+| aap_admin_username        | Admin User (for AAP)                 |          | true     | '{{ admin_user }}' |
+| aap_admin_password        | Admin Password (for AAP)             |          | true     | '{{ admin_password }} ' |
+| private_hub_username        | Admin User (for Automation Hub)    |          | true     | '{{ admin_user }}' |
+| private_hub_password        | Admin Password (for Automation Hub) |          | true     | '{{ admin_password }} ' |
 | custom_execution_environments | Array of Execution Environments to build on Hub |        | true     |  []     |
 
 ### AWS-Specific Configuration
