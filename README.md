@@ -148,9 +148,9 @@ The variables to include builds for the extra components are all Ansible boolean
 
 | Name                      | Description                          | Required | Default  | Notes |
 | ------------------------- | ------------------------------------ | -------- | -------- | ------------------ |
-| init_env_collection_install | Whether to install collections required by the framework |  | false | true |  |
+| init_env_collection_install | Whether to install collections required by the framework | false | true |  |
 | init_env_collection_install_force | Whether to use the `force` argument when installing collections | false | false | Forces the installation of declared dependencies if true |
-| special_collection_installs | "Bundled" collection installations (references files in repodir) | false | true | `[]` | A mechanism to allow the installation of collections bundled into the pattern, if the ones published in galaxy and/or Automation Hub are not sufficient |
+| special_collection_installs | "Bundled" collection installations (references files in repodir) | false | `[]` | A mechanism to allow the installation of collections bundled into the pattern, if the ones published in galaxy and/or Automation Hub are not sufficient |
 
 ### Automation Hub Specific Configuration
 
