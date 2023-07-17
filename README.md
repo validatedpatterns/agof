@@ -185,19 +185,20 @@ The variables to include builds for the extra components are all Ansible boolean
 | org_number_vault          | Red Hat Subscriber Organization Number | true  |  | This is the organization number associated with the RHEL instances you need to entitle |
 | activation_key_vault      | Activation Key Name to embed in image  | true  |                    | This is an activation key for the Red Hat CDN. It is expected to be able to enable both the base RHEL repos and the AAP repos. |
 | skip_imagebuilder_build   | Flag to skip imagebuilder build (also set `imagebuilder_ami` if true) |  false | false     | |
-| imagebuilder_ami   | AMI to use for VM creation in AWS  | false             | | It is very possible to re-use another imagebuilder build from a previous installation of the pattern framework, and saves ~15 minutes on AWS to re-use such an image. |
+| imagebuilder_ami   | AMI to use for VM creation in AWS  | false             | | It is very possible to re-use another imagebuilder build from a previous installation of the pattern framework, and saves ~15 minutes on a new pattern install to re-use such an image. |
 
 ## What the Framework Does, Step-by-Step
 
 ### Pre-GitOps Steps
 
-#### pre-init
+#### [pre-init](init_env/pre_init_env.yml)
 
+##### Build ansible.cfg
 ##### Collection dependency install
-##### image build (optional)
 
 #### Initialization
 
+##### image build (optional)
 ##### Install AWS Infrastructure
 ##### Manage AWS Instances
 
