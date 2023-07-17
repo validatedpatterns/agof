@@ -138,11 +138,11 @@ The variables to include builds for the extra components are all Ansible boolean
 | redhat_registry_username_vault  | Red Hat Subscriber Username    | true    |           |  |
 | redhat_registry_password_vault  | Red Hat Subscriber Password    | true    |           |  |
 | manifest_content          | Base64 encoded Manifest to Entitle   | true    |           | Can be loaded directly from a file using a construct like this: `"{{ lookup('file', '~/Downloads/manifest.zip') | b64encode }}"` |
-| automation_hub_url_vault  | Subscriber-specific URL for Content  | true    | This refers to the automation hub section on https://console.redhat.com.  It is the endpoint that is used to download Validated Content in addition to any public Galaxy content needed |
+| automation_hub_url_vault  | Subscriber-specific URL for Content  | true    |  | This refers to the automation hub section on https://console.redhat.com.  It is the endpoint that is used to download Validated Content in addition to any public Galaxy content needed |
 | automation_hub_token_vault| Subscriber-specific token for Content | true    |                    |
-| automation_hub            | Flag to build an enable Automation Hub | false     | false | Building a Private Automation Hub is necessary if your pattern builds an Execution Environment that is not hosted on a public container registry. |
-| controller_configs_dir    | Directory to pass to controller_configuration | true  | This directory is the key one to load all other AAP Controller configuration. The framework is not opinionated about how the directory gets there - you may wish to generate it yourself or check it out from a git repo |
-| controller_launch_jobs    | List of jobs to run after controller_configuration has run | false     | Use this to start a job (or jobs) that do not have aggressive schedules, and that are ready to run as soon as the controller is configured. The fewer jobs listed here the better. |
+| automation_hub            | Flag to build an enable Automation Hub | false     | false |  | Building a Private Automation Hub is necessary if your pattern builds an Execution Environment that is not hosted on a public container registry. |
+| controller_configs_dir    | Directory to pass to controller_configuration | true  |  | This directory is the key one to load all other AAP Controller configuration. The framework is not opinionated about how the directory gets there - you may wish to generate it yourself or check it out from a git repo |
+| controller_launch_jobs    | List of jobs to run after controller_configuration has run | false     |  | Use this to start a job (or jobs) that do not have aggressive schedules, and that are ready to run as soon as the controller is configured. The fewer jobs listed here the better. |
 
 ### Initialization Environment Configuration
 
