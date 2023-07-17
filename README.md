@@ -227,21 +227,43 @@ The standard public IPs that are offered by AWS (which are used by this framewor
 
 ##### [Teardown AWS Environment)](init_env/aws/teardown.yml) (`make aws_uninstall`)
 
-The teardown play will terminate all VMs associated with a VPC and subnet, and remove the DNS entries managed by the "bootstrap set".
+The teardown play will terminate all VMs associated with a VPC and subnet, and remove the DNS entries managed by the "bootstrap set" (which are just the VMs the framework has been told it has to build).
 
-#### [Host Initialization](hosts/main.yml) (`make from_os_install` entry point)
+#### [Host Configuration](hosts/main.yml) (`make from_os_install` entry point)
 
-##### AAP Installation (mandatory)
-##### Private Automation Hub Installation (optional)
+This is normally run inline with the `make install` entry point. You may, at your option, provide a suitable inventory file that specifies a node to install AAP on, and optionally a node to install Automation Hub on, and pass that inventory file in, as desribed [here](#from-os-install).
 
+The [common role](hosts/roles/aap_download/) here prepares AAP (on both the controller node, as well as the automation_hub node, if one is configured to be installed).
 
-##### AAP Configuration
+##### [AAP Installation](hosts/roles/control_node/) (mandatory)
+
+The control node configuration role templates an [inventory file](hosts/roles/control_node/templates/controller_install.j2) for the AAP installer and runs it. Additionally, this role will entitle the AAP controller, as well as loading execution environments from the Red Hat registry. The bulk of controller configuration, however, is designed to happen later, when control is handed to the controller_configuration `dispatch` role.
+
+This is one of the few elements in the pattern that is mandatory. (Technically, if you use the "API only" installation mode, this part is also optional.)
+
+##### [Private Automation Hub Installation](hosts/roles/private_automation_hub/) (optional)
+
+This role configures an instance of the AAP Private Automation Hub, if the `automation_hub` variable is set to `true`. Private Automation Hub serves as a content repository for Ansible content; in particular, it serves as a container registry for Ansible Execution Environments; since one of the main reasons to use Execution Environments is to encapsulate Validated Content, this provides a mechanism for the pattern to facilitate the use of Validated Content in a safe and subscription agreement-compliant manner.
+
+You will _need_ a Private Automation Hub if your pattern builds an Execution Environment with Validated Content. You may also want one for other reasons. The `automation_hub`  variable defaults to `false`.
+
+If you specify custom execution environments to be built, they will be built on the Hub node and pushed to the registry on the Hub node.
+
+##### [AAP Configuration](configure_aap.yml) (mandatory; `make api_install` entry point)
+
+This play is really the heart and focus of this framework. The rest of the framework exists to facilitate running this play, and providing additional capabilities to the environment in which the play runs. The `make api_install` entry point uses just the variables related to controller installation as desribed [here](#api-install-aka-bare). Otherwise, it is called inline from the `make install` entry point. It is safe to run multiple times.
 
 ###### Entitle Controller
 
+The play uses the same technique and variables to entitle the AAP controller as the role above does; but since we want to preserve the option to call it outside that role, it is duplicated. The key thing is to populate `manifest_contents` with a suitable manifest file.
+
 ###### Configure Controller
 
+Using the credentials you supply, the play will now proceed to invoke the `controller_configuration` `dispatch` role on the controller endpoint based on the configuration found in `controller_configuration_dir` and in your `agof_vault.yml` file. This controls all of the controller configuration. Based on the variables defined in the controller configuration, `dispatch` will call the necessary roles and modules in the right order to configure AAP to run your pattern.
+
 ###### Run "immediate" jobs
+
+The final step in the play allows you to run job(s) immediately. This mechanism is provided in case you have a potentially long-running play for configuration that is scheduled to run repeatedly but at a long interval. This ensures the play (job) runs immediately.
 
 ### GitOps Step
 
