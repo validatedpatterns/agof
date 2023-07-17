@@ -146,11 +146,11 @@ The variables to include builds for the extra components are all Ansible boolean
 
 ### Initialization Environment Configuration
 
-| Name                      | Description                          | Required | Default            |
+| Name                      | Description                          | Required | Default  | Notes |
 | ------------------------- | ------------------------------------ | -------- | -------- | ------------------ |
-| init_env_collection_install | Whether to install collections required by the framework |  | false | true |
-| init_env_collection_install_force | Whether to use the `force` argument when installing collections | false | false |
-| special_collection_installs | "Bundled" collection installations (references files in repodir) | false | true | `[]` |
+| init_env_collection_install | Whether to install collections required by the framework |  | false | true |  |
+| init_env_collection_install_force | Whether to use the `force` argument when installing collections | false | false | Forces the installation of declared dependencies if true |
+| special_collection_installs | "Bundled" collection installations (references files in repodir) | false | true | `[]` | A mechanism to allow the installation of collections bundled into the pattern, if the ones published in galaxy and/or Automation Hub are not sufficient |
 
 ### Automation Hub Specific Configuration
 
@@ -183,7 +183,7 @@ The variables to include builds for the extra components are all Ansible boolean
 | ------------------------- | ------------------------------------ | -------- | ------------------ | ------- |
 | org_number_vault          | Red Hat Subscriber Organization Number | true  |  | This is the organization number associated with the RHEL instances you need to entitle |
 | activation_key_vault      | Activation Key Name to embed in image  | true  |                    | This is an activation key for the Red Hat CDN. It is expected to be able to enable both the base RHEL repos and the AAP repos. |
-| skip_imagebuilder_build   | Flag to skip imagebuilder build (also set `imagebuilder_ami` if true)  flase | true     | |
+| skip_imagebuilder_build   | Flag to skip imagebuilder build (also set `imagebuilder_ami` if true) |  false | false     | |
 | imagebuilder_ami   | AMI to use for VM creation in AWS  | false             | | It is very possible to re-use another imagebuilder build from a previous installation of the pattern framework, and saves ~15 minutes on AWS to re-use such an image. |
 
 ## Acknowledgements
