@@ -187,6 +187,38 @@ The variables to include builds for the extra components are all Ansible boolean
 | skip_imagebuilder_build   | Flag to skip imagebuilder build (also set `imagebuilder_ami` if true) |  false | false     | |
 | imagebuilder_ami   | AMI to use for VM creation in AWS  | false             | | It is very possible to re-use another imagebuilder build from a previous installation of the pattern framework, and saves ~15 minutes on AWS to re-use such an image. |
 
+## Phases
+
+### Pre-GitOps Phases
+
+#### pre-init
+
+##### Collection dependency install
+##### image build (optional)
+
+#### Initialization
+
+##### Install AWS Infrastructure
+##### Manage AWS Instances
+
+#### Host Initialization
+
+##### AAP Installation (mandatory)
+##### Private Automation Hub Installation (optional)
+
+
+##### AAP Configuration
+
+###### Entitle Controller
+
+###### Configure Controller
+
+###### Run "immediate" jobs
+
+### GitOps Phase
+
+The framework is only truly in GitOps mode once the configuration has been fully applied to the AAP controller and the AAP controller has taken responsibility for managing the environment. Prior to that point, there are many opportunities (by design) to inject non-declarative elements into the environment. Beyond that point, changes should be made to the environment or the workflows that configure it by pushing git commits to the repositories the pattern uses.
+
 ## Acknowledgements
 
 This repository represents an interpretation of GitOps principles, as developed in the Hybrid Cloud Patterns GitOps framework for Kubernetes, and an adaptation and fusion of two previous ongoing efforts at Red Hat: [Ansible-Workshops](https://github.com/ansible/workshops) and [LabBuilder2/RHISbuilder](https://github.com/parmstro/labbuilder2).
