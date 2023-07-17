@@ -203,21 +203,23 @@ Because ansible.cfg needs to be built with your automation hub token inside it, 
 
 The next thing the pre-init play does is install dependency collections based on what's contained in [requirements.yml](requirements.yml). If there are any "special" collections contained in the root of the framework they can also be installed at this time. When the framework was under development this was necessary with redhat.satellite but the necessary changes have been upstreamed as of 3.11; 3.12 has been released since then, so this mechanism is no longer needed but is left in as it might be necessary in the future.
 
-#### [Environment Initialization](init_env/main.yml) (optional; enabled by default)
+#### [Environment Initialization](init_env/main.yml) (optional; enabled by default; `make install` entry point)
 
 Environment initialization includes the steps necessary to build the environment (VMs) to install AAP and related tooling; currently the framework can do this on AWS. This step is optional if you wish to provide either an AAP controller API endpoint OR else bring your own inventory/VMs to install AAP Controller and (optionally) Automation Hub on.
 
-##### [image build (optional)](buildimage/main.yml)
+##### [image build (optional)](buildimage/main.yml) (optional)
 
 This play builds an image using the Red Hat Console's imagebuilder service; the end result of this process is an image that will serve as an AMI in AWS. (ImageBuilder can build other types of images as well.) The key aspects of this image are that they include the cloud-init package (which helps with certain aspects of initialization), but more importantly, they include the organization number and activation key so that images that are instantiated with this AMI are automatically registered and enabled to install content via the Red Hat CDN.
 
 These images tend to be fairly static, so it is not necessary to build a brand new image every time you run the pattern. You can save the AMI from a previous pattern run, and re-use it as long as you like. Building and uploading the image to AWS represents about 15 minutes of the runtime of the pattern installation.
 
-##### [Initialize the Environment (for AWS)](init_env/aws/main.yml)
+##### [Initialize the Environment (for AWS)](init_env/aws/main.yml) (optional)
 
 This play handles all the AWS-specific setup necessary to run AAP, (optionally) Automation Hub, (optionally) IdM, (optionally) Satellite, and also offers you the ability to install VMs of your own for a pattern via overrides. The reason for this is that installing the VMs at this stage allows the customer/user to not have to involve AWS credentials in the pattern itself if they do not wish to do so. Of course they are free to include workflows that interact with AWS or other infrastructure if they want - this was done with the intention of simplifying that process if AWS was an implementation detail of the pattern as opposed to the intention of it.
 
 The two key roles that are invoked here are [manage_ec2_infra](init_env/aws/roles/manage_ec2_infra/) and [manage_ec2_instances](init_env/aws/roles/manage_ec2_instances/). Both of these have been adapted from [ansible-workshops](https://github.com/ansible/workshops). The `manage_ec2_infra` role is responsible for setting up the VPC, subnet, and security group for the patten. `manage_ec2_instances` is responsible for actually building the VM instances. It will also manage route53 DNS entries. It is safe to run these roles repeatedly; they will not "double allocate" VMs as long as the VMs are running.
+
+These roles also include code for making hostnames durable across reboots, as well as maintaining `/etc/hosts` on all AWS nodes in the bootstrap set that include all of the other servers in the bootstrap set.
 
 ##### [Update Route53 DNS (if needed))](init_env/aws/fix_aws_dns.yml)
 
@@ -227,7 +229,7 @@ The standard public IPs that are offered by AWS (which are used by this framewor
 
 The teardown play will terminate all VMs associated with a VPC and subnet, and remove the DNS entries managed by the "bootstrap set".
 
-#### Host Initialization
+#### [Host Initialization](hosts/main.yml) (`make from_os_install` entry point)
 
 ##### AAP Installation (mandatory)
 ##### Private Automation Hub Installation (optional)
