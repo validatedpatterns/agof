@@ -177,12 +177,14 @@ The variables to include builds for the extra components are all Ansible boolean
 
 ### ImageBuilder-Specific Configuration
 
-| Name                      | Description                          | Required | Default            |
-| ------------------------- | ------------------------------------ | -------- | ------------------ |
-| org_number_vault          | Red Hat Subscriber Organization Number | false  | true               |
-| activation_key_vault      | Activation Key Name to embed in image  | false  |                    |
-| skip_imagebuilder_build   | Flag to skip imagebuilder build (also set `imagebuilder_ami` if true)  flase | true     |
-| imagebuilder_ami   | AMI to use for VM creation in AWS  | false             | true     |
+*Note:* If you are providing an AMI via the `imagebuilder_ami` variable as opposed to building one from console.redhat.com for the pattern, the pattern still assumes that the RHEL instance will be entitled and will be running a suitable version of RHEL.
+
+| Name                      | Description                          | Required | Default            | Notes |
+| ------------------------- | ------------------------------------ | -------- | ------------------ | ------- |
+| org_number_vault          | Red Hat Subscriber Organization Number | true  |  | This is the organization number associated with the RHEL instances you need to entitle |
+| activation_key_vault      | Activation Key Name to embed in image  | true  |                    | This is an activation key for the Red Hat CDN. It is expected to be able to enable both the base RHEL repos and the AAP repos. |
+| skip_imagebuilder_build   | Flag to skip imagebuilder build (also set `imagebuilder_ami` if true)  flase | true     | |
+| imagebuilder_ami   | AMI to use for VM creation in AWS  | false             | | It is very possible to re-use another imagebuilder build from a previous installation of the pattern framework, and saves ~15 minutes on AWS to re-use such an image. |
 
 ## Acknowledgements
 
