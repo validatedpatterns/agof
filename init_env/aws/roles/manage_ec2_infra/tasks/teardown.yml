@@ -36,7 +36,7 @@
 
 # retrieve instances for VPC 1
 - name: grab vpc node facts for workshop
-  ec2_instance_info:
+  amazon.aws.ec2_instance_info:
     region: "{{ ec2_region }}"
     filters:
       "vpc-id": "{{ec2_vpc_id}}"
