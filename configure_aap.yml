@@ -55,3 +55,7 @@
     - name: "Configure AAP"
       ansible.builtin.include_role:
         name: dispatch
+
+    - name: "Kick off any jobs that need to launch immediately"
+      ansible.builtin.include_role:
+        name: job_launch
