@@ -143,6 +143,7 @@ The variables to include builds for the extra components are all Ansible boolean
 | automation_hub_token_vault| Subscriber-specific token for Content | true    |                    |
 | controller_configs_dir    | Directory to pass to controller_configuration | true  |     |
 | automation_hub            | Flag to build an enable Automation Hub | false     | false              |
+| controller_launch_jobs    | List of jobs to run after controller_configuration has run | false     |               |
 
 ### Initialization Environment Configuration
 
