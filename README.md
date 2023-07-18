@@ -2,6 +2,29 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
+# Table of Contents
+
+* [Start Here](#start-here)
+* [How to Use It](#how-to-use-it)
+  * [Installation](#installation)
+  * [Uninstallation](#uninstallation)
+* [Entry Points](#entry-points)
+  * ["API" Install (aka "Bare")](#api-install-aka-bare)
+  * ["From OS" Install](#from-os-install)
+  * [Default Install](#default-install)
+* [AGOF_Vault.yml](#agof_vaultyml-configuration)
+  * [Common Configuration](#common-configuration)
+  * [Initialization Environment Configuration](#initialization-environment-configuration)
+  * [Automation Hub Specific Configuration](#automation-hub-specific-configuration)
+  * [AWS-Specific Configuration](#aws-specific-configuration)
+  * [ImageBuilder-Specific Configuration](#imagebuilder-specific-configuration)
+* [What the Framework Does, Step-by-Step](#what-the-framework-does-step-by-step)
+  * [Pre-GitOps Steps](#pre-gitops-steps)
+    * [Pre-init](#pre-init-mandatory)
+    * [Environment Initialization](#environment-initialization-optional-enabled-by-default-make-install-entry-point)
+    * [Host Configuration](#host-configuration-make-from_os_install-entry-point)
+  * [GitOps Step](#gitops-step)
+
 ## Start Here
 
 This repository is part of Red Hat's [Hybrid Cloud Patterns](https://hybrid-cloud-patterns.io) effort, which in general
@@ -26,7 +49,7 @@ $ ./pattern.sh make install
 $ ./pattern.sh make aws_uninstall
 ```
 
-## What this is
+## Entry Points
 
 This is a framework for building Validated Patterns that use Ansible Automation Platform (AAP) as their underlying GitOps engine. To that end, the framework has three deployment models (in increasing level of complexity):
 
