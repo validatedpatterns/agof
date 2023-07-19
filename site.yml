@@ -11,19 +11,11 @@
     - name: "Show vars"
       ansible.builtin.debug:
         msg: 'build_idm: {{ build_idm }} / build_sat: {{ build_sat }} / automation_hub: {{ automation_hub }}'
-        #msg: 'build_idm: {{ build_idm }} / build_sat: {{ build_sat }} / automation_hub: {{ automation_hub }} / aap_boostrap_repo: {{ aap_bootstrap_repo }} / aap_bootstrap_config: {{ aap_bootstrap_config }}'
 
 - name: "Phase 1 - initialize the environment"
   ansible.builtin.import_playbook: ./init_env/main.yml
   tags:
     - tags_phase_1
-
-#- name: "Phase 1a - configure the environment"
-#  ansible.builtin.import_playbook: ./init_env/aws/configure_idm_dns.yml
-#  when: agof_bootstrap_target == "aws"
-#  tags:
-#    - tags_phase_1
-#    - tags_phase_1a
 
 - name: "Phase 2 - bootstrap AAP"
   ansible.builtin.import_playbook: ./hosts/main.yml
