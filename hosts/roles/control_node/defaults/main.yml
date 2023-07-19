@@ -1,4 +1,6 @@
 ---
+automation_hub: false
+
 username: "ec2-user"
 admin_user: 'admin'
 aap_dir: "/opt/ansible-automation-platform/installer"
