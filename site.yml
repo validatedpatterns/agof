@@ -20,9 +20,9 @@
 - name: "Phase 2 - bootstrap AAP"
   ansible.builtin.import_playbook: ./hosts/main.yml
   tags:
-  - tags_phase_2
+    - tags_phase_2
 
 - name: "Phase 3 - configure AAP"
   ansible.builtin.import_playbook: ./configure_aap.yml
   tags:
-  - tags_phase_3
+    - tags_phase_3

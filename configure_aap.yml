@@ -25,8 +25,8 @@
       tags:
         - always
 
-    - name: wait for Automation Controller to be up
-      uri:
+    - name: Wait for Automation Controller to be up
+      anible.builtin.uri:
         url: '{{ controller_hostname }}/api/v2/ping/'
         method: GET
         user: '{{ admin_user | default("admin") }}'
@@ -38,11 +38,11 @@
       delay: 10
 
     - name: Display /api/v2/ping results
-      debug:
+      ansible.builtin.debug:
         msg: '{{ check2.json }}'
 
     - name: Post manifest file
-      uri:
+      ansible.builtin.uri:
         url: '{{ controller_hostname }}/api/v2/config/'
         method: POST
         user: '{{ admin_user | default("admin") }}'
