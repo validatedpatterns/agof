@@ -37,6 +37,8 @@ The thinking behind this effort is documented in the [Ansible Pattern Theory](ht
 
 ## How to Use It
 
+A minimal example pattern is available to download and run [here](https://github.com/mhjacks/agof_minimal_demo).
+
 ### Installation
 
 ```shell
