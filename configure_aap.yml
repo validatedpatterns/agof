@@ -26,7 +26,7 @@
         - always
 
     - name: Wait for Automation Controller to be up
-      anible.builtin.uri:
+      ansible.builtin.uri:
         url: '{{ controller_hostname }}/api/v2/ping/'
         method: GET
         user: '{{ admin_user | default("admin") }}'
@@ -57,7 +57,7 @@
 
     - name: "Configure AAP"
       ansible.builtin.include_role:
-        name: dispatch
+        name: redhat_cop.controller_configuration.dispatch
 
     - name: "Kick off any jobs that need to launch immediately"
       ansible.builtin.include_role:
