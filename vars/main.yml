@@ -2,7 +2,3 @@
 build_idm: false
 build_sat: false
 automation_hub: false
-
-pattern_name: '{{ ec2_name_prefix }}'
-
-controller_hostname: 'https://aap.{{ pattern_name }}.{{ pattern_dns_zone }}'

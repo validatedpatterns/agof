@@ -103,7 +103,7 @@ ansible_ssh_pass=mypass
 ansible_become_pass=mypass
 ansible_remote_tmp=/tmp/.ansible
 username=myuser
-controller_hostname=https://192.168.5.207
+controller_hostname=192.168.5.207
 ```
 
 Example `~/agof_inventory` (including both AAP and Hub):
@@ -128,7 +128,7 @@ ansible_ssh_pass=mypass
 ansible_become_pass=mypass
 ansible_remote_tmp=/tmp/.ansible
 username=myuser
-controller_hostname=https://192.168.5.207
+controller_hostname=192.168.5.207
 ```
 
 ### Default Install
@@ -280,7 +280,7 @@ If you specify custom execution environments to be built, they will be built on 
 
 ##### [AAP Configuration](configure_aap.yml) (mandatory; `make api_install` entry point)
 
-This play is really the heart and focus of this framework. The rest of the framework exists to facilitate running this play, and providing additional capabilities to the environment in which the play runs. The `make api_install` entry point uses just the variables related to controller installation as desribed [here](#api-install-aka-bare). Otherwise, it is called inline from the `make install` entry point. It is safe to run multiple times.
+This play is really the heart and focus of this framework. The rest of the framework exists to facilitate running this play, and providing additional capabilities to the environment in which the play runs. The logic for the play is contained in the [configure_aap](hosts/roles/configure_aap/) role. The `make api_install` entry point uses just the variables related to controller installation as desribed [here](#api-install-aka-bare). Otherwise, it is called inline from the `make install` entry point. It is safe to run multiple times.
 
 ###### Entitle Controller
 

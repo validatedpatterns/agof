@@ -1,0 +1,53 @@
+---
+- name: Debug
+  ansible.builtin.debug:
+    var: controller_hostname
+
+- name: Include vars from configs directory
+  ansible.builtin.include_vars:
+    dir: "{{ controller_configs_dir }}"
+    ignore_unknown_extensions: true
+    extensions:
+      - "json"
+      - "yaml"
+      - "yml"
+  tags:
+    - always
+
+- name: Wait for Automation Controller to be up
+  ansible.builtin.uri:
+    url: 'https://{{ controller_hostname }}/api/v2/ping/'
+    method: GET
+    user: '{{ admin_user | default("admin") }}'
+    password: "{{ admin_password }}"
+    validate_certs: false
+  register: check2
+  until: check2.json is defined and check2.json.instances[0].capacity > 0 and check2.json.instance_groups[0].capacity > 0
+  retries: 60
+  delay: 10
+
+- name: Display /api/v2/ping results
+  ansible.builtin.debug:
+    msg: '{{ check2.json }}'
+
+- name: Post manifest file
+  ansible.builtin.uri:
+    url: 'https://{{ controller_hostname }}/api/v2/config/'
+    method: POST
+    user: '{{ admin_user | default("admin") }}'
+    password: "{{ admin_password }}"
+    body: '{ "eula_accepted": true, "manifest": "{{ manifest_content }}" }'
+    body_format: json
+    validate_certs: false
+    force_basic_auth: true
+  register: license_controller
+  until: license_controller is not failed
+  retries: 5
+
+- name: "Configure AAP"
+  ansible.builtin.include_role:
+    name: redhat_cop.controller_configuration.dispatch
+
+- name: "Kick off any jobs that need to launch immediately"
+  ansible.builtin.include_role:
+    name: redhat_cop.controller_configuration.job_launch
