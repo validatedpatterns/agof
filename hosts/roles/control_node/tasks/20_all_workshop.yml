@@ -22,7 +22,7 @@
     dest: /home/{{ username }}/.bashrc
     owner: "{{ username }}"
     group: "{{ username }}"
-    mode: 0644
+    mode: '0644'
 
 # Login into Red Hat registry
 - name: Login to redhat registry
@@ -41,4 +41,4 @@
     dest: /home/{{ username }}/.ssh/config
     owner: "{{ username }}"
     group: "{{ username }}"
-    mode: 0700
+    mode: '0700'
