@@ -4,8 +4,6 @@
   connection: local
   gather_facts: false
   become: false
-  collections:
-    - redhat_cop.controller_configuration
   vars_files:
     - "vars/main.yml"
     - "~/agof_vault.yml"
@@ -61,4 +59,4 @@
 
     - name: "Kick off any jobs that need to launch immediately"
       ansible.builtin.include_role:
-        name: job_launch
+        name: redhat_cop.controller_configuration.job_launch
