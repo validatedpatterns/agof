@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-# Table of Contents
+## Table of Contents
 
 * [Start Here](#start-here)
 * [How to Use It](#how-to-use-it)
@@ -42,13 +42,13 @@ A minimal example pattern is available to download and run [here](https://github
 ### Installation
 
 ```shell
-$ ./pattern.sh make install
+./pattern.sh make install
 ```
 
 ### Uninstallation
 
 ```shell
-$ ./pattern.sh make aws_uninstall
+./pattern.sh make aws_uninstall
 ```
 
 ## Entry Points
@@ -58,7 +58,7 @@ This is a framework for building Validated Patterns that use Ansible Automation 
 ### "API" Install (aka "Bare")
 
 ```shell
-$ ./pattern.sh make api_install
+./pattern.sh make api_install
 ```
 
 In this model, you provide an AAP endpoint. It does not need to be entitled, it just needs to be running the AAP Controller. You supply the manifest contents, endpoint hostname, admin username (defaults to "admin"), and admin password, and then the installation hands off to a `controller_config_dir` you define. This is provided for users who have their own AAP installations on bare metal or on-prem or do not want to run on AWS.
@@ -66,7 +66,7 @@ In this model, you provide an AAP endpoint. It does not need to be entitled, it 
 ### "From OS" Install
 
 ```shell
-$ ./pattern.sh make from_os_install INVENTORY=(your_inventory_file)
+./pattern.sh make from_os_install INVENTORY=(your_inventory_file)
 ```
 
 In this model, you provide an inventory file with up to two fresh RHEL installations. The model is tested with one AAP and one Hub instance. (Many other topologies are possible with the AAP installation framework; see the Ansible Automation Platform Planning and Installation guides for details.) If you need to install a pattern on a cluster with a different topology than this, use the API install mechanism. This mechanism will run a (slightly) opinionated install of the AAP and Hub components, and will add some conveniences like default execution environments and credentials. Like the "API" install, the install will then be handed over to a `controller_config_dir` you define.
@@ -130,7 +130,7 @@ ansible_remote_tmp=/tmp/.ansible
 ### Default Install
 
 ```shell
-$ ./pattern.sh make install
+./pattern.sh make install
 ```
 
 In this model, you provide AWS credentials in addition to the other components needed in the "bare" install. The framework will build an AWS image using Red Hat's ImageBuilder, deploy that image onto a new AWS VPC and subnet, and deploy AAP on that image using the command line installer. It will then hand over the configuration of the AAP installation to the specified `controller_config_dir`.
@@ -138,7 +138,7 @@ In this model, you provide AWS credentials in addition to the other components n
 ### Convenience Features Install (defined by options in the "default" install)
 
 ```shell
-$ ./pattern.sh make install
+./pattern.sh make install
 ```
 
 This model builds on the Default installation by adding the options for building extra VMs besides AAP - the configured VM options include Private Automation Hub (hub), Identity Management (idm), and Satellite (satellite). The framework will configure Automation Hub in this mode, and configure AAP to use it; it will not configure idm or satellite beyond what they need to be managed by AAP. (The configuration of idm and satellite is the subject of the first pattern to use this framework.)
@@ -154,7 +154,7 @@ The variables to include builds for the extra components are all Ansible boolean
 ### Common Configuration
 
 | Name                      | Description                          | Required | Default  | Notes |
-| ------------------------- | ------------------------------------ | -------- | -------- | ------ | 
+| ------------------------- | ------------------------------------ | -------- | -------- | ------ |
 | admin_user                | Admin User (for AAP and/or Hub)      | false     | 'admin' |        |
 | admin_password            | Admin Password (for AAP and/or Hub)  | true    |           |        |
 | aap_verison               | AAP Version to Use                   | true     | '2.3'    | Can also be '2.4' currently |
@@ -163,7 +163,7 @@ The variables to include builds for the extra components are all Ansible boolean
 | redhat_registry_username_vault  | Red Hat Subscriber Username    | true    |           |  |
 | redhat_registry_password_vault  | Red Hat Subscriber Password    | true    |           |  |
 | manifest_content          | Base64 encoded Manifest to Entitle   | true    |           | Can be loaded directly from a file using a construct like this: `"{{ lookup('file', '~/Downloads/manifest.zip') | b64encode }}"` |
-| automation_hub_url_vault  | Subscriber-specific URL for Content  | true    |  | This refers to the automation hub section on https://console.redhat.com.  It is the endpoint that is used to download Validated Content in addition to any public Galaxy content needed |
+| automation_hub_url_vault  | Subscriber-specific URL for Content  | true    |  | This refers to the automation hub section on [https://console.redhat.com](https://console.redhat.com).  It is the endpoint that is used to download Validated Content in addition to any public Galaxy content needed |
 | automation_hub_token_vault| Subscriber-specific token for Content | true    |                    |
 | automation_hub            | Flag to build an enable Automation Hub | false     | false |  | Building a Private Automation Hub is necessary if your pattern builds an Execution Environment that is not hosted on a public container registry. |
 | controller_configs_dir    | Directory to pass to controller_configuration | true  |  | This directory is the key one to load all other AAP Controller configuration. The framework is not opinionated about how the directory gets there - you may wish to generate it yourself or check it out from a git repo |
@@ -181,11 +181,11 @@ The variables to include builds for the extra components are all Ansible boolean
 ### Automation Hub Specific Configuration
 
 | Name                      | Description                          | Required | Default            | Notes |
-| ------------------------- | ------------------------------------ | -------- | ------------------ | ------ | 
-| aap_admin_username        | Admin User (for AAP)                 | false    | '{{ admin_user }}' | | 
+| ------------------------- | ------------------------------------ | -------- | ------------------ | ------ |
+| aap_admin_username        | Admin User (for AAP)                 | false    | '{{ admin_user }}' | |
 | aap_admin_password        | Admin Password (for AAP)             | true     | '{{ admin_password }} ' | |
-| private_hub_username        | Admin User (for Automation Hub)    | true     | '{{ admin_user }}' | | 
-| private_hub_password        | Admin Password (for Automation Hub) |true     | '{{ admin_password }} ' | | 
+| private_hub_username        | Admin User (for Automation Hub)    | true     | '{{ admin_user }}' | |
+| private_hub_password        | Admin Password (for Automation Hub) |true     | '{{ admin_password }} ' | |
 | custom_execution_environments | Array of Execution Environments to build on Hub | true     |  `[]`  | The execution environments will be built on the hub node, and then pushed into the hub registry from there. |
 
 ### AWS-Specific Configuration
@@ -270,7 +270,7 @@ This is one of the few elements in the pattern that is mandatory. (Technically, 
 
 This role configures an instance of the AAP Private Automation Hub, if the `automation_hub` variable is set to `true`. Private Automation Hub serves as a content repository for Ansible content; in particular, it serves as a container registry for Ansible Execution Environments; since one of the main reasons to use Execution Environments is to encapsulate Validated Content, this provides a mechanism for the pattern to facilitate the use of Validated Content in a safe and subscription agreement-compliant manner.
 
-You will _need_ a Private Automation Hub if your pattern builds an Execution Environment with Validated Content. You may also want one for other reasons. The `automation_hub`  variable defaults to `false`.
+You will *need* a Private Automation Hub if your pattern builds an Execution Environment with Validated Content. You may also want one for other reasons. The `automation_hub`  variable defaults to `false`.
 
 If you specify custom execution environments to be built, they will be built on the Hub node and pushed to the registry on the Hub node.
 
