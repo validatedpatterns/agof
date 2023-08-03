@@ -11,9 +11,9 @@ pattern_dns_zone: 'A public DNS zone managed by AWS Route53'
 offline_token: 'A Red Hat offline token used to build the RHEL image on console.redhat.com'
 
 redhat_username: 'Red Hat Subscription username, used to login to registry.redhat.io'
-redhat_pfooword: 'Red Hat Subscription password, used to login to registry.redhat.io'
+redhat_password: 'Red Hat Subscription password, used to login to registry.redhat.io'
 
-admin_pfooword: 'An admin password for AAP Controller and Automation Hub'
+admin_password: 'An admin password for AAP Controller and Automation Hub'
 
 manifest_content: "Content for a manifest file to entitle AAP Controller. See below for an example of how to point to a local file"
 #manifest_content: "{{ lookup('file', '~/Downloads/manifest_AVP_20230510T202608Z.zip') | b64encode }}"
