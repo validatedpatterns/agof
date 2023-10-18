@@ -9,7 +9,9 @@ ansible.limit = all
 forks = 20
 host_key_checking = False
 nocows = True
+{% if ansible_user is defined %}
 remote_user = {{ ansible_user }}
+{% endif %}
 gathering = smart
 fact_caching = jsonfile
 fact_caching_connection = $HOME/ansible/facts
@@ -19,11 +21,13 @@ fact_caching_timeout = 600
 inventory_ignore_extensions = secrets.py, .pyc, .cfg, .crt, .ini
 timeout = 60
 
+{% if ansible_cfg_vault_password_path is defined %}
 vault_password_file = {{ ansible_cfg_vault_password_path }}
+{% endif %}
 
 inventory = inventory
 
-collections_paths =  {{ ansible_cfg_collections_path }}
+collections_path =  {{ ansible_cfg_collections_path }}
 
 [callback_profile_tasks]
 task_output_limit = 10
@@ -45,9 +49,9 @@ control_path = %(directory)s/%%h-%%r
 server_list = automation_hub,galaxy_pub
 
 [galaxy_server.automation_hub]
-url={{ automation_hub_url }}
-auth_url=https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
-token="{{ automation_hub_token }}"
+url={{ automation_hub_url | d('https://console.redhat.com/api/automation-hub/content/published/') }}
+auth_url={{ auth_url | d('https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token') }}
+token={{ automation_hub_token }}
 
 [galaxy_server.galaxy_pub]
 url=https://galaxy.ansible.com/
