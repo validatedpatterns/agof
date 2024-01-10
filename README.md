@@ -226,7 +226,7 @@ Pre-initialization, for our purposes, refers to things that have to be installed
 
 ##### Build ansible.cfg
 
-Because ansible.cfg needs to be built with your automation hub token inside it, we generate it from a template. The ansible.cfg includes your token, endpoints for both public and Automation Hub galaxy servers, and a vault password path (for `ansible-vault`). The template used is [here](init_env/templates/ansible.cfg.j2).
+Because ansible.cfg needs to be configured with the automation hub endpooint, we generate it from a template. The ansible.cfg includes endpoints for both public and Automation Hub galaxy servers and a vault password path (for `ansible-vault`). The template used is [here](init_env/templates/ansible.cfg.j2). The automation hub token is read from the vault and injected into the environment for the collection installation phase.
 
 ##### Collection dependency install
 
