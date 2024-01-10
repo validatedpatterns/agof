@@ -51,7 +51,6 @@ server_list = automation_hub,galaxy_pub
 [galaxy_server.automation_hub]
 url={{ automation_hub_url | d('https://console.redhat.com/api/automation-hub/content/published/') }}
 auth_url={{ auth_url | d('https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token') }}
-token={{ automation_hub_token }}
 
 [galaxy_server.galaxy_pub]
 url=https://galaxy.ansible.com/

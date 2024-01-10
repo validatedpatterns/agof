@@ -1,1 +1,1 @@
-scripts/pattern.sh
+scripts/pattern-util.sh
