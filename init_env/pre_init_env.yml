@@ -27,8 +27,6 @@
           ansible.builtin.command:
             cmd: "ansible-galaxy collection install {{ '--force' if init_env_collection_install_force }} -p '{{ ansible_cfg_patch_collection_dir }}' -r requirements.yml"
             chdir: ".."
-      environment:
-        ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN: "{{ automation_hub_token }}"
 
     - name: "Assert that we have a valid target platform"
       ansible.builtin.assert:
