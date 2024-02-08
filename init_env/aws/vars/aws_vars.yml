@@ -4,7 +4,7 @@ imagebuilder_image_type: 'aws'
 aws_remote_tmp: '/tmp/.ansible'
 
 pattern_domain: "{{ ec2_name_prefix }}.example.com"
-pattern_state_rootdir: "{{ '~' | expandvars }}"
+pattern_state_rootdir: "{{ '~' | expanduser }}"
 
 build_aap_from_image: true
 
