@@ -10,3 +10,5 @@
     value: "{{ item.public_ip_address }}"
     wait: true
   loop: '{{ ec2_instances_built }}'
+  loop_control:
+    label: '{{ item.tags.avpname }}.{{ ec2_name_prefix|lower }}.{{ pattern_dns_zone }} 300 A {{ item.public_ip_address }}'

@@ -23,6 +23,8 @@
     short_hostname: '{{ inst.name }}'
     fqdn: '{{ inst.name }}.{{ pattern_domain }}'
   loop: '{{ instance_info.instances }}'
+  loop_control:
+    label: "{{ item.public_dns_name }} fqdn: {{ inst.name }}.{{ pattern_domain }} groups: {{ [ 'aws_nodes' ] + (inst.ansible_extra_groups | default([])) }}"
 
 - name: Special handling for IDM instance if provided
   ansible.builtin.set_fact:
