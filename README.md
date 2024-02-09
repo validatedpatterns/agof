@@ -161,7 +161,7 @@ The variables to include builds for the extra components are all Ansible boolean
 | ------------------------- | ------------------------------------ | -------- | -------- | ------ |
 | admin_user                | Admin User (for AAP and/or Hub)      | false     | 'admin' |        |
 | admin_password            | Admin Password (for AAP and/or Hub)  | true    |           |        |
-| aap_verison               | AAP Version to Use                   | true     | '2.3'    | Can also be '2.4' currently |
+| aap_verison               | AAP Version to Use                   | true     | '2.4'    | Can also be '2.3' currently |
 | redhat_username           | Red Hat Subscriber Username          | true    |           |        |
 | redhat_password           | Red Hat Subscriber Password          | true    |           |        |
 | redhat_registry_username_vault  | Red Hat Subscriber Username    | true    |           |  |
