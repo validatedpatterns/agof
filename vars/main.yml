@@ -4,4 +4,4 @@ build_sat: false
 automation_hub: false
 
 aap_version: "2.4"
-aap_version_short: "{{ aap_version | regex_replace("\.") }}"
+aap_version_short: "{{ aap_version | regex_replace('\.') }}"
