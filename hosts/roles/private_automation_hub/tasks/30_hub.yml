@@ -1,6 +1,7 @@
 ---
 - name: Re-check fully qualified hostname
-  ansilble.builtin.command: 'hostname -f'
+  ansible.builtin.command:
+    cmd: 'hostname -f'
   register: hostname_output
 
 - name: Set ansible_fqdn to ensure self-signed cert is created correctly
