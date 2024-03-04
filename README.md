@@ -201,7 +201,7 @@ The variables to include builds for the extra components are all Ansible boolean
 | aws_secret_key_vault      | AWS Secret Key String                | false    |                    | |
 | ec2_region                | EC2 region to use for builds         | false    |                   | |
 | ec2_name_prefix           | Text to add for EC2                  | false    |                   | This is a name to disambiguate your pattern from anything else that might be running in your AWS account. A VPC, subnet, and security group is built from this, and the prefix is added to the `pattern_dns_zone` by default. Additionally, the SSH private key is stored locally in `~/{{ ec2_name_prefix }}`. |
-| pattern_dns_zone          | Zone to use for route53 updates      | false    |                   | |
+| pattern_dns_zone          | Zone to use for route53 updates      | false    |                   | Definitely set this if doing DNS updates |
 | build_idm                 | Flag to build an idm VM on AWS       | false    | false             | This is a flag to indicate whether to build a VM called `idm` on AWS, for later installation of the idm software. Note that the framework just instantiates the VM, it does not install the IDM software. |
 | build_sat                 | Flag to build a Satellite VM on AWS  | false    | false             | This is a flag to indicate whether to install a Satellite VM on AWS, for later installation of the Satellite software. The framework does not include the Ansible code to install Satellite itself. |
 
