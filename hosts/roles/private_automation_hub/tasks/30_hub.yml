@@ -1,4 +1,13 @@
 ---
+- name: Re-check fully qualified hostname
+  ansible.builtin.command:
+    cmd: 'hostname -f'
+  register: hostname_output
+
+- name: Set ansible_fqdn to ensure self-signed cert is created correctly
+  set_fact:
+    ansible_fqdn: '{{ hostname_output.stdout | trim }}'
+
 - name: Set host private ip to ip of the machine
   set_fact:
     __host_private_ip: '{{ ansible_default_ipv4["address"] }}'

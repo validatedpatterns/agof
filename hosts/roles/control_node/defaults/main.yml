@@ -23,4 +23,4 @@ ee_images:
 # And the default image is...
 ee_default_image: "{{ ee_registry_name }}/ansible-automation-platform-{{ aap_version_short }}/ee-supported-rhel{{ ansible_distribution_major_version }}:latest"
 
-pattern_domain: '{{ ec2_name_prefix }}.example.com'
+pattern_domain: '{{ ec2_name_prefix }}.{{ pattern_dns_zone }}'
