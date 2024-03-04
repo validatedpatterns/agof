@@ -53,11 +53,15 @@
     - name: "Deploy CA bundles"
       ansible.builtin.copy:
         content: "{{ hostvars[item].ca_slurp.content | b64decode }}"
-        dest: "/etc/pki/ca-trust/source/anchors/{{ item.name }}-ca-bundle.crt"
+        dest: "/etc/pki/ca-trust/source/anchors/{{ item }}-ca-bundle.crt"
         mode: "0644"
         owner: root
         group: root
-      loop: "{{ groups['all'] }}"
+      loop: "{{ groups['aap_controllers'] + groups['automation_hub'] }}"
+      when:
+        - automation_hub|bool
 
     - name: "Update CA trusts"
       ansible.builtin.command: /usr/bin/update-ca-trust
+      when:
+        - automation_hub|bool
