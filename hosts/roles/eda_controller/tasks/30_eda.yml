@@ -14,7 +14,7 @@
 
 - name: template inventory file for Ansible Hub Install
   template:
-    src: "hub_install.j2"
+    src: "eda_install.j2"
     dest: "{{ aap_dir }}/inventory"
 
 - name: check to see if EDA is already up and running

@@ -1,0 +1,14 @@
+---
+- block:
+    - name: redhat subscription
+      include_tasks: "5_redhat_sub.yml"
+
+    - name: aap setup
+      include_tasks: "10_aap_setup.yml"
+      tags:
+        - aap_setup
+  when: not pre_build|bool
+
+- name: install eda
+  include_tasks: "30_eda.yml"
+  when: not pre_build|bool
