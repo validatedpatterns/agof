@@ -1,6 +1,7 @@
 ---
 build_idm: false
 build_sat: false
+eda: false
 automation_hub: false
 
 aap_version: "2.4"

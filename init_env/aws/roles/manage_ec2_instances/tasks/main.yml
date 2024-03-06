@@ -12,6 +12,17 @@
       ansible.builtin.set_fact:
         ec2_instances: '{{ ec2_instances + [ hub_instance ] }}'
 
+- name: Add eda instance if desired
+  when: eda|bool
+  block:
+    - name: Include hub parameters
+      ansible.builtin.include_vars:
+        file: eda.yml
+
+    - name: Include hub parameters
+      ansible.builtin.set_fact:
+        ec2_instances: '{{ ec2_instances + [ eda_instance ] }}'
+
 - name: Add idm instance if desired
   when: build_idm|bool
   block:
