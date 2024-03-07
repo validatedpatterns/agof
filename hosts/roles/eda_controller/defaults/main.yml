@@ -17,3 +17,4 @@ pattern_domain: '{{ ec2_name_prefix }}.{{ pattern_dns_zone }}'
 active_controller: 'aap.{{ pattern_domain }}'
 aap_validate_controller_certs: false
 admin_username: 'admin'
+pre_build: false

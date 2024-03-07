@@ -45,7 +45,7 @@
   tasks:
     - name: "Configure EDA Controllers"
       ansible.builtin.include_role:
-        name: roles/eda_contoller
+        name: roles/eda_controller
       when:
         - eda|bool
 
@@ -56,7 +56,7 @@
   vars_files:
     - '~/agof_vault.yml'
   tasks:
-    - name: "Retreive CA bundles"
+    - name: "Retrieve CA bundles"
       ansible.builtin.slurp:
         src: /etc/pki/ca-trust/source/anchors/ansible-automation-platform-managed-ca-cert.crt
       register: ca_slurp
