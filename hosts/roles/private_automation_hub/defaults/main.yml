@@ -1,19 +1,14 @@
 ---
+eda: false
 admin_user: 'admin'
 aap_admin_username: '{{ admin_user }}'
 aap_admin_password: '{{ admin_password }}'
-private_hub_username: '{{ admin_user }}'
-private_hub_password: '{{ admin_password }}'
-automation_hub: true
+default_automation_controller_main_url: 'https://aap.{{ ec2_name_prefix  }}.{{ pattern_dns_zone }}'
 username: 'ec2-user'
 aap_dir: "/opt/ansible-automation-platform/installer"
 output_dir: "{{ playbook_dir }}/{{ ec2_name_prefix }}"
 state: present
 teardown: false
-enable_signing: true
-gpg_key_user_name: "Joe Tester"
-gpg_key_user_email: "joe@foo.bar"
-seed_validated_content: true
 pre_build: false
 custom_execution_environments: []
 automation_hub_url: '{{ automation_hub_url_vault }}'
