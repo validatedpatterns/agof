@@ -9,4 +9,4 @@ eda_instance:
   host_aliases:
     - edacontroller
   ansible_extra_groups:
-    - eda
+    - eda_controllers
