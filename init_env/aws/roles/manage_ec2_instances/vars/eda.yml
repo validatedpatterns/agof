@@ -7,6 +7,6 @@ eda_instance:
   disk_iops: 3000
   disk_throughput: 125
   host_aliases:
-    - eda
+    - edacontroller
   ansible_extra_groups:
     - eda
