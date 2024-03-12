@@ -1,0 +1,25 @@
+[automationedacontroller]
+{{ ansible_fqdn }} ansible_connection=local
+
+[database]
+
+[servicescatalog_workers]
+
+[all:vars]
+automation_controller_main_url='{{ automation_controller_main_url | default(default_automation_controller_main_url) }}'
+automationedacontroller_controller_verify_ssl=false
+no_log=false
+admin_password='{{ admin_password }}'
+
+pg_host=''
+pg_port=''
+
+pg_database='automationedacontroller'
+pg_username='automationedacontroller'
+automationedacontroller_admin_password='{{ admin_password }}'
+automationedacontroller_pg_password='{{ admin_password }}'
+pg_sslmode='prefer'  # set to 'verify-full' for client-side enforced SSL
+
+registry_url='registry.redhat.io'
+registry_username='{{ redhat_username }}'
+registry_password='{{ redhat_password }}'

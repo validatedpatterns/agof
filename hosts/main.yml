@@ -1,6 +1,6 @@
 ---
 - name: "Prepare AAP Installation"
-  hosts: aap_controllers:automation_hub
+  hosts: aap_controllers:automation_hub:eda_controllers
   gather_facts: true
   become: true
   vars_files:
@@ -36,19 +36,32 @@
       when:
         - automation_hub|bool
 
-- name: "Mutually trust CA certs"
-  hosts: aap_controllers:automation_hub
+- name: "Configure Event Driven Automation Controller"
+  hosts: eda_controllers
   gather_facts: true
   become: true
   vars_files:
     - '~/agof_vault.yml'
   tasks:
-    - name: "Retreive CA bundles"
+    - name: "Configure EDA Controllers"
+      ansible.builtin.include_role:
+        name: roles/eda_controller
+      when:
+        - eda|bool
+
+- name: "Mutually trust CA certs"
+  hosts: aap_controllers:automation_hub:eda_controllers
+  gather_facts: true
+  become: true
+  vars_files:
+    - '~/agof_vault.yml'
+  tasks:
+    - name: "Retrieve CA bundles"
       ansible.builtin.slurp:
         src: /etc/pki/ca-trust/source/anchors/ansible-automation-platform-managed-ca-cert.crt
       register: ca_slurp
       when:
-        - automation_hub|bool
+        - (automation_hub|bool or eda|bool)
 
     - name: "Deploy CA bundles"
       ansible.builtin.copy:
@@ -59,9 +72,9 @@
         group: root
       loop: "{{ groups['aap_controllers'] + groups['automation_hub'] }}"
       when:
-        - automation_hub|bool
+        - (automation_hub|bool or eda|bool)
 
     - name: "Update CA trusts"
       ansible.builtin.command: /usr/bin/update-ca-trust
       when:
-        - automation_hub|bool
+        - (automation_hub|bool or eda|bool)
