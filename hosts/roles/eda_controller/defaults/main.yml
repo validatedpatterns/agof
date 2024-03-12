@@ -18,3 +18,4 @@ active_controller: 'aap.{{ pattern_domain }}'
 aap_validate_controller_certs: false
 admin_username: 'admin'
 pre_build: false
+default_automation_controller_main_url: 'https://aap.{{ pattern_domain }}'
