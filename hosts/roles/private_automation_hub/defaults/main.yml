@@ -1,5 +1,6 @@
 ---
 eda: false
+automation_hub: true
 admin_user: 'admin'
 aap_admin_username: '{{ admin_user }}'
 aap_admin_password: '{{ admin_password }}'
@@ -10,6 +11,10 @@ output_dir: "{{ playbook_dir }}/{{ ec2_name_prefix }}"
 state: present
 teardown: false
 pre_build: false
+enable_signing: true
+gpg_key_user_name: "Joe Tester"
+gpg_key_user_email: "joe@foo.bar"
+seed_validated_content: true
 custom_execution_environments: []
 automation_hub_url: '{{ automation_hub_url_vault }}'
 automation_hub_token: '{{ automation_hub_token_vault }}'
