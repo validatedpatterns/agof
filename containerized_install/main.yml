@@ -1,0 +1,49 @@
+---
+- name: "Prep the containerized installer (root required)"
+  hosts: aap_controllers
+  become: true
+  gather_facts: true
+  vars_files:
+    - 'vars/main.yml'
+    - "~/agof_vault.yml"
+  tasks:
+    - name: "Install prereq packages"
+      ansible.builtin.package:
+        name:
+          - ansible-core
+          - wget
+          - git
+          - rsync
+          - sudo
+
+    - name: "Manage user for AAP installer"
+      ansible.builtin.user:
+        name: '{{ containerized_installer_user }}'
+        comment: 'AAP User'
+        create_home: true
+        home: '{{ containerized_installer_user_home }}'
+
+    - name: "Enable sudo for AAP installer user"
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers.d/aap
+        line: "{{ containerized_installer_user }} ALL=(ALL) NOPASSWD: ALL"
+        owner: root
+        group: root
+        mode: '0444'
+        create: true
+
+    - name: "Enable linger for AAP installer user"
+      ansible.builtin.command:
+        cmd: |-
+          loginctl enable-linger "{{ containerized_installer_user }}"
+
+- name: "Run the containerized installer"
+  hosts: aap_controllers
+  become: true
+  vars_files:
+    - 'vars/main.yml'
+    - "~/agof_vault.yml"
+  tasks:
+    - name: Install AAP
+      ansible.builtin.include_role:
+        name: installer

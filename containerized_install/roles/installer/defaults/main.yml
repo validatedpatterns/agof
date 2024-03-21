@@ -1,0 +1,53 @@
+---
+automation_hub: true
+eda: true
+
+controller_fqdn: "{{ ansible_facts.fqdn }}"
+controller_admin_password: "{{ admin_password }}"
+automationhub_fqdn: "{{ ansible_facts.fqdn }}"
+eda_fqdn: "{{ ansible_facts.fqdn }}"
+db_fqdn: "{{ ansible_facts.fqdn }}"
+
+postgresql_admin_username: 'postgres'
+postgresql_admin_password: "{{ db_password }}"
+
+controller_postinstall: false
+controller_postinstall_dir: ''
+controller_postinstall_repo_url: ''
+controller_postinstall_repo_ref: 'main'
+
+ee_extra_images: []
+de_extra_images: []
+
+controller_license_file: "/var/lib/aap/manifest.zip"
+
+hub_admin_password: "{{ admin_password }}"
+hub_pg_host: "{{ db_fqdn }}"
+hub_pg_password: "{{ db_password }}"
+hub_workers: 2
+registry_username: "{{ redhat_username }}"
+registry_password: "{{ redhat_password }}"
+
+hub_postinstall: false
+hub_postinstall_dir: ''
+hub_postinstall_repo_url: ''
+hub_postinstall_repo_ref: 'main'
+
+hub_collection_signing: false
+hub_collection_signing_key: ''
+
+hub_container_signing: false
+hub_container_signing_key: ''
+
+eda_admin_password: "{{ admin_password }}"
+eda_pg_host: "{{ db_fqdn }}"
+eda_pg_password: "{{ db_password }}"
+eda_workers: 2
+eda_activation_workers: 2
+
+# controller_license_src_file:
+# admin_password:
+# db_password:
+# redhat_username
+# redhat_password
+# postgresql_admin_username

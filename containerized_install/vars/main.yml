@@ -1,0 +1,5 @@
+---
+containerized_installer_user: 'aap'
+containerized_installer_user_home: '/var/lib/aap'
+
+containerized_installer_shasum: '714de904596f2f3312b8804eee0d2fdce6842ac2108dbf718f2107ef61d1598d'

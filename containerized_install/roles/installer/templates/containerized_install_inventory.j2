@@ -1,0 +1,148 @@
+# This is the AAP installer inventory file
+# Please consult the docs if you're unsure what to add
+# For all optional variables please consult the included README.md
+
+# This section is for your AAP Controller host(s)
+# -------------------------------------------------
+[automationcontroller]
+{{ controller_fqdn }} ansible_connection=local
+
+# This section is for your AAP Automation Hub host(s)
+# -----------------------------------------------------
+[automationhub]
+{% if automation_hub %}
+{{ automationhub_fqdn }} ansible_connection=local
+{% endif %}
+
+# This section is for your AAP EDA Controller host(s)
+# -----------------------------------------------------
+[automationeda]
+{% if eda %}
+{{ eda_fqdn }} ansible_connection=local
+{% endif %}
+
+# This section is for your AAP Execution host(s)
+# ------------------------------------------------
+#[execution_nodes]
+#fqdn_of_your_rhel_host
+
+# This section is for the AAP database(s)
+# -----------------------------------------
+# Uncomment the lines below and amend appropriately if you want AAP to install and manage the postgres databases
+# Leave commented out if you intend to use your own external database and just set appropriate _pg_hosts vars
+# see mandatory sections under each AAP component
+[database]
+{{ db_fqdn }} ansible_connection=local
+
+[all:vars]
+
+# Common variables needed for installation
+# ----------------------------------------
+postgresql_admin_username={{ postgresql_admin_username }}
+postgresql_admin_password={{ postgresql_admin_password }}
+# If using the online (non-bundled) installer, you need to set RHN registry credentials
+registry_username={{ registry_username }}
+registry_password={{ registry_password }}
+# If using the bundled installer, you need to alter defaults by using:
+#bundle_install=true
+# The bundle directory must include /bundle in the path
+#bundle_dir=<full path to the bundle directory>
+# To add more decision environment images you need to set the de_extra_images variable
+de_extra_images={{ de_extra_images | to_json }}
+#de_extra_images=[{'name': 'Custom decision environment', 'image': '<registry>/<namespace>/<image>:<tag>'}]
+# To add more execution environment images you need to set the ee_extra_images variable
+ee_extra_images={{ ee_extra_images | to_json }}
+#ee_extra_images=[{'name': 'Custom execution environment', 'image': '<registry>/<namespace>/<image>:<tag>'}]
+# To use custom TLS CA certificate/key you need to set these variables
+#ca_tls_cert=<full path to your TLS CA certificate file>
+#ca_tls_key=<full path to your TLS CA key file>
+
+# AAP Database - optional
+# --------------------------
+# To use custom TLS certificate/key you need to set these variables
+#postgresql_tls_cert=<full path to your TLS certificate file>
+#postgresql_tls_key=<full path to your TLS key file>
+
+# AAP Controller - mandatory
+# --------------------------
+controller_admin_password={{ controller_admin_password }}
+controller_pg_host={{ db_fqdn }}
+controller_pg_password={{ postgresql_admin_password }}
+
+# AAP Controller - optional
+# -------------------------
+# To use the postinstall feature you need to set these variables
+controller_postinstall={{ controller_postinstall }}
+controller_license_file={{ controller_license_file }}
+controller_postinstall_dir={{ controller_postinstall_dir }}
+# When using config-as-code in a git repository
+#controller_postinstall_repo_url=<url to your config-as-code git repository>
+#controller_postinstall_repo_ref=main
+controller_postinstall_repo_url={{ controller_postinstall_repo_url }}
+controller_postinstall_repo_ref={{ controller_postinstall_repo_ref }}
+# To use custom TLS certificate/key you need to set these variables
+#controller_tls_cert=<full path to your TLS certificate file>
+#controller_tls_key=<full path to your TLS key file>
+
+# AAP Automation Hub - mandatory
+# ------------------------------
+hub_admin_password={{ hub_admin_password }}
+hub_pg_host={{ hub_pg_host }}
+hub_pg_password={{ hub_pg_password }}
+
+# AAP Automation Hub - optional
+# -----------------------------
+# To use the postinstall feature you need to set these variables
+#hub_postinstall=true
+hub_postinstall={{ hub_postinstall }}
+#hub_postinstall_dir=<full path to your config-as-code directory>
+hub_postinstall_dir={{ hub_postinstall_dir }}
+# When using config-as-code in a git repository
+#hub_postinstall_repo_url=<url to your config-as-code git repository>
+#hub_postinstall_repo_ref=main
+hub_postinstall_repo_url={{ hub_postinstall_repo_url }}
+hub_postinstall_repo_ref={{ hub_postinstall_repo_ref }}
+# To customize the number of worker containers
+#hub_workers=2
+hub_workers={{ hub_workers }}
+# To use the collection signing feature you need to set these variables
+#hub_collection_signing=true
+hub_collection_signing={{ hub_collection_signing }}
+#hub_collection_signing_key=<full path to your gpg key file>
+hub_collection_signing_key={{ hub_collection_signing_key }}
+# To use the container signing feature you need to set these variables
+#hub_container_signing=true
+hub_container_signing={{ hub_container_signing }}
+#hub_container_signing_key=<full path to your gpg key file>
+hub_container_signing_key={{ hub_container_signing_key }}
+# To use custom TLS certificate/key you need to set these variables
+#hub_tls_cert=<full path to your TLS certificate file>
+#hub_tls_key=<full path to your TLS key file>
+
+# AAP EDA Controller - mandatory
+# ------------------------------
+eda_admin_password={{ eda_admin_password }}
+eda_pg_host={{ eda_pg_host }}
+eda_pg_password={{ eda_pg_password }}
+
+# AAP EDA Controller - optional
+# -----------------------------
+# When using an external controller node unmanaged by the installer.
+#controller_main_url=https://fqdn_of_your_rhel_host
+# To customize the number of default/activation worker containers
+eda_workers={{ eda_workers }}
+eda_activation_workers={{ eda_activation_workers }}
+# To use custom TLS certificate/key you need to set these variables
+#eda_tls_cert=<full path to your TLS certificate file>
+#eda_tls_key=<full path to your TLS key file>
+
+# AAP Execution Nodes - optional
+# -----------------------------
+#receptor_port=27199
+#receptor_protocol=tcp
+# To use custom TLS certificate/key you need to set these variables
+#receptor_tls_cert=<full path to your TLS certificate file>
+#receptor_tls_key=<full path to your TLS key file>
+# To use custom RSA key pair you need to set these variables
+#receptor_signing_private_key=<full path to your RSA private key file>
+#receptor_signing_public_key=<full path to your RSA public key file>
