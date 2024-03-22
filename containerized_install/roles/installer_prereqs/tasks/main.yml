@@ -29,7 +29,7 @@
     user: "{{ containerized_installer_user }}"
     key: "{{ containerized_installer_user_ssh_pubkey }}"
 
-- name: "Enable linger for AAP installer user"
-  ansible.builtin.command:
-    cmd: |-
-      loginctl enable-linger "{{ containerized_installer_user }}"
+- name: "Remove tmpdir as we expect another user to need it"
+  ansible.builtin.file:
+    path: "{{ ansible_remote_tmp }}"
+    state: absent

@@ -13,8 +13,8 @@
 
 - name: "Run the containerized installer"
   hosts: aap_controllers
-  remote_user: "{{ containerized_installer_user }}"
-  become: false
+  become_user: "{{ containerized_installer_user }}"
+  become: true
   vars_files:
     - 'vars/main.yml'
     - "~/agof_vault.yml"
