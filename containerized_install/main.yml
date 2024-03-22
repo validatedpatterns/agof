@@ -31,7 +31,7 @@
     - 'vars/main.yml'
     - "~/agof_vault.yml"
   tasks:
-    - name: "Remove AAP Installer sudo file"
-      ansible.builtin.file:
-        path: "/etc/sudoers.d/{{ containerized_installer_user }}"
-        state: absent
+    - name: Cleanup scaffolding after install
+      ansible.builtin.include_role:
+        name: installer_cleanup
+      when: containerized_installer_cleanup | bool
