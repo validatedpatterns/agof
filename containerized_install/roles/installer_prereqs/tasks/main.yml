@@ -1,0 +1,35 @@
+---
+- name: "Install prereq packages"
+  ansible.builtin.package:
+    name:
+      - ansible-core
+      - wget
+      - git
+      - rsync
+      - sudo
+
+- name: "Manage user for AAP installer"
+  ansible.builtin.user:
+    name: '{{ containerized_installer_user }}'
+    comment: 'AAP User'
+    create_home: true
+    home: '{{ containerized_installer_user_home }}'
+
+- name: "Enable sudo for AAP installer user"
+  ansible.builtin.lineinfile:
+    path: "/etc/sudoers.d/{{ containerized_installer_user }}"
+    line: "{{ containerized_installer_user }} ALL=(ALL) NOPASSWD: ALL"
+    owner: root
+    group: root
+    mode: '0444'
+    create: true
+
+- name: "Install pubkey for AAP Installer user"
+  ansible.posix.authorized_key:
+    user: "{{ containerized_installer_user }}"
+    key: "{{ containerized_installer_user_ssh_pubkey }}"
+
+- name: "Enable linger for AAP installer user"
+  ansible.builtin.command:
+    cmd: |-
+      loginctl enable-linger "{{ containerized_installer_user }}"

@@ -75,6 +75,6 @@
   ansible.builtin.command:
     chdir: "{{ aap_installer_dir }}"
     cmd: |-
-      su "{{ containerized_installer_user }}" -c "ansible-playbook -i inventory ansible.containerized_installer.install"
+      ansible-playbook -i inventory ansible.containerized_installer.install
   async: 3600
   poll: 15
