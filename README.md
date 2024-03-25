@@ -53,7 +53,7 @@ A minimal example pattern is available to download and run [here](https://github
 
 ## Entry Points
 
-This is a framework for building Validated Patterns that use Ansible Automation Platform (AAP) as their underlying GitOps engine. To that end, the framework has three deployment models (in increasing level of complexity):
+This is a framework for building Validated Patterns that use Ansible Automation Platform (AAP) as their underlying GitOps engine. To that end, the framework has these deployment models (in increasing level of complexity):
 
 ### "API" Install (aka "Bare")
 
@@ -63,10 +63,10 @@ This is a framework for building Validated Patterns that use Ansible Automation 
 
 In this model, you provide an AAP endpoint. It does not need to be entitled, it just needs to be running the AAP Controller. You supply the manifest contents, endpoint hostname, admin username (defaults to "admin"), and admin password, and then the installation hands off to a `controller_config_dir` you define. This is provided for users who have their own AAP installations on bare metal or on-prem or do not want to run on AWS.
 
-### "From OS" Install
+### Legacy "From OS" Install
 
 ```shell
-./pattern.sh make from_os_install INVENTORY=(your_inventory_file)
+./pattern.sh make legacy_from_os_install INVENTORY=(your_inventory_file)
 ```
 
 In this model, you provide an inventory file with up to two fresh RHEL installations. The model is tested with one AAP and one Hub instance. (Many other topologies are possible with the AAP installation framework; see the Ansible Automation Platform Planning and Installation guides for details.) If you need to install a pattern on a cluster with a different topology than this, use the API install mechanism. This mechanism will run a (slightly) opinionated install of the AAP and Hub components, and will add some conveniences like default execution environments and credentials. Like the "API" install, the install will then be handed over to a `controller_config_dir` you define.
@@ -154,6 +154,7 @@ This model builds on the Default installation by adding the options for building
 The variables to include builds for the extra components are all Ansible booleans that can be included in your configuration:
 
 `automation_hub`
+`eda`
 `build_idm`
 `build_sat`
 
