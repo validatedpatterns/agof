@@ -34,7 +34,7 @@
   retries: 15
   delay: 20
 
-- name: Untar containerized installer
+- name: Extract containerized installer
   ansible.builtin.unarchive:
     src: "{{ containerized_installer_user_home }}/aap_installer.tar.gz"
     dest: "{{ containerized_installer_user_home }}"
