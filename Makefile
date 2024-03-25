@@ -18,7 +18,10 @@ install: preinit ## Install the pattern - including bootstrapping an AWS environ
 aws_uninstall: ## Uninstall the AWS environment for the pattern, including its DNS entries
 	ansible-playbook init_env/aws/teardown.yml $(EXTRA_PLAYBOOK_OPTS)
 
-from_os_install: preinit ## Install assuming registered RHEL VM(s)
+from_os_install: preinit ## Install on registered RHEL VM(s), using the containerized installer
+	ansible-playbook -i $(INVENTORY) containerized_install/main.yml $(EXTRA_PLAYBOOK_OPTS)
+
+legacy_from_os_install: preinit ## Install assuming registered RHEL VM(s) with the traditional AAP installer
 	ansible-playbook -i $(INVENTORY) hosts/main.yml $(EXTRA_PLAYBOOK_OPTS)
 	ansible-playbook -i $(INVENTORY) configure_aap.yml $(EXTRA_PLAYBOOK_OPTS)
 
