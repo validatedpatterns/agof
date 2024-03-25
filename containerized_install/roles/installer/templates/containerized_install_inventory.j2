@@ -11,14 +11,14 @@
 # -----------------------------------------------------
 [automationhub]
 {% if automation_hub %}
-{{ automationhub_fqdn }} ansible_connection=local
+{{ controller_fqdn }} ansible_connection=local
 {% endif %}
 
 # This section is for your AAP EDA Controller host(s)
 # -----------------------------------------------------
 [automationeda]
 {% if eda %}
-{{ eda_fqdn }} ansible_connection=local
+{{ controller_fqdn }} ansible_connection=local
 {% endif %}
 
 # This section is for your AAP Execution host(s)
@@ -32,7 +32,7 @@
 # Leave commented out if you intend to use your own external database and just set appropriate _pg_hosts vars
 # see mandatory sections under each AAP component
 [database]
-{{ db_fqdn }} ansible_connection=local
+{{ controller_fqdn }} ansible_connection=local
 
 [all:vars]
 
@@ -66,7 +66,7 @@ ee_extra_images={{ ee_extra_images | to_json }}
 # AAP Controller - mandatory
 # --------------------------
 controller_admin_password={{ controller_admin_password }}
-controller_pg_host={{ db_fqdn }}
+controller_pg_host={{ controller_fqdn }}
 controller_pg_password={{ postgresql_admin_password }}
 
 # AAP Controller - optional
@@ -87,7 +87,7 @@ controller_postinstall_repo_ref={{ controller_postinstall_repo_ref }}
 # AAP Automation Hub - mandatory
 # ------------------------------
 hub_admin_password={{ hub_admin_password }}
-hub_pg_host={{ hub_pg_host }}
+hub_pg_host={{ controller_fqdn }}
 hub_pg_password={{ hub_pg_password }}
 
 # AAP Automation Hub - optional
@@ -122,7 +122,7 @@ hub_container_signing_key={{ hub_container_signing_key }}
 # AAP EDA Controller - mandatory
 # ------------------------------
 eda_admin_password={{ eda_admin_password }}
-eda_pg_host={{ eda_pg_host }}
+eda_pg_host={{ controller_fqdn }}
 eda_pg_password={{ eda_pg_password }}
 
 # AAP EDA Controller - optional
