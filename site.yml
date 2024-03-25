@@ -17,19 +17,19 @@
   tags:
     - tags_phase_1
 
-- name: "Phase 2 - containerized AAP install"
+- name: "Phase 2 - containerized AAP install including bootstrap and configuration"
   ansible.builtin.import_playbook: ./containerized_install/main.yml
   tags:
     - tags_phase_2
   when: containerized_install | bool
 
-- name: "Phase 2 - bootstrap AAP"
+- name: "Phase 2 - bootstrap AAP (traditional install)"
   ansible.builtin.import_playbook: ./hosts/main.yml
   tags:
     - tags_phase_2
   when: not (containerized_install|bool)
 
-- name: "Phase 3 - configure AAP"
+- name: "Phase 3 - configure AAP (traditional install)"
   ansible.builtin.import_playbook: ./configure_aap.yml
   tags:
     - tags_phase_3
