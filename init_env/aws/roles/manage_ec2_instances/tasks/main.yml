@@ -2,7 +2,9 @@
 # Note: we always build AAP. It is in the defaults
 
 - name: Add hub instance if desired
-  when: automation_hub|bool
+  when:
+    - not containerized_install|bool
+    - automation_hub|bool
   block:
     - name: Include hub parameters
       ansible.builtin.include_vars:
@@ -13,13 +15,15 @@
         ec2_instances: '{{ ec2_instances + [ hub_instance ] }}'
 
 - name: Add eda instance if desired
-  when: eda|bool
+  when:
+    - not containerized_install|bool
+    - eda|bool
   block:
     - name: Include hub parameters
       ansible.builtin.include_vars:
         file: eda.yml
 
-    - name: Include hub parameters
+    - name: Include eda parameters
       ansible.builtin.set_fact:
         ec2_instances: '{{ ec2_instances + [ eda_instance ] }}'
 

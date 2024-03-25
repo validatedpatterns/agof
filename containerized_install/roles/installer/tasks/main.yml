@@ -55,6 +55,15 @@
   ansible.builtin.set_fact:
     aap_installer_dir: "{{ (aap_directories.files | sort(attribute='mtime', reverse=true) | first).path }}"
 
+- name: Determine controller_fqdn from inside the user environment
+  ansible.builtin.command: |-
+    hostname -f
+  register: local_hostname
+
+- name: Set controller_fqdn to local hostname
+  ansible.builtin.set_fact:
+    controller_fqdn: "{{ local_hostname.stdout | trim }}"
+
 - name: Template inventory file
   ansible.builtin.template:
     src: containerized_install_inventory.j2
