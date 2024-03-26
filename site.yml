@@ -10,7 +10,7 @@
   tasks:
     - name: "Show vars"
       ansible.builtin.debug:
-        msg: 'build_idm: {{ build_idm }} / build_sat: {{ build_sat }} / automation_hub: {{ automation_hub }} / eda: {{ eda }}/ containerized_install: {{ containerized_install }}'
+        msg: 'build_idm: {{ build_idm }} / build_sat: {{ build_sat }} / automation_hub: {{ automation_hub }} / eda: {{ eda }} / containerized_install: {{ containerized_install }}'
 
 - name: "Phase 1 - initialize the environment"
   ansible.builtin.import_playbook: ./init_env/main.yml

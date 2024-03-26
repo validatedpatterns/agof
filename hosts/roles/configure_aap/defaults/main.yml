@@ -6,3 +6,4 @@ automation_hub: false
 pattern_name: '{{ ec2_name_prefix }}'
 
 controller_hostname: 'aap.{{ pattern_name }}.{{ pattern_dns_zone }}'
+controller_port: 443

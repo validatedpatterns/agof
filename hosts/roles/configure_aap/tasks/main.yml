@@ -16,7 +16,7 @@
 
 - name: Wait for Automation Controller to be up
   ansible.builtin.uri:
-    url: 'https://{{ controller_hostname }}/api/v2/ping/'
+    url: 'https://{{ controller_hostname }}:{{ controller_port }}/api/v2/ping/'
     method: GET
     user: '{{ admin_user | default("admin") }}'
     password: "{{ admin_password }}"
