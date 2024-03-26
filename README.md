@@ -27,7 +27,7 @@
 
 ## Start Here
 
-This repository is part of Red Hat's [Hybrid Cloud Patterns](https://hybrid-cloud-patterns.io) effort, which in general
+This repository is part of Red Hat's [Validated Patterns](https://validatedpatterns.io) effort, which in general
 aims to provide Reference Architectures that can be run through CI/CD systems.
 
 The goal of this project in particular is to provide an extensible framework to do GitOps with Ansible Automation
@@ -61,7 +61,7 @@ This is a framework for building Validated Patterns that use Ansible Automation 
 ./pattern.sh make api_install
 ```
 
-In this model, you provide an AAP endpoint. It does not need to be entitled, it just needs to be running the AAP Controller. You supply the manifest contents, endpoint hostname, admin username (defaults to "admin"), and admin password, and then the installation hands off to a `controller_config_dir` you define. This is provided for users who have their own AAP installations on bare metal or on-prem or do not want to run on AWS.
+In this model, you provide an (already provisioned) AAP endpoint. It does not need to be entitled, it just needs to be running the AAP Controller. You supply the manifest contents, endpoint hostname, admin username (defaults to "admin"), and admin password, and then the installation hands off to a `controller_config_dir` you define. This is provided for users who have their own AAP installations on bare metal or on-prem or do not want to run on AWS. It is also useful in situations where the AAP deployment topology is more complex than what we provide in the pattern provisioner.
 
 ### Legacy "From OS" Install
 
@@ -167,6 +167,7 @@ The variables to include builds for the extra components are all Ansible boolean
 | admin_user                | Admin User (for AAP and/or Hub)      | false     | 'admin' |        |
 | admin_password            | Admin Password (for AAP and/or Hub)  | true    |           |        |
 | aap_verison               | AAP Version to Use                   | true     | '2.4'    | Can also be '2.3' currently |
+| containerized_install     | Flag to direct containerized install | true    |  true     | TP in AAP 2.4; Expected to become AAP's default in AAP 2.5|
 | redhat_username           | Red Hat Subscriber Username          | true    |           |        |
 | redhat_password           | Red Hat Subscriber Password          | true    |           |        |
 | redhat_registry_username_vault  | Red Hat Subscriber Username    | true    |           |  |

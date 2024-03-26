@@ -1,4 +1,5 @@
 ---
+containerized_install: true
 containerized_installer_user: 'aap'
 containerized_installer_user_home: '/var/lib/{{ containerized_installer_user }}'
 
