@@ -74,7 +74,7 @@
 
 - name: Copy manifest
   ansible.builtin.copy:
-    src: "{{ controller_license_src_file }}"
+    content: "{{ manifest_content | b64decode }}"
     dest: "{{ controller_license_file }}"
     owner: "{{ containerized_installer_user }}"
     group: "{{ containerized_installer_user }}"
