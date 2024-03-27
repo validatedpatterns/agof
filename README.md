@@ -37,7 +37,20 @@ The thinking behind this effort is documented in the [Ansible Pattern Theory](ht
 
 ## How to Use It
 
-A minimal example pattern is available to download and run [here](https://github.com/hybrid-cloud-demos/agof_minimal_demo).
+A minimal example pattern is available to download and run [here](https://github.com/validatedpatterns/agof_minimal_demo).
+
+The default installation will provide an AAP 2.4 installation deployed via the Containerized Installer, with services deployed this way:
+
+| URL Pattern | Service |
+|-------------|---------|
+| https://aapnode.fqdn:8443/ | Controller API |
+| https://aapnode.fqdn:8444/ | Private Automation Hub |
+| https://aapnode.fqdn:8445/ | EDA Automation Controller |
+
+By default, the framework will apply license content specified by the `manifest_content` variable, but will not further configure Controller or Automation Hub beyond the defaults.
+
+
+
 
 ### Installation
 
@@ -54,6 +67,10 @@ A minimal example pattern is available to download and run [here](https://github
 ## Entry Points
 
 This is a framework for building Validated Patterns that use Ansible Automation Platform (AAP) as their underlying GitOps engine. To that end, the framework has these deployment models (in increasing level of complexity):
+
+## Using the Containerized Installer vs. The traditional one
+
+As of AAP 2.4, the [containerized installer feature](https://access.redhat.com/documentation/en-us/red_hat_ansible_automation_platform/2.4/html/containerized_ansible_automation_platform_installation_guide/aap-containerized-installation) is in Tech Preview, but because of certain advantages it has over the traditional installer, AGOF will use it by default.
 
 ### "API" Install (aka "Bare")
 
