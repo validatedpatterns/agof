@@ -37,8 +37,6 @@ The thinking behind this effort is documented in the [Ansible Pattern Theory](ht
 
 ## How to Use It
 
-A minimal example pattern is available to download and run [here](https://github.com/validatedpatterns/agof_minimal_demo).
-
 The default installation will provide an AAP 2.4 installation deployed via the Containerized Installer, with services deployed this way:
 
 | URL Pattern | Service |
@@ -50,7 +48,7 @@ The default installation will provide an AAP 2.4 installation deployed via the C
 By default, the framework will apply license content specified by the `manifest_content` variable, but will not further configure Controller or Automation Hub beyond the defaults.
 
 
-
+A minimal example pattern is available to download and run [here](https://github.com/validatedpatterns/agof_minimal_demo).
 
 ### Installation
 

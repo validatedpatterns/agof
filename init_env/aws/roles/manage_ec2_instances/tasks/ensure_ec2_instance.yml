@@ -14,6 +14,7 @@
         state: running
         filters:
           instance-state-name: running
+          "tag:avp": "{{ ec2_name_prefix }}"
           "tag:avpname": "{{ inst.name }}"
         tags:
           avp: "{{ ec2_name_prefix }}"

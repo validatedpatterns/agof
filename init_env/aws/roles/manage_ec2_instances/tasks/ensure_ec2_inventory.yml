@@ -4,6 +4,7 @@
     region: "{{ ec2_region }}"
     filters:
       instance-state-name: running
+      "tag:avp": '{{ ec2_name_prefix }}'
       "tag:avpname": '{{ inst.name }}'
   register: instance_info
 
@@ -25,6 +26,11 @@
   loop: '{{ instance_info.instances }}'
   loop_control:
     label: "{{ item.public_dns_name }} fqdn: {{ inst.name }}.{{ pattern_domain }} groups: {{ [ 'aws_nodes' ] + (inst.ansible_extra_groups | default([])) }}"
+
+- name: Special handling for Satellite instance if provided
+  ansible.builtin.set_fact:
+    sat_instance: '{{ instance_info.instances | first }}'
+  when: inst.name == 'sat'
 
 - name: Special handling for IDM instance if provided
   ansible.builtin.set_fact:
