@@ -1,0 +1,37 @@
+---
+- name: "Prep the containerized installer (root required)"
+  hosts: aap_controllers
+  become: true
+  gather_facts: true
+  vars_files:
+    - 'vars/main.yml'
+    - "~/agof_vault.yml"
+  tasks:
+    - name: AAP Containerized installer prereqs - packages and user setup
+      ansible.builtin.include_role:
+        name: installer_prereqs
+
+- name: "Run the containerized installer"
+  hosts: aap_controllers
+  become_user: "{{ containerized_installer_user }}"
+  become: true
+  vars_files:
+    - 'vars/main.yml'
+    - "~/agof_vault.yml"
+  tasks:
+    - name: Install AAP
+      ansible.builtin.include_role:
+        name: installer
+
+- name: "Remove sudo file for installer user"
+  hosts: aap_controllers
+  become: true
+  gather_facts: false
+  vars_files:
+    - 'vars/main.yml'
+    - "~/agof_vault.yml"
+  tasks:
+    - name: Cleanup scaffolding after install
+      ansible.builtin.include_role:
+        name: installer_cleanup
+      when: containerized_installer_cleanup | bool

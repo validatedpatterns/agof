@@ -1,7 +1,12 @@
 ---
 build_idm: false
 build_sat: false
-eda: false
-automation_hub: false
+eda: true
+automation_hub: true
+
+containerized_install: true
+
+containerized_install_user: 'aap'
+containerized_install_user_home: '/var/lib/aap'
 
 aap_version: "2.4"

@@ -24,3 +24,5 @@ ec2_instances:
     ansible_extra_groups:
       - aap_controllers
     instance_type: 'm4.xlarge'
+
+containerized_install: true
