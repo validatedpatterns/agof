@@ -44,14 +44,22 @@ vpc_ports:
     to_port: 8443
     from_port: 8443
     cidr_ip: 0.0.0.0/0
+    rule_desc: Containerized AAP Controller Service
   - proto: tcp
     to_port: 8444
     from_port: 8444
     cidr_ip: 0.0.0.0/0
+    rule_desc: Containerized AAP Automation Hub Service
   - proto: tcp
     to_port: 8445
     from_port: 8445
     cidr_ip: 0.0.0.0/0
+    rule_desc: Containerized AAP EDA Service
+  - proto: tcp
+    to_port: 5000
+    from_port: 5000
+    cidr_ip: 0.0.0.0/0
+    rule_desc: Ansible EDA Webhook Listener
   - proto: tcp
     to_port: 830
     from_port: 830
