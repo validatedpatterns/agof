@@ -196,7 +196,8 @@ The variables to include builds for the extra components are all Ansible boolean
 | redhat_registry_username_vault  | Red Hat Subscriber Username    | true    |           |  |
 | redhat_registry_password_vault  | Red Hat Subscriber Password    | true    |           |  |
 | manifest_content          | Base64 encoded Manifest to Entitle   | true    |           | Can be loaded directly from a file using a construct like this: `"{{ lookup('file', '~/Downloads/manifest.zip') | b64encode }}"` |
-| automation_hub_url_vault  | Subscriber-specific URL for Content  | true    |  | This refers to the automation hub section on [https://console.redhat.com](https://console.redhat.com).  It is the endpoint that is used to download Validated Content in addition to any public Galaxy content needed |
+| automation_hub_certified_url | URL for Certified Content  | false    | <https://console.redhat.com/api/automation-hub/content/published/>   | This refers to the automation hub section on [https://console.redhat.com](https://console.redhat.com).  It is the endpoint that is used to download Validated Content in addition to any public Galaxy content needed |
+| automation_hub_validated_url | URL for Validated Content  | false    | <https://console.redhat.com/api/automation-hub/content/validated/> | This refers to the automation hub section on [https://console.redhat.com](https://console.redhat.com).  It is the endpoint that is used to download Certified Content in addition to any public Galaxy content needed |
 | automation_hub_token_vault| Subscriber-specific token for Content | true    |                    |
 | automation_hub            | Flag to build and enable Automation Hub | false     | false |  | Building a Private Automation Hub is necessary if your pattern builds an Execution Environment that is not hosted on a public container registry. |
 | eda            | Flag to build and enable Event Driven Automation controller | false     | true |  |  |

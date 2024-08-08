@@ -48,6 +48,16 @@ if [ -n "$KUBECONFIG" ]; then
         exit 1
     fi
 fi
+
+# Use /etc/pki by default and try a couple of fallbacks if it does not exist
+if [ -d /etc/pki ]; then
+    PKI_HOST_MOUNT="/etc/pki"
+elif [ -d /etc/ssl ]; then
+    PKI_HOST_MOUNT="/etc/ssl"
+else
+    PKI_HOST_MOUNT="/usr/share/ca-certificates"
+fi
+
 # Copy Kubeconfig from current environment. The utilities will pick up ~/.kube/config if set so it's not mandatory
 # $HOME is mounted as itself for any files that are referenced with absolute paths
 # $HOME is mounted to /root because the UID in the container is 0 and that's where SSH looks for credentials
@@ -57,10 +67,17 @@ podman run -it --rm --pull=newer \
 	-e EXTRA_HELM_OPTS \
 	-e EXTRA_PLAYBOOK_OPTS \
 	-e KUBECONFIG \
-	-v /etc/pki:/etc/pki:ro \
+	-e K8S_AUTH_HOST \
+	-e K8S_AUTH_VERIFY_SSL \
+	-e K8S_AUTH_SSL_CA_CERT \
+	-e K8S_AUTH_USERNAME \
+	-e K8S_AUTH_PASSWORD \
+	-e K8S_AUTH_TOKEN \
+	-v "${PKI_HOST_MOUNT}":/etc/pki:ro \
 	-v "${HOME}":"${HOME}" \
 	-v "${HOME}":/pattern-home \
 	${PODMAN_ARGS} \
+	${EXTRA_ARGS} \
 	-w "$(pwd)" \
 	"$PATTERN_UTILITY_CONTAINER" \
 	$@

@@ -46,10 +46,14 @@ timeout = 10
 control_path = %(directory)s/%%h-%%r
 
 [galaxy]
-server_list = automation_hub,galaxy_pub
+server_list = automation_hub_certified,automation_hub_validated,galaxy_pub
 
-[galaxy_server.automation_hub]
-url={{ automation_hub_url | d('https://console.redhat.com/api/automation-hub/content/published/') }}
+[galaxy_server.automation_hub_certified]
+url={{ automation_hub_certified_url | d('https://console.redhat.com/api/automation-hub/content/published/') }}
+auth_url={{ auth_url | d('https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token') }}
+
+[galaxy_server.automation_hub_validated]
+url={{ automation_hub_validated_url | d('https://console.redhat.com/api/automation-hub/content/validated/') }}
 auth_url={{ auth_url | d('https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token') }}
 
 [galaxy_server.galaxy_pub]

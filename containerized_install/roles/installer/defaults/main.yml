@@ -1,6 +1,12 @@
 ---
+aap_version: "2.4"
+
 automation_hub: true
 eda: true
+
+# This is due to a known issue with version 1.0.7
+# of EDA in AAP 2.4.
+ci_24_eda_workaround: true
 
 controller_fqdn: "{{ ansible_facts.fqdn }}"
 controller_admin_password: "{{ admin_password }}"

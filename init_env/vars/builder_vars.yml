@@ -23,19 +23,19 @@ image_definition_file: "request-base-image.json"
 imagebuilder_image_type: "aws"
 imagebuilder_include_filesystem: false
 
-# type             extension 
+# type             extension
 # vsphere          vmdk
 # aws              ami
 # image-installer  iso
 # guest-image      qcow2
 # azure            vhd
 # gcp              img
-# edge-commit      
+# edge-commit
 # edge-installer   iso
 
-# you can use the API url to pull a current list of available distributions 
+# you can use the API url to pull a current list of available distributions
 # they must match what is supported for Satellite and Identity Management. RHEL 8.7 works for both.
-builder_distribution: "rhel-88"
+builder_distribution: "rhel-8"
 
 # what we will call the image and where we put it
 image_file_directory: "/tmp"
@@ -50,7 +50,7 @@ org_number: "{{ org_number_vault }}"
 activation_key: "{{ activation_key_vault }}"
 
 # Image definition volume sizes
-# this image disk layout will meet most compliance standards 
+# this image disk layout will meet most compliance standards
 image_template: "template.request-base-image.json.j2"
 slash_size: 10737418240
 home_size: 1073741824

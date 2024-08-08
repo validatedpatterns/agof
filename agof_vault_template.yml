@@ -26,5 +26,9 @@ activation_key_vault: "The name of an Activation Key to embed in the imagebuilde
 #skip_imagebuilder_build: 'boolean: skips imagebuilder build process'
 #imagebuilder_ami: 'The ID of an AWS AMI image, preferably one that was built with this toolkit'
 
-automation_hub_url_vault: 'The private automation hub URL associated with your Ansible Automation Platform Subscription. Used to generate ansible.cfg to retrieve Automation Hub content'
 automation_hub_token_vault: 'A token associated with your AAP subscription used to retrieve Automation Hub content'
+
+# These variables can be set but are optional. The previous (before AAP 2.4) conncept of sync-list was private
+# to an account.
+#automation_hub_url_certified_vault: 'The private automation hub URL for certified content'
+#automation_hub_url_validated_vault: 'The private automation hub URL for validated content'
