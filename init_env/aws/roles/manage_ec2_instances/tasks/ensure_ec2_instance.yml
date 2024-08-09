@@ -33,7 +33,7 @@
           - device_name: /dev/sda1
             ebs:
               volume_type: "{{ inst.disk_volume_type | default('gp3') }}"
-              volume_size: "{{ inst.disk_space | default(20) }}"
+              volume_size: "{{ inst.disk_space | default(30) }}"
               iops: "{{ inst.disk_iops | default(3000) }}"
               throughput: "{{ inst.disk_throughput | default(125) }}"
               delete_on_termination: true
