@@ -17,7 +17,7 @@
       rescue:
         - name: Error with setup
           fail:
-            msg: The provisioner has failed during initial check_setup, please scroll up to see exact error.  Open an issue on https://github.com/ansible/workshops/issues
+            msg: The provisioner has failed during initial check_setup, please scroll up to see exact error.  Open an issue on https://github.com/validatedpatterns/agof/issues
 
 - name: "Get info on the elements built"
   hosts: localhost

@@ -28,16 +28,8 @@
       - "admin_password cannot be set to ansible"
       - "please set a unique password for your pattern"
 
-- name: grab boto version
-  command: "{{ansible_python['executable']}} -c 'import boto3; print(boto3.__version__)'"
-  register: py_cmd
-  changed_when: false
-
-- name: make sure we are running correct boto version
-  assert:
-    that:
-      - py_cmd.stdout is version('1.7', operator='ge')
-    msg: "boto3 >= 1.7 is required."
+# Previously we had a boto3 version check on the controller. This caused problems with homebrew installed, so
+# it was removed. (The version was quite old that we were checking for)
 
 - name: check route53 information
   when: dns_type == "aws"
