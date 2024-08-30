@@ -79,7 +79,7 @@
       ansible.builtin.include_role:
         name: roles/manage_ec2_instances
       vars:
-        imagebuilder_ami: "{{ copied_ami | default(imagebuilder_ami) }}"
+        ami_id: "{{ copied_ami | default(imagebuilder_ami) }}"
 
 - name: Post-provisioning tasks
   hosts: aws_nodes
