@@ -26,9 +26,35 @@
       ansible.builtin.include_role:
         name: roles/manage_ec2_infra
 
-    - name: Build VMs and manage DNS entries
-      ansible.builtin.include_role:
-        name: roles/manage_ec2_instances
+    - name: Include vars from previous runs
+      ansible.builtin.include_vars:
+        file: '{{ pattern_state_rootdir }}/{{ ec2_name_prefix }}/aws_state_vars.yml'
+      ignore_errors: true
+      when: save_aws_vars
+
+    - name: Copy AMI image if needed
+      block:
+        - name: Check for AMI in ec2 region
+          amazon.aws.ec2_ami:
+            image_id: "{{ imagebuilder_ami }}"
+            region: "{{ ec2_region }}"
+          register: ami_query
+          failed_when: ami_query.msg is search('InvalidAMIID.NotFound')
+      rescue:
+        - name: Copy image to desired region
+          community.aws.ec2_ami_copy:
+            source_region: "{{ ami_source_region }}"
+            region: "{{ ec2_region }}"
+            source_image_id: "{{ imagebuilder_ami }}"
+            wait: true
+          register: ami_copy
+
+        - name: Set AMI ID now that we have a new one
+          ansible.builtin.set_fact:
+            copied_ami: "{{ ami_copy.image_id }}"
+      when:
+        - copied_ami is not defined
+        - ami_source_region != ec2_region
 
     - name: Save variables for later if desired
       ansible.builtin.copy:
@@ -41,9 +67,18 @@
 
            pattern_dns_zone: '{{ pattern_dns_zone }}'
 
+           {% if copied_ami is defined %}
+           copied_ami: '{{ copied_ami }}'
+           {% endif %}
            imagebuilder_ami: '{{ imagebuilder_ami }}'
         dest: '{{ pattern_state_rootdir }}/{{ ec2_name_prefix }}/aws_state_vars.yml'
       when: save_aws_vars
+
+    - name: Build VMs and manage DNS entries
+      ansible.builtin.include_role:
+        name: roles/manage_ec2_instances
+      vars:
+        ami_id: "{{ copied_ami | default(imagebuilder_ami) }}"
 
 - name: Post-provisioning tasks
   hosts: aws_nodes

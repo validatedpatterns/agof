@@ -248,6 +248,7 @@ The variables to include builds for the extra components are all Ansible boolean
 | activation_key_vault      | Activation Key Name to embed in image  | true  |                    | This is an activation key for the Red Hat CDN. It is expected to be able to enable both the base RHEL repos and the AAP repos. |
 | skip_imagebuilder_build   | Flag to skip imagebuilder build (also set `imagebuilder_ami` if true) |  false | false     | |
 | imagebuilder_ami   | AMI to use for VM creation in AWS  | false             | | It is very possible to re-use another imagebuilder build from a previous installation of the pattern framework, and saves ~15 minutes on a new pattern install to re-use such an image. |
+| ami_source_region   | Source Region to copy AMI from if not present in target region  | false             | us-east-1 | Imagebuilder puts its images in us-east-1 by default. If you specify a non-imagebuilder ami and it "starts out" in a different region, you can specify that here. |
 
 ##  5. <a name='WhattheFrameworkDoesStep-by-Step'></a>What the Framework Does, Step-by-Step
 
