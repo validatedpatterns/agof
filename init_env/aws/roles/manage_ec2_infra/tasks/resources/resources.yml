@@ -14,14 +14,14 @@
   until: create_vpc is not failed
   retries: 5
 
-- name: create file for all AWS security group rules
+- name: Create file for all AWS security group rules
   template:
     src: vpc_rules.j2
     dest: "{{pattern_state_rootdir}}/{{ec2_name_prefix}}/aws_rules.yml"
   delegate_to: localhost
   run_once: true
 
-- include_vars:
+- ansible.builtin.include_vars:
     file: "{{pattern_state_rootdir}}/{{ec2_name_prefix}}/aws_rules.yml"
 
 - name: Create EC2 security group for VPC named {{ ec2_name_prefix }}-vpc
@@ -60,7 +60,7 @@
   until: create_subnet is not failed
   retries: 15
 
-- name: vpc internet gateway is present for {{ create_vpc.vpc.id }}
+- name: Vpc internet gateway is present for {{ create_vpc.vpc.id }}
   amazon.aws.ec2_vpc_igw:
     region: "{{ ec2_region }}"
     vpc_id: "{{ create_vpc.vpc.id }}"
@@ -73,7 +73,7 @@
   until: igw is not failed
   retries: 15
 
-- name: vpc public subnet route table is present for {{ create_vpc.vpc.id }}
+- name: Vpc public subnet route table is present for {{ create_vpc.vpc.id }}
   amazon.aws.ec2_vpc_route_table:
     region: "{{ ec2_region }}"
     vpc_id: "{{ create_vpc.vpc.id }}"
@@ -103,23 +103,27 @@
     region: "{{ ec2_region }}"
   register: create_key
 
-- name: save private key
-  copy:
+#- name: Debug create key
+#  ansible.builtin.debug:
+#    var: create_key
+
+- name: Save private key
+  ansible.builtin.copy:
     content: "{{ create_key.key.private_key }}"
     dest: "{{ pattern_state_rootdir }}/{{ ec2_name_prefix }}/{{ ec2_name_prefix }}-private.pem"
     mode: '0400'
   when: create_key.changed
 
-- name: use {{ dns_type }} storage for key
-  include_tasks: "{{ dns_type }}.yml"
+- name: Use {{ dns_type }} storage for key
+  ansible.builtin.include_tasks: "{{ dns_type }}.yml"
 
 - name: Ensure key file has proper permissions
-  file:
+  ansible.builtin.file:
     dest: "{{ pattern_state_rootdir }}/{{ ec2_name_prefix }}/{{ ec2_name_prefix }}-private.pem"
     mode: 0600
 
-- name: debugging all variables for ec2 instance creation VPC-1
-  debug:
+- name: Debugging all variables for ec2 instance creation VPC-1
+  ansible.builtin.debug:
     msg:
       - "ec2_name_prefix: {{ ec2_name_prefix }}"
       - "ec2_vpc_id: {{ ec2_vpc_id }}"
