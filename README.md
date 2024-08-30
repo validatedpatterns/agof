@@ -226,13 +226,6 @@ The variables to include builds for the extra components are all Ansible boolean
 
 ###  4.4. <a name='AWS-SpecificConfiguration'></a>AWS-Specific Configuration
 
-*Note:* The provisioning code stores the SSH keypair for instance logins in an S3 bucket which is named based on the
-pattern. This means that the same user can install the same pattern in exactly one AWS region at present. Further,
-the S3 bucket takes some time to delete, so if you immediately delete a pattern from one region and try to install it
-in another region, the creation of the S3 bucket may fail because the previous S3 bucket may not have actually been
-deleted yet. As a workaround, you can change the `ec2_name_prefix` which will create a different bucket for the new
-pattern, or else wait until the bucket name has been fully deleted by AWS.
-
 | Name                      | Description                          | Required | Default            | Notes  |
 | ------------------------- | ------------------------------------ | -------- | ------------------ | ------ |
 | aws_account_nbr_vault     | AWS Account Number                   | false    |                    | The AWS Account Number is used by ImageBuilder to share the resulting image to as an AMI |
