@@ -6,7 +6,7 @@
     region: "{{ ec2_region }}"
     tags:
       Pattern: "{{ ec2_name_prefix }}"
-  retries: 4
+  retries: 100
   delay: 15
   register: s3_result
   until: s3_result.failed == false

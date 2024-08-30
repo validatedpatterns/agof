@@ -226,6 +226,13 @@ The variables to include builds for the extra components are all Ansible boolean
 
 ###  4.4. <a name='AWS-SpecificConfiguration'></a>AWS-Specific Configuration
 
+*Note:* The provisioning code stores the SSH keypair for instance logins in an S3 bucket which is named based on the
+pattern. This means that the same user can install the same pattern in exactly one AWS region at present. Further,
+the S3 bucket takes some time to delete, so if you immediately delete a pattern from one region and try to install it
+in another region, the creation of the S3 bucket may fail because the previous S3 bucket may not have actually been
+deleted yet. As a workaround, you can change the `ec2_name_prefix` which will create a different bucket for the new
+pattern, or else wait until the bucket name has been fully deleted by AWS.
+
 | Name                      | Description                          | Required | Default            | Notes  |
 | ------------------------- | ------------------------------------ | -------- | ------------------ | ------ |
 | aws_account_nbr_vault     | AWS Account Number                   | false    |                    | The AWS Account Number is used by ImageBuilder to share the resulting image to as an AMI |
@@ -248,6 +255,7 @@ The variables to include builds for the extra components are all Ansible boolean
 | activation_key_vault      | Activation Key Name to embed in image  | true  |                    | This is an activation key for the Red Hat CDN. It is expected to be able to enable both the base RHEL repos and the AAP repos. |
 | skip_imagebuilder_build   | Flag to skip imagebuilder build (also set `imagebuilder_ami` if true) |  false | false     | |
 | imagebuilder_ami   | AMI to use for VM creation in AWS  | false             | | It is very possible to re-use another imagebuilder build from a previous installation of the pattern framework, and saves ~15 minutes on a new pattern install to re-use such an image. |
+| ami_source_region   | Source Region to copy AMI from if not present in target region  | false             | us-east-1 | Imagebuilder puts its images in us-east-1 by default. If you specify a non-imagebuilder ami and it "starts out" in a different region, you can specify that here. |
 
 ##  5. <a name='WhattheFrameworkDoesStep-by-Step'></a>What the Framework Does, Step-by-Step
 
