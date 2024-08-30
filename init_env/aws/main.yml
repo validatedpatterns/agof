@@ -39,8 +39,7 @@
             image_id: "{{ imagebuilder_ami }}"
             region: "{{ ec2_region }}"
           register: ami_query
-          failed_when:
-            - "'InvalidAMIID.NotFound' in '{{ ami_query.msg }}'"
+          failed_when: ami_query.msg is search('InvalidAMIID.NotFound')
       rescue:
         - name: Copy image to desired region
           community.aws.ec2_ami_copy:
