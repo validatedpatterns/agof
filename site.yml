@@ -29,8 +29,9 @@
     - tags_phase_2
   when: not (containerized_install | default(true) | bool)
 
-- name: "Phase 3 - configure AAP (traditional install)"
+- name: "Phase 3 - configure AAP (traditional install OR AGOF custom IAC install)"
   ansible.builtin.import_playbook: ./configure_aap.yml
   tags:
     - tags_phase_3
-  when: not (containerized_install | default(true) | bool)
+  when:
+    - not (containerized_install | default(true) | bool)

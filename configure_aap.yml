@@ -9,4 +9,4 @@
   tasks:
     - name: "Configure AAP"
       ansible.builtin.include_role:
-        name: hosts/roles/configure_aap
+        name: agof_configure_aap/roles/configure_aap

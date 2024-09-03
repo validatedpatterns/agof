@@ -3,6 +3,16 @@
   ansible.builtin.debug:
     var: controller_hostname
 
+- name: "Checkout infrastructure-as-code directory"
+  ansible.builtin.git:
+    repo: "{{ agof_iac_repo }}"
+    version: "{{ agof_iac_repo_version | default('main') }}"
+    dest: "{{ controller_configs_dir }}"
+    force: true
+    clone: true
+    update: true
+    recursive: true
+
 - name: Include vars from configs directory
   ansible.builtin.include_vars:
     dir: "{{ controller_configs_dir }}"
@@ -32,7 +42,7 @@
 
 - name: Post manifest file
   ansible.builtin.uri:
-    url: 'https://{{ controller_hostname }}/api/v2/config/'
+    url: 'https://{{ controller_hostname }}:{{ controller_port }}/api/v2/config/'
     method: POST
     user: '{{ admin_user | default("admin") }}'
     password: "{{ admin_password }}"
@@ -46,8 +56,4 @@
 
 - name: "Configure AAP"
   ansible.builtin.include_role:
-    name: redhat_cop.controller_configuration.dispatch
-
-- name: "Kick off any jobs that need to launch immediately"
-  ansible.builtin.include_role:
-    name: redhat_cop.controller_configuration.job_launch
+    name: infra.controller_configuration.dispatch
