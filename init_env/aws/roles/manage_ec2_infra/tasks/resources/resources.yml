@@ -60,7 +60,7 @@
   until: create_subnet is not failed
   retries: 15
 
-- name: Vpc internet gateway is present for {{ create_vpc.vpc.id }}
+- name: VPC internet gateway is present for {{ create_vpc.vpc.id }}
   amazon.aws.ec2_vpc_igw:
     region: "{{ ec2_region }}"
     vpc_id: "{{ create_vpc.vpc.id }}"
@@ -73,7 +73,7 @@
   until: igw is not failed
   retries: 15
 
-- name: Vpc public subnet route table is present for {{ create_vpc.vpc.id }}
+- name: VPC public subnet route table is present for {{ create_vpc.vpc.id }}
   amazon.aws.ec2_vpc_route_table:
     region: "{{ ec2_region }}"
     vpc_id: "{{ create_vpc.vpc.id }}"
