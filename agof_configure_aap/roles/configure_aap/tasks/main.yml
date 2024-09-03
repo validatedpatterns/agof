@@ -40,7 +40,38 @@
   ansible.builtin.debug:
     msg: '{{ check2.json }}'
 
-- name: Post manifest file
+- name: Default to entitlement
+  ansible.builtin.set_fact:
+    entitle_aap: true
+
+- name: Entitle AAP if needed
+  block:
+    # AAP will have an empty license_info block if it hasn't been entitled
+    # of course we expect to entitle it through the containerized installer
+    # But in case we didn't use the containerized installer, we have this check
+    # and this block as a failsafe
+    - name: Check on current license_info status
+      ansible.builtin.uri:
+        url: 'https://{{ controller_hostname }}:{{ controller_port }}/api/v2/config/'
+        method: GET
+        user: '{{ admin_user | default("admin") }}'
+        password: "{{ admin_password }}"
+        validate_certs: false
+        force_basic_auth: true
+      register: config_check
+
+    - name: Turn off entitlement if needed
+      ansible.builtin.set_fact:
+        entitle_aap: false
+      when:
+        - config_check.json.license_info.valid_key
+
+  rescue:
+    - name: Notify that we are going to entitle
+      ansible.builtin.debug:
+        msg: "Caught an exception, entitling"
+
+- name: Post manifest file if needed
   ansible.builtin.uri:
     url: 'https://{{ controller_hostname }}:{{ controller_port }}/api/v2/config/'
     method: POST
@@ -50,6 +81,7 @@
     body_format: json
     validate_certs: false
     force_basic_auth: true
+  when: entitle_aap
   register: license_controller
   until: license_controller is not failed
   retries: 5

@@ -34,4 +34,5 @@
   tags:
     - tags_phase_3
   when:
-    - not (containerized_install | default(true) | bool)
+    - controller_postinstall_dir is not defined
+    - controller_postinstall_repo_url is not defined
