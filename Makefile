@@ -26,4 +26,4 @@ legacy_from_os_install: preinit ## Install assuming registered RHEL VM(s) with t
 	ansible-playbook -i $(INVENTORY) configure_aap.yml $(EXTRA_PLAYBOOK_OPTS)
 
 api_install: preinit ## Install assuming *just* an AAP endpoint
-	ansible-playbook configure_aap.yml $(EXTRA_PLAYBOOK_OPTS)
+	ansible-playbook -i $(INVENTORY) configure_aap.yml $(EXTRA_PLAYBOOK_OPTS)

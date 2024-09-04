@@ -60,6 +60,10 @@
         force_basic_auth: true
       register: config_check
 
+    - name: Debug license_info status
+      ansible.builtin.debug:
+        var: config_check
+
     - name: Turn off entitlement if needed
       ansible.builtin.set_fact:
         entitle_aap: false
@@ -86,6 +90,26 @@
   until: license_controller is not failed
   retries: 5
 
-- name: "Configure AAP"
+- name: Consolidate controller_hostname
+  ansible.builtin.set_fact:
+    controller_hostname: "https://{{ controller_hostname }}:{{ controller_port }}"
+
+- name: Debug infra.controller_configuration.dispatch common variables
+  ansible.builtin.debug:
+    msg:
+      - "controller_state: {{ controller_state }}"
+      - "controller_hostname: {{ controller_hostname }}"
+      - "controller_port: {{ controller_port }}"
+      - "controller_validate_certs: {{ controller_validate_certs }}"
+      - "controller_username: {{ controller_username }}"
+      - "controller_request_timeout: {{ controller_request_timeout }}"
+  when:
+    - agof_configure_aap_debug
+
+- name: "Configure AAP Controller"
   ansible.builtin.include_role:
+    #name: redhat_cop.controller_configuration.dispatch
     name: infra.controller_configuration.dispatch
+
+#- name: "Configure EDA Controller"
+#- name: "Configure Automation Hub"
