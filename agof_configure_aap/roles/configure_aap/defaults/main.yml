@@ -12,4 +12,4 @@ controller_state: present
 
 agof_configure_aap_debug: false
 controller_request_timeout: 90
-controller_configuration_async_dir: /tmp
+controller_configuration_async_dir: /tmp/.ansible_async

@@ -103,6 +103,7 @@
       - "controller_validate_certs: {{ controller_validate_certs }}"
       - "controller_username: {{ controller_username }}"
       - "controller_request_timeout: {{ controller_request_timeout }}"
+      - "controller_configuration_async_dir: {{ controller_configuration_async_dir }}"
   when:
     - agof_configure_aap_debug
 
@@ -111,5 +112,10 @@
     #name: redhat_cop.controller_configuration.dispatch
     name: infra.controller_configuration.dispatch
 
-#- name: "Configure EDA Controller"
-#- name: "Configure Automation Hub"
+- name: "Configure AAP EDA Controller"
+  ansible.builtin.include_role:
+    name: infra.eda_configuration.dispatch
+
+- name: "Configure AAP Automation Hub"
+  ansible.builtin.include_role:
+    name: infra.ah_configuration.dispatch

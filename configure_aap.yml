@@ -1,3 +1,4 @@
+# vim: ft=yaml.ansible
 ---
 - name: "Configure AAP"
   hosts: localhost
@@ -6,6 +7,8 @@
   become: false
   vars_files:
     - "~/agof_vault.yml"
+  vars:
+    ansible_async_dir: /tmp/.ansible_async
   tasks:
     - name: "Configure AAP"
       ansible.builtin.include_role:
