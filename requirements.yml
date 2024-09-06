@@ -13,7 +13,6 @@ collections:
 - infra.ah_configuration
 - infra.controller_configuration
 - infra.eda_configuration
-- redhat_cop.controller_configuration
 - redhat.rhel_idm
 - redhat.rhel_system_roles
 - redhat.satellite
