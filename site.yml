@@ -12,6 +12,11 @@
       ansible.builtin.debug:
         msg: 'build_idm: {{ build_idm }} / build_sat: {{ build_sat }} / automation_hub: {{ automation_hub }} / eda: {{ eda }} / containerized_install: {{ containerized_install }}'
 
+    - name: "Set controller port for containerized_install"
+      ansible.builtin.set_fact:
+        controller_port: 8443
+      when: containerized_install | bool
+
 - name: "Phase 1 - initialize the environment"
   ansible.builtin.import_playbook: ./init_env/main.yml
   tags:
@@ -29,8 +34,10 @@
     - tags_phase_2
   when: not (containerized_install | default(true) | bool)
 
-- name: "Phase 3 - configure AAP (traditional install)"
+- name: "Phase 3 - configure AAP (traditional install OR AGOF custom IAC install)"
   ansible.builtin.import_playbook: ./configure_aap.yml
   tags:
     - tags_phase_3
-  when: not (containerized_install | default(true) | bool)
+  when:
+    - controller_postinstall_dir is not defined
+    - controller_postinstall_repo_url is not defined

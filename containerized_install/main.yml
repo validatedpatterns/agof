@@ -1,3 +1,4 @@
+# vim: ft=yaml.ansible
 ---
 - name: "Prep the containerized installer (root required)"
   hosts: aap_controllers

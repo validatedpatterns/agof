@@ -80,7 +80,7 @@
     group: "{{ containerized_installer_user }}"
     mode: "0600"
 
-- name: Run installer
+- name: Run containerized installer
   ansible.builtin.command:
     chdir: "{{ aap_installer_dir }}"
     cmd: |-
