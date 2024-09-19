@@ -7,7 +7,6 @@ bootstrap_allowable_values:
 agof_bootstrap_target: "aws"
 
 ansible_cfg_log_path: '~/lab_builder_ansible.log'
-ansible_cfg_vault_password_path: '~/.ansible/vault.txt'
 ansible_cfg_collections_path: '~/.ansible/collections/ansible_collections:/usr/share/ansible/collections/ansible_collections'
 ansible_cfg_patch_collection_dir: '~/.ansible/collections/ansible_collections'
 
