@@ -201,7 +201,7 @@ The variables to include builds for the extra components are all Ansible boolean
 | automation_hub_token_vault| Subscriber-specific token for Content | true    |                    |
 | automation_hub            | Flag to build and enable Automation Hub | false     | false |  | Building a Private Automation Hub is necessary if your pattern builds an Execution Environment that is not hosted on a public container registry. |
 | eda            | Flag to build and enable Event Driven Automation controller | false     | true |  |  |
-| controller_configs_dir    | Directory to pass to controller_configuration | false  |  | This directory is the key one to load all other AAP Controller configuration. The framework is not opinionated about how the directory gets there - you may wish to generate it yourself or check it out from a git repo |
+| agof_controller_config_dir    | Directory to pass to controller_configuration | false  |  | This directory is the key one to load all other AAP Controller configuration. The framework will populate it by checking out the `agof_iac_repo` version `agof_iac_repo_version` (default: `main`) |
 | controller_launch_jobs    | List of jobs to run after controller_configuration has run | false     |  | Use this to start a job (or jobs) that do not have aggressive schedules, and that are ready to run as soon as the controller is configured. The fewer jobs listed here the better. |
 
 ###  4.2. <a name='InitializationEnvironmentConfiguration'></a>Initialization Environment Configuration

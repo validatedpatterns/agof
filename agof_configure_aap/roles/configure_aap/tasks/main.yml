@@ -7,7 +7,7 @@
   ansible.builtin.git:
     repo: "{{ agof_iac_repo }}"
     version: "{{ agof_iac_repo_version | default('main') }}"
-    dest: "{{ controller_configs_dir }}"
+    dest: "{{ agof_controller_config_dir }}"
     force: true
     clone: true
     update: true
@@ -15,7 +15,7 @@
 
 - name: Include vars from configs directory
   ansible.builtin.include_vars:
-    dir: "{{ controller_configs_dir }}"
+    dir: "{{ agof_controller_config_dir }}"
     ignore_unknown_extensions: true
     extensions:
       - "json"
