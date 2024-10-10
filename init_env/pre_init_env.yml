@@ -8,6 +8,11 @@
     - "./vars/init_env_vars.yml"
     - "~/agof_vault.yml"
   tasks:
+    - name: Ensure we can proceed
+      ansible.builtin.assert:
+        that: aap_version == '2.4'
+        fail_msg: "aap_version {{ aap_version }} not (yet) supported. Must be 2.4"
+
     - name: "Write ansible.cfg"
       ansible.builtin.template:
         src: ansible.cfg.j2
@@ -25,7 +30,12 @@
 
         - name: "Install requirements file based collections {{ 'forcefully' if init_env_collection_install_force }}"
           ansible.builtin.command:
-            cmd: "ansible-galaxy collection install {{ '--force' if init_env_collection_install_force }} -p '{{ ansible_cfg_patch_collection_dir }}' -r requirements.yml"
+            cmd: |-
+              {% if aap_version < '2.5' %}
+              ansible-galaxy collection install {{ '--force' if init_env_collection_install_force }} -p '{{ ansible_cfg_patch_collection_dir }}' -r requirements.yml.pre25
+              {% else %}
+              ansible-galaxy collection install {{ '--force' if init_env_collection_install_force }} -p '{{ ansible_cfg_patch_collection_dir }}' -r requirements.yml
+              {% endif %}
             chdir: ".."
           environment:
             ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_CERTIFIED_TOKEN: "{{ automation_hub_token }}"

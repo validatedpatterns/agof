@@ -12,7 +12,7 @@
 
 - name: Run AAP Containerized installer
   when:
-    - (force_aap_reconfigure|bool) or (aap_check is failed)
+    - (force_aap_reconfigure) or (aap_check is failed)
   block:
     # https://access.redhat.com/articles/3626371#bgenerating-an-access-tokenb-4
     #
@@ -102,5 +102,3 @@
           ansible-playbook -i inventory ansible.containerized_installer.install
       async: 3600
       poll: 15
-      when:
-        - force_aap_configure or 

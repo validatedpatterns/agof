@@ -14,6 +14,7 @@ automation_hub_url: '{{ automation_hub_url_vault }}'
 automation_hub_token: '{{ automation_hub_token_vault }}'
 
 init_env_collection_install: true
-init_env_collection_install_force: false
+init_env_collection_install_force: true
+aap_version: '2.4'
 
 special_collection_installs: []

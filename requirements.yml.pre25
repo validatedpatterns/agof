@@ -1,0 +1,22 @@
+# vim: ft=yaml
+---
+# These are the collections required by the builder
+collections:
+- amazon.aws
+- awx.awx
+- name: ansible.controller
+  version: '<4.6.0'
+- ansible.netcommon
+- ansible.posix
+- ansible.utils
+- community.aws
+- community.general
+- containers.podman
+- infra.ah_configuration
+- infra.controller_configuration
+- infra.eda_configuration
+- redhat.rhel_idm
+- redhat.rhel_system_roles
+- redhat.satellite
+- redhat.satellite_operations
+- redhat.redhat_csp_download
