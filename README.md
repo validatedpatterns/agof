@@ -52,7 +52,13 @@ The default installation will provide an AAP 2.4 installation deployed via the C
 
 By default, the framework will apply license content specified by the `manifest_content` variable, but will not further configure Controller or Automation Hub beyond the defaults.
 
-From there, a minimal example pattern is available to download and run [here](https://github.com/validatedpatterns/agof_minimal_demo). To use this example, check it out locally and use its `config` directory as the `controller_config_dir` parameter.
+From there, a minimal example pattern is available to download and run [here](https://github.com/validatedpatterns-demos/agof_minimal_config.git). To use this example, set the following variables in your `agof_vault.yml`.
+`agof_statedir` is where the config repo will be checked out by the process. Any repo that can be used with the controller_configuration collection can be used as the `agof_iac_repo`.
+
+```yaml
+agof_statedir: "{{ '~/agof' | expanduser }}"
+agof_iac_repo: "https://github.com/validatedpatterns-demos/agof_minimal_config.git"
+```
 
 ###  1.1. <a name='Installation'></a>Installation
 
