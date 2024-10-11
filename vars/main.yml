@@ -10,3 +10,4 @@ containerized_install_user: 'aap'
 containerized_install_user_home: '/var/lib/aap'
 
 aap_version: "2.4"
+init_env_collection_install_force: true
