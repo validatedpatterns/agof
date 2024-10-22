@@ -80,6 +80,19 @@
       vars:
         ami_id: "{{ copied_ami | default(imagebuilder_ami) }}"
 
+- name: Ensure AWS nodes are ready for post-provisioning
+  hosts: aws_nodes
+  become: true
+  gather_facts: false
+  vars_files:
+    - "vars/aws_vars.yml"
+    - "~/agof_vault.yml"
+  tasks:
+    - name: "Wait for VM(s) to be ready for SSH"
+      ansible.builtin.wait_for:
+        port: 22
+        search_regex: OpenSSH
+
 - name: Post-provisioning tasks
   hosts: aws_nodes
   become: true
@@ -91,11 +104,6 @@
     ec2_instances_built: "{{ hostvars['localhost']['ec2_instances_built'] }}"
     ipaclient_configure_dns_resolver: false
   tasks:
-    - name: "Wait for VM(s) to be ready for SSH"
-      ansible.builtin.wait_for:
-        port: 22
-        search_regex: OpenSSH
-
     - name: "Ensure remote tmp directory"
       ansible.builtin.file:
         path: '{{ aws_remote_tmp }}'

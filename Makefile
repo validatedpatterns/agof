@@ -12,7 +12,7 @@ preinit: ## Setup ansible environemnt - configure ansible.cfg and download colle
 fix_aws_dns: ## Update public DNS for AWS - needed when a VM cold starts
 	ansible-playbook init_env/aws/fix_aws_dns.yml $(EXTRA_PLAYBOOK_OPTS)
 
-install: preinit ## Install the pattern - including bootstrapping an AWS environment to run it in
+install: ## Install the pattern - including bootstrapping an AWS environment to run it in
 	ansible-playbook site.yml $(EXTRA_PLAYBOOK_OPTS)
 
 aws_uninstall: ## Uninstall the AWS environment for the pattern, including its DNS entries
