@@ -1,6 +1,6 @@
 ---
 - name: "Pre-install: validate values and variables"
-  hosts: build_control
+  hosts: localhost
   become: false
   gather_facts: false
   connection: local
