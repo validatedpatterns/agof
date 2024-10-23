@@ -89,9 +89,9 @@
     - "~/agof_vault.yml"
   tasks:
     - name: "Wait for VM(s) to be ready for SSH"
-      ansible.builtin.wait_for:
-        port: 22
-        search_regex: OpenSSH
+      ansible.builtin.wait_for_connection:
+        delay: 60
+        timeout: 300
 
 - name: Post-provisioning tasks
   hosts: aws_nodes
