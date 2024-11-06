@@ -1,7 +1,8 @@
 ---
 - name: Debug
   ansible.builtin.debug:
-    var: controller_hostname
+    msg:
+      - "aap_hostname: {{ aap_hostname }}"
 
 - name: "Checkout infrastructure-as-code directory"
   ansible.builtin.git:
@@ -26,7 +27,7 @@
 
 - name: Wait for Automation Controller to be up
   ansible.builtin.uri:
-    url: 'https://{{ controller_hostname }}:{{ controller_port }}/api/v2/ping/'
+    url: "https://{{ aap_hostname }}/{{ api_prefix }}/ping/"
     method: GET
     user: '{{ admin_user | default("admin") }}'
     password: "{{ admin_password }}"
@@ -36,7 +37,7 @@
   retries: 60
   delay: 10
 
-- name: Display /api/v2/ping results
+- name: Display api ping results
   ansible.builtin.debug:
     msg: '{{ check2.json }}'
 
@@ -52,7 +53,7 @@
     # and this block as a failsafe
     - name: Check on current license_info status
       ansible.builtin.uri:
-        url: 'https://{{ controller_hostname }}:{{ controller_port }}/api/v2/config/'
+        url: 'https://{{ aap_hostname }}/{{ api_prefix }}/config/'
         method: GET
         user: '{{ admin_user | default("admin") }}'
         password: "{{ admin_password }}"
@@ -77,7 +78,7 @@
 
 - name: Post manifest file if needed
   ansible.builtin.uri:
-    url: 'https://{{ controller_hostname }}:{{ controller_port }}/api/v2/config/'
+    url: 'https://{{ aap_hostname }}/{{ api_prefix }}/config/'
     method: POST
     user: '{{ admin_user | default("admin") }}'
     password: "{{ admin_password }}"
@@ -90,32 +91,19 @@
   until: license_controller is not failed
   retries: 5
 
-- name: Consolidate controller_hostname
-  ansible.builtin.set_fact:
-    controller_hostname: "https://{{ controller_hostname }}:{{ controller_port }}"
-
 - name: Debug infra.controller_configuration.dispatch common variables
   ansible.builtin.debug:
     msg:
-      - "controller_state: {{ controller_state }}"
-      - "controller_hostname: {{ controller_hostname }}"
-      - "controller_port: {{ controller_port }}"
-      - "controller_validate_certs: {{ controller_validate_certs }}"
-      - "controller_username: {{ controller_username }}"
-      - "controller_request_timeout: {{ controller_request_timeout }}"
-      - "controller_configuration_async_dir: {{ controller_configuration_async_dir }}"
+      - "aap_hostname: {{ aap_hostname }}"
+      - "aap_validate_certs: {{ aap_validate_certs }}"
+      - "aap_username: {{ aap_username }}"
+      - "aap_request_timeout: {{ aap_request_timeout }}"
+      - "aap_configuration_async_dir: {{ aap_configuration_async_dir }}"
   when:
     - agof_configure_aap_debug
 
-- name: "Configure AAP Controller"
-  ansible.builtin.include_role:
-    #name: redhat_cop.controller_configuration.dispatch
-    name: infra.controller_configuration.dispatch
-
-- name: "Configure AAP EDA Controller"
-  ansible.builtin.include_role:
-    name: infra.eda_configuration.dispatch
-
-- name: "Configure AAP Automation Hub"
-  ansible.builtin.include_role:
-    name: infra.ah_configuration.dispatch
+- name: "Configure AAP - Version 2.5+"
+  block:
+    - name: "Configure AAP"
+      ansible.builtin.include_role:
+        name: infra.aap_configuration.dispatch

@@ -1,15 +1,16 @@
 ---
-build_idm: false
-build_sat: false
 automation_hub: false
 
 pattern_name: '{{ ec2_name_prefix }}'
 
-controller_hostname: 'aap.{{ pattern_name }}.{{ pattern_dns_zone }}'
-controller_port: 443
+aap_hostname: 'aap.{{ pattern_name }}.{{ pattern_dns_zone }}'
+
+api_prefix: api/controller/v2
 
 controller_state: present
 
 agof_configure_aap_debug: false
-controller_request_timeout: 90
-controller_configuration_async_dir: /tmp/.ansible_async
+aap_request_timeout: 90
+aap_configuration_async_dir: /tmp/.ansible_async
+
+aap_validate_certs: false

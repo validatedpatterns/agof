@@ -8,29 +8,13 @@
     - 'vars/main.yml'
     - '~/agof_vault.yml'
   vars:
-    aap_version: '2.4'
     init_env_collection_install_force: true
   tasks:
-    - name: Ensure we can proceed
-      ansible.builtin.assert:
-        that:
-          - aap_version == '2.4'
-        fail_msg: "aap_version {{ aap_version }} not (yet) supported. Must be 2.4"
-
     - name: "Show vars"
       ansible.builtin.debug:
         msg:
-          - "aap_version: {{ aap_version }}"
-          - "build_idm: {{ build_idm }}"
-          - "build_sat: {{ build_sat }}"
           - "automation_hub: {{ automation_hub }}"
           - "eda: {{ eda }}"
-          - "containerized_install: {{ containerized_install }}"
-
-    - name: "Set controller port for containerized_install"
-      ansible.builtin.set_fact:
-        controller_port: 8443
-      when: containerized_install | bool
 
 - name: "Phase 1 - initialize the environment"
   ansible.builtin.import_playbook: ./init_env/main.yml
@@ -41,13 +25,6 @@
   ansible.builtin.import_playbook: ./containerized_install/main.yml
   tags:
     - tags_phase_2
-  when: containerized_install | bool
-
-- name: "Phase 2 - bootstrap AAP (traditional install)"
-  ansible.builtin.import_playbook: ./hosts/main.yml
-  tags:
-    - tags_phase_2
-  when: not (containerized_install | default(true) | bool)
 
 - name: "Phase 3 - configure AAP (traditional install OR AGOF custom IAC install)"
   ansible.builtin.import_playbook: ./configure_aap.yml

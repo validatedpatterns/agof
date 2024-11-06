@@ -6,8 +6,6 @@ ebs_optimized_capable: false
 
 eda: false
 automation_hub: false
-build_idm: false
-build_sat: false
 
 ec2_instances:
   - name: aap

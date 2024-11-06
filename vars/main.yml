@@ -1,13 +1,10 @@
 ---
-build_idm: false
-build_sat: false
 eda: true
 automation_hub: true
 
 containerized_install: true
 
-containerized_install_user: 'aap'
-containerized_install_user_home: '/var/lib/aap'
+containerized_installer_user: 'aap'
+containerized_installer_user_home: '/var/lib/aap'
 
-aap_version: "2.4"
-init_env_collection_install_force: true
+init_env_collection_install_force: false

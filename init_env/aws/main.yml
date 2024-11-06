@@ -90,8 +90,8 @@
   tasks:
     - name: "Wait for VM(s) to be ready for SSH"
       ansible.builtin.wait_for_connection:
-        delay: 60
-        timeout: 300
+        delay: 1
+        timeout: 600
 
 - name: Post-provisioning tasks
   hosts: aws_nodes

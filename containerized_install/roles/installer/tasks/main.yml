@@ -1,7 +1,7 @@
 ---
 - name: Check to see whether AAP is already running
   ansible.builtin.uri:
-    url: 'https://127.0.0.1:{{ controller_port }}/api/v2/ping/'
+    url: 'https://127.0.0.1/api/controller/v2/ping/'
     method: GET
     user: '{{ admin_user | default("admin") }}'
     password: "{{ admin_password }}"
