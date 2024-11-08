@@ -111,7 +111,7 @@ Note that INVENTORY defaults to '~/inventory_agof' if you do not specify one.
 
 Your inventory *must* define an `aap_controllers` group (which will be configured as the AAP node) and an `automation_hub` group which will be configured as the automation hub, if you want one. You must also specify `username` if you want it to be something besides the default 'ec2-user' (which it does not create or otherwise manage). Similarly, you should set `controller_hostname` (including the 'https://' schema) because that will default to something AWS-specific otherwise. As with all Ansible inventory files, you can set other variables here and the plays will use them. (Other variables of interest might be `aap_version`, for example.)
 
-Example `~/agof_inventory` (for just AAP, which is the default):
+Example `~/inventory_agof` (for just AAP, which is the default):
 
 ```ini
 [build_control]
@@ -137,7 +137,7 @@ username=myuser
 controller_hostname=192.168.5.207
 ```
 
-Example `~/agof_inventory` (including both AAP and Hub):
+Example `~/inventory_agof` (including both AAP and Hub):
 
 ```ini
 [build_control]
