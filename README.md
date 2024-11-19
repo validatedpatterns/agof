@@ -307,7 +307,7 @@ The teardown play will terminate all VMs associated with a VPC and subnet, and r
 | containerized_installer_shasum          | SHA256 sum of the installer image to download | true  | `714de904596f2f3312b8804eee0d2fdce6842ac2108dbf718f2107ef61d1598d` | This currently points to the image for AAP 2.4 |
 | automation_hub  | Boolean to indicate whether to install automation_hub | true  | true |  |
 | postgresql_admin_username  | Name of postgres admin for services | true  | `postgres` |  |
-| postgresql_admin_password  | Name of postgres admin for services | true  | `{{ db_password }}` |  |
+| postgresql_admin_password  | Password for the postgres user for services | true  | `{{ db_password }}` |  |
 | ee_extra_images  | Specifications for extra execution environments to load | false  | `[]` |  |
 | de_extra_images  | Specifications for extra decision environments to load (for EDA) | false  | `[]` |  |
 | controller_postinstall  | Whether or not to use controller_postinstall feature | false  | `false` |  |
