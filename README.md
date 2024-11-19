@@ -218,7 +218,6 @@ The variables to include builds for the extra components are all Ansible boolean
 | init_env_collection_install_force | Whether to use the `force` argument when installing collections | false | false | Forces the installation of declared dependencies if true |
 | special_collection_installs | "Bundled" collection installations (references files in repodir) | false | `[]` | A mechanism to allow the installation of collections bundled into the pattern, if the ones published in galaxy and/or Automation Hub are not sufficient |
 | offline_token             | Red Hat Offline Token                | false    |          | Used to build the imagebuilder image |
-| offline_token             | Red Hat Offline Token                | false    |          | Used to build the imagebuilder image |
 
 ###  4.3. <a name='AutomationHubSpecificConfiguration'></a>Automation Hub Specific Configuration
 
