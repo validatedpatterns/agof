@@ -9,6 +9,7 @@ pattern_dns_zone: 'A public DNS zone managed by AWS Route53'
 ec2_name_prefix: 'A unique prefix to distinguish instances in AWS. Used as the pattern name and in public DNS entries'
 ec2_region: 'An AWS region that your account has access to'
 
+# Generate it from https://access.redhat.com/management/api
 offline_token: 'A Red Hat offline token used to build the RHEL image on console.redhat.com'
 
 redhat_username: 'Red Hat Subscription username, used to login to registry.redhat.io'
@@ -16,6 +17,7 @@ redhat_password: 'Red Hat Subscription password, used to login to registry.redha
 
 admin_password: 'An admin password for AAP Controller and Automation Hub'
 
+# https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.4/html-single/red_hat_ansible_automation_platform_operations_guide/index#proc-create-subscription-allocation_obtain-manifest
 manifest_content: "Content for a manifest file to entitle AAP Controller. See below for an example of how to point to a local file"
 #manifest_content: "{{ lookup('file', '~/Downloads/manifest_AVP_20230510T202608Z.zip') | b64encode }}"
 
