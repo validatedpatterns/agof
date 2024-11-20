@@ -8,7 +8,7 @@
 * 2. [Entry Points](#EntryPoints)
 * 3. [Using the Containerized Installer vs. The traditional one](#UsingtheContainerizedInstallervs.Thetraditionalone)
 	* 3.1. ["API" Install (aka "Bare")](#APIInstallakaBare)
-	* 3.2. [Legacy "From OS" Install](#LegacyFromOSInstall)
+	* 3.2. ["From OS" Install](#FromOSInstall)
 	* 3.3. [Default Install](#DefaultInstall)
 	* 3.4. [Convenience Features Install (defined by options in the "default" install)](#ConvenienceFeaturesInstalldefinedbyoptionsinthedefaultinstall)
 * 4. [agof_vault.yml Configuration](#agof_vault.ymlConfiguration)
@@ -22,7 +22,7 @@
 		* 5.1.1. [[Pre-init](init_env/pre_init_env.yml) (mandatory)](#Pre-initinit_envpre_init_env.ymlmandatory)
 		* 5.1.2. [[Environment Initialization](init_env/main.yml) (optional; enabled by default; `make install` entry point)](#EnvironmentInitializationinit_envmain.ymloptionalenabledbydefaultmakeinstallentrypoint)
 		* 5.1.3. [[Containerized Install](containerized_install/main.yml) (`make install` default)](#ContainerizedInstallcontainerized_installmain.ymlmakeinstalldefault)
-		* 5.1.4. [[Host Configuration](hosts/main.yml) (`make legacy_from_os_install` entry point)](#HostConfigurationhostsmain.ymlmakelegacy_from_os_installentrypoint)
+		* 5.1.4. [OpenShift Targets](#OpenShiftTargets)
 	* 5.2. [GitOps Step](#GitOpsStep)
 * 6. [Acknowledgements](#Acknowledgements)
 
@@ -42,13 +42,13 @@ The thinking behind this effort is documented in the [Ansible Pattern Theory](ht
 
 ##  1. <a name='HowtoUseIt'></a>How to Use It
 
-The default installation will provide an AAP 2.4 installation deployed via the Containerized Installer, with services deployed this way:
+The default installation will provide an AAP 2.5 installation deployed via the Containerized Installer, with services deployed this way:
 
 | URL Pattern | Service |
 |-------------|---------|
-| https://aapnode.fqdn:8443/ | Controller API |
-| https://aapnode.fqdn:8444/ | Private Automation Hub |
-| https://aapnode.fqdn:8445/ | EDA Automation Controller |
+| https://aapnode.fqdn3/ | Controller API |
+
+Automation Hub and EDA are enabled by default, but they can be turned off if desired.
 
 By default, the framework will apply license content specified by the `manifest_content` variable, but will not further configure Controller or Automation Hub beyond the defaults.
 
@@ -66,7 +66,7 @@ agof_iac_repo: "https://github.com/validatedpatterns-demos/agof_minimal_config.g
 ./pattern.sh make install
 ```
 
-This builds the default pattern configuration on AWS, which (by default) includes a containerized install of AAP 2.4 on a single AWS VM. Various add-ons can be included by adding variables to the `~/agof_vault.yml` file as described below - these options will all be honored as the pattern installs itself.
+This builds the default pattern configuration on AWS, which (by default) includes a containerized install of AAP 2.5 on a single AWS VM. Various add-ons can be included by adding variables to the `~/agof_vault.yml` file as described below - these options will all be honored as the pattern installs itself.
 
 ###  1.2. <a name='Uninstallation'></a>Uninstallation
 
@@ -82,7 +82,7 @@ This is a framework for building Validated Patterns that use Ansible Automation 
 
 ##  3. <a name='UsingtheContainerizedInstallervs.Thetraditionalone'></a>Using the Containerized Installer vs. The traditional one
 
-As of AAP 2.4, the [containerized installer feature](https://access.redhat.com/documentation/en-us/red_hat_ansible_automation_platform/2.4/html/containerized_ansible_automation_platform_installation_guide/aap-containerized-installation) is in Tech Preview, but because of certain advantages it has over the traditional installer, AGOF uses it by default.
+In AAP 2.5, the containerized install feature has reached General Availability and is the preferred way to install AAP on non-OpenShift environments.
 
 ###  3.1. <a name='APIInstallakaBare'></a>"API" Install (aka "Bare")
 
@@ -92,24 +92,25 @@ As of AAP 2.4, the [containerized installer feature](https://access.redhat.com/d
 
 In this model, you provide an (already provisioned) AAP endpoint. It does not need to be entitled, it just needs to be running the AAP Controller. You supply the manifest contents, endpoint hostname, admin username (defaults to "admin"), and admin password, and then the installation hands off to a `agof_controller_config_dir` you define. This is provided for users who have their own AAP installations on bare metal or on-prem or do not want to run on AWS. It is also useful in situations where the AAP deployment topology is more complex than what we provide in the pattern provisioner.
 
-###  3.2. <a name='LegacyFromOSInstall'></a>Legacy "From OS" Install
+###  3.2. <a name='FromOSInstall'></a>"From OS" Install
 
 ```shell
-./pattern.sh make legacy_from_os_install INVENTORY=(your_inventory_file)
+./pattern.sh make from_os_install INVENTORY=(your_inventory_file)
 ```
 
-In this model, you provide an inventory file with up to two fresh RHEL installations. The model is tested with one AAP and one Hub instance. (Many other topologies are possible with the AAP installation framework; see the Ansible Automation Platform Planning and Installation guides for details.) If you need to install a pattern on a cluster with a different topology than this, use the API install mechanism. This mechanism will run a (slightly) opinionated install of the AAP and Hub components, and will add some conveniences like default execution environments and credentials. Like the "API" install, the install will then be handed over to a `agof_controller_config_dir` you define.
+In this model, you provide an inventory file with a fresh RHEL 9 installation. The workflow will use the containerized installer to install AAP on the host
+in the aap_controllers group. (Many other topologies are possible with the AAP installation framework; see the Ansible Automation Platform Planning and Installation guides for details.) If you need to install a pattern on a cluster with a different topology than this, use the API install mechanism. This mechanism will run a (slightly) opinionated install of the AAP and Hub components, and will add some conveniences like default execution environments and credentials. Like the "API" install, the install will then be handed over to a `agof_controller_config_dir` you define.
 
 The reason for making this a separate option is to make it easy for those who are not used to installing AAP to get up and running with it given a couple of VMs (or baremetal instances). Requirements for this mode are as follows:
 
 * Must be running a version of RHEL that AAP supports
-* Must be properly entitled with a subscription that makes the appropriate AAP repository available
+* Must be properly entitled with a RHEL subscription
 
 It is not possible to test all possible scenarios in this mode, and we do not try.
 
 Note that INVENTORY defaults to '~/inventory_agof' if you do not specify one.
 
-Your inventory *must* define an `aap_controllers` group (which will be configured as the AAP node) and an `automation_hub` group which will be configured as the automation hub, if you want one. You must also specify `username` if you want it to be something besides the default 'ec2-user' (which it does not create or otherwise manage). Similarly, you should set `controller_hostname` (including the 'https://' schema) because that will default to something AWS-specific otherwise. As with all Ansible inventory files, you can set other variables here and the plays will use them. (Other variables of interest might be `aap_version`, for example.)
+Your inventory *must* define an `aap_controllers` group (which will be configured as the AAP node) and an `automation_hub` group which will be configured as the automation hub, if you want one. You must also specify `username` if you want it to be something besides the default 'ec2-user' (which it does not create or otherwise manage). Similarly, you should set `controller_hostname` (including the 'https://' schema) because that will default to something AWS-specific otherwise. As with all Ansible inventory files, you can set other variables here and the plays will use them.
 
 Example `~/inventory_agof` (for just AAP, which is the default):
 
@@ -134,34 +135,7 @@ ansible_ssh_pass=mypass
 ansible_become_pass=mypass
 ansible_remote_tmp=/tmp/.ansible
 username=myuser
-controller_hostname=192.168.5.207
-```
-
-Example `~/inventory_agof` (including both AAP and Hub):
-
-```ini
-[build_control]
-localhost
-
-[aap_controllers]
-192.168.5.207
-
-[automation_hub]
-192.168.5.209
-
-[eda_controllers]
-
-[aap_controllers:vars]
-
-[automation_hub:vars]
-
-[all:vars]
-ansible_user=myuser
-ansible_ssh_pass=mypass
-ansible_become_pass=mypass
-ansible_remote_tmp=/tmp/.ansible
-username=myuser
-controller_hostname=192.168.5.207
+aap_hostname=192.168.5.207
 ```
 
 ###  3.3. <a name='DefaultInstall'></a>Default Install
@@ -184,8 +158,6 @@ The variables to include builds for the extra components are all Ansible boolean
 
 `automation_hub`
 `eda`
-`build_idm`
-`build_sat`
 
 ##  4. <a name='agof_vault.ymlConfiguration'></a>agof_vault.yml Configuration
 
@@ -195,8 +167,6 @@ The variables to include builds for the extra components are all Ansible boolean
 | ------------------------- | ------------------------------------ | -------- | -------- | ------ |
 | admin_user                | Admin User (for AAP and/or Hub)      | false     | 'admin' |        |
 | admin_password            | Admin Password (for AAP and/or Hub)  | true    |           |        |
-| aap_verison               | AAP Version to Use                   | true     | '2.4'    | Can also be '2.3' currently |
-| containerized_install     | Flag to direct containerized install | true    |  true     | TP in AAP 2.4; Expected to become AAP's default in AAP 2.5|
 | redhat_username           | Red Hat Subscriber Username          | true    |           |        |
 | redhat_password           | Red Hat Subscriber Password          | true    |           |        |
 | redhat_registry_username_vault  | Red Hat Subscriber Username    | true    |           |  |
@@ -239,8 +209,6 @@ The variables to include builds for the extra components are all Ansible boolean
 | ec2_region                | EC2 region to use for builds         | false    |                   | us-east-1 is a reasonable value to use because this is where imagebuilder puts images by default |
 | ec2_name_prefix           | Text to add for EC2                  | false    |                   | This is a name to disambiguate your pattern from anything else that might be running in your AWS account. A VPC, subnet, and security group is built from this, and the prefix is added to the `pattern_dns_zone` by default. Additionally, the SSH private key is stored locally in `~/{{ ec2_name_prefix }}`. |
 | pattern_dns_zone          | Zone to use for route53 updates      | false    |                   | Definitely set this if doing DNS updates |
-| build_idm                 | Flag to build an idm VM on AWS       | false    | false             | This is a flag to indicate whether to build a VM called `idm` on AWS, for later installation of the idm software. Note that the framework just instantiates the VM, it does not install the IDM software. |
-| build_sat                 | Flag to build a Satellite VM on AWS  | false    | false             | This is a flag to indicate whether to install a Satellite VM on AWS, for later installation of the Satellite software. The framework does not include the Ansible code to install Satellite itself. |
 | ec2_instances_xtra        | Dictionary of additional ec2_instances to build  | false    |          | Build additional VMs as part of the pattern |
 
 ###  4.5. <a name='ImageBuilder-SpecificConfiguration'></a>ImageBuilder-Specific Configuration
@@ -253,7 +221,7 @@ The variables to include builds for the extra components are all Ansible boolean
 | activation_key_vault      | Activation Key Name to embed in image  | true  |                    | This is an activation key for the Red Hat CDN. It is expected to be able to enable both the base RHEL repos and the AAP repos. |
 | skip_imagebuilder_build   | Flag to skip imagebuilder build (also set `imagebuilder_ami` if true) |  false | false     | |
 | imagebuilder_ami   | AMI to use for VM creation in AWS  | false             | | It is very possible to re-use another imagebuilder build from a previous installation of the pattern framework, and saves ~15 minutes on a new pattern install to re-use such an image. |
-| ami_source_region   | Source Region to copy AMI from if not present in target region  | false             | us-east-1 | Imagebuilder puts its images in us-east-1 by default. If you specify a non-imagebuilder ami and it "starts out" in a different region, you can specify that here. |
+| ami_source_region   | Source Region to copy AMI from if not present in target region  | false             | us-east-1 | Imagebuilder puts its images in us-east-1 by default, but the framework can copy an image built there to another region if you specify one here. If you specify a non-imagebuilder ami and it "starts out" in a different region, you can specify that here. |
 
 ##  5. <a name='WhattheFrameworkDoesStep-by-Step'></a>What the Framework Does, Step-by-Step
 
@@ -301,10 +269,9 @@ The teardown play will terminate all VMs associated with a VPC and subnet, and r
 
 | Name                      | Description                          | Required | Default            | Notes |
 | ------------------------- | ------------------------------------ | -------- | ------------------ | ------- |
-| containerized_install          | Whether to use the containerized installer | true  | true |  |
 | containerized_installer_user          | Unprivileged user to create to run AAP | true  | `aap` |  |
 | containerized_installer_user_home          | Directory to install containerized AAP into | true  | `/var/lib/{{ containerized_installer_user }}` |  |
-| containerized_installer_shasum          | SHA256 sum of the installer image to download | true  | `714de904596f2f3312b8804eee0d2fdce6842ac2108dbf718f2107ef61d1598d` | This currently points to the image for AAP 2.4 |
+| containerized_installer_shasum          | SHA256 sum of the installer image to download | true  | `62e6bd23bd6d74e47e36f08849981e724b92056d5cd68a676f2d01f234070806` | Containerized AAP install 2.5 as of November 18, 2024 |
 | automation_hub  | Boolean to indicate whether to install automation_hub | true  | true |  |
 | postgresql_admin_username  | Name of postgres admin for services | true  | `postgres` |  |
 | postgresql_admin_password  | Name of postgres admin for services | true  | `{{ db_password }}` |  |
@@ -330,49 +297,51 @@ The teardown play will terminate all VMs associated with a VPC and subnet, and r
 | eda_workers  | Number of EDA workers | false  | `2` |  |
 | eda_activation_workers  | Number of EDA activation workers | false  | `2` |  |
 
-The containerized installer is a relatively new feature for AAP, and because it makes different assumptions and has very different options from the traditional installer, it has its own path in AGOF, which bypasses the traditional installer steps.
-
 First, we run the [Installer Prereqs](containerized_install/roles/installer_prereqs/) role. This sets up a user (default: `aap`) to run AAP as, sets up password-less sudo for that user, and installs the pattern user's `~/.ssh/id_rsa.pub` as an authorized_key for the user. The sudo rule simplifies the process of running the containerized installer, and by default is removed in the cleanup stage. This role also sets `linger` on the AAP user so that services will start at boot time under the AAP user.
 
 Next, we run the [Containerized Installer](containerized_install/roles/installer/) role. This runs the containerized installer as the designated user. This user _cannot_ be root (because of how it uses and configures containerized services). This role downloads and executes the installer, and also places a manifest file (designated by the `manifest_content` variable) as `manifest.zip` to entitle the controller. It runs the containerized installer.
 
 Finally, we run the [cleanup](containerized_install/roles/installer_cleanup/) role if it is enabled (which it is by default). This removed the sudo rule from the AAP user, and removes the manifest.zip file. The installation is now ready for you to use.
 
-####  5.1.4. <a name='HostConfigurationhostsmain.ymlmakelegacy_from_os_installentrypoint'></a>[Host Configuration](hosts/main.yml) (`make legacy_from_os_install` entry point)
-
-This is normally run inline with the `make install` entry point, when the pattern frame is _not_ using the containerized installer.. You may, at your option, provide a suitable inventory file that specifies a node to install AAP on, and optionally a node to install Automation Hub on, and pass that inventory file in, as desribed [here](#legacy-from-os-install).
-
-The [common role](hosts/roles/aap_download/) here prepares AAP (on both the controller node, as well as the automation_hub node, if one is configured to be installed).
-
-##### [AAP Installation](hosts/roles/control_node/) (mandatory for non-containerized install)
-
-The control node configuration role templates an [inventory file](hosts/roles/control_node/templates/controller_install.j2) for the AAP installer and runs it. Additionally, this role will entitle the AAP controller, as well as loading execution environments from the Red Hat registry. The bulk of controller configuration, however, is designed to happen later, when control is handed to the controller_configuration `dispatch` role.
-
-This is one of the few elements in the pattern that is mandatory. (Technically, if you use the "API only" installation mode, this part is also optional.)
-
-##### [Private Automation Hub Installation](hosts/roles/private_automation_hub/) (optional)
-
-This role configures an instance of the AAP Private Automation Hub, if the `automation_hub` variable is set to `true`. Private Automation Hub serves as a content repository for Ansible content; in particular, it serves as a container registry for Ansible Execution Environments; since one of the main reasons to use Execution Environments is to encapsulate Validated Content, this provides a mechanism for the pattern to facilitate the use of Validated Content in a safe and subscription agreement-compliant manner.
-
-You will *need* a Private Automation Hub if your pattern builds an Execution Environment with Validated Content. You may also want one for other reasons. The `automation_hub`  variable defaults to `false`.
-
-If you specify custom execution environments to be built, they will be built on the Hub node and pushed to the registry on the Hub node.
-
 ##### [AAP Configuration](configure_aap.yml) (mandatory for non-containerized install; `make api_install` entry point)
 
 This play is really the heart and focus of this framework. The rest of the framework exists to facilitate running this play, and providing additional capabilities to the environment in which the play runs. The logic for the play is contained in the [configure_aap](hosts/roles/configure_aap/) role. The `make api_install` entry point uses just the variables related to controller installation as desribed [here](#api-install-aka-bare). Otherwise, it is called inline from the `make install` entry point. It is safe to run multiple times.
 
-###### Entitle Controller
+###### Entitle AAP
 
-The play uses the same technique and variables to entitle the AAP controller as the role above does; but since we want to preserve the option to call it outside that role, it is duplicated. The key thing is to populate `manifest_contents` with a suitable manifest file.
+The play uses the same technique and variables to entitle AAP as the role above does; but since we want to preserve the option to call it outside that role, it is duplicated. The key thing is to populate `manifest_contents` with a suitable manifest file.
 
-###### Configure Controller
+###### Configure AAP
 
-Using the credentials you supply, the play will now proceed to invoke the `controller_configuration` `dispatch` role on the controller endpoint based on the configuration found in `controller_configuration_dir` and in your `agof_vault.yml` file. This controls all of the controller configuration. Based on the variables defined in the controller configuration, `dispatch` will call the necessary roles and modules in the right order to configure AAP to run your pattern.
+Using the credentials you supply, the play will now proceed to invoke the `aap_configuration` `dispatch` role on the endpoint based on the configuration found in `controller_configuration_dir` and in your `agof_vault.yml` file. This controls all of the controller configuration. Based on the variables defined in the controller configuration, `dispatch` will call the necessary roles and modules in the right order to configure AAP to run your pattern.
 
-###### Run "immediate" jobs
+If you need any jobs to be run immediately, then can be specified using the `launch_job` type as part of the AAP
+configuration repo.
 
-The final step in the play allows you to run job(s) immediately. This mechanism is provided in case you have a potentially long-running play for configuration that is scheduled to run repeatedly but at a long interval. This ensures the play (job) runs immediately.
+####  5.1.4. <a name='OpenShiftTargets'></a>OpenShift Targets
+
+Designed to run under OpenShift and configure an OpenShift-hosted AAP instance, AGOF has some special handling for these targets. It is meant to be used by the Validated Patterns aap-config chart, which is meant to run agof_vault.yml
+
+The preinit steps run as they do in other contexts, setting up ansible.cfg and downloading and installing the ansible collections necessary to do the configuration of the AAP instance. The main difference is that inside OpenShift the aap-config provides Kubernetes ConfigMaps and some specific Secrets that can be used to further configure the AAP instance.
+Since the OpenShift Validated Patterns experience uses HashiCorp Vault as a secret store, AGOF under OpenShift facilitates using this vault as a secret store.
+
+Additionally, AGOF expects an agof_vault.yml file for any other secret material, which will be included in OpenShift as well. This means that you do not have to use the Vault integration if you would rather not.
+
+Because the AGOF runner needs predicatability for the existence of the manifest file and the IAC repo and revision, it overrides these specific elements from vault with its own override file, which is created as `~/agof_overrides.yml`. This file is included as the last extra_vars file on the playbook command line. It specifically sets these variables:
+
+* `aap_entitled`: Based on examing the AAP endpoint, whether the instance has been entitled or not
+* `admin_user`: Hardcoded to `admin` currently.
+* `admin_password`: Has the value of the password randomly generated by the AAP Operator installation
+* `aap_hostname`: The endpoint of the AAP instance, as discovered by looking for its route in the ansible-automation-platform namespace
+* `agof_iac_repo`: Set by retrieving it from the helm values, so that it overries what may be in your local `agof_vault.yml` file.
+* `agof_iac_repo_version`: Set by retrieving it from the Helm chart, as above.
+* `controller_license_src_file`: Set by creating a temporary file from the manifest file secret
+* `secrets`: Special data structure that contains other elements discovered from OpenShift.
+* `helm_values`: All of the helm values available to the application.
+
+Additionally, the `agof_vault.yml` file that is passed to Vault will be used as the agof_vault.yml file inside the configuration container, so any variables set here will be usable by the framework; but any of the values listed above will be overridden by the overrides file. The goal is to provide as similar an experience as possible between the different ways of running AGOF.
+
+Meanwhile, the helm values that have been passed into the aap-config application will be available in the `helm_values` variable.
 
 ###  5.2. <a name='GitOpsStep'></a>GitOps Step
 

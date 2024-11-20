@@ -1,0 +1,19 @@
+---
+aap_entitled: {{ aap_entitled | string | lower }}
+
+admin_user: admin
+admin_password: "{{ admin_password }}"
+
+aap_username: admin
+aap_password: {{ admin_password }}
+aap_hostname: {{ ansible_host }}
+aap_validate_certs: false
+
+agof_iac_repo: "{{ agof_iac_repo }}"
+agof_iac_repo_version: "{{ agof_iac_repo_version }}"
+
+controller_license_src_file: "{{ manifest_file_ref }}"
+
+secrets: {{ secrets | to_json }}
+
+helm_values: {{ helm_values | to_json }}

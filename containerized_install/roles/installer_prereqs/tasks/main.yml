@@ -8,6 +8,10 @@
       - rsync
       - sudo
 
+- name: "Use podman workaround if desired"
+  ansible.builtin.include_tasks: podman_workaround.yml
+  when: use_podman_workaround | bool
+
 - name: "Manage user for AAP installer"
   ansible.builtin.user:
     name: '{{ containerized_installer_user }}'
@@ -23,6 +27,11 @@
     group: root
     mode: '0444'
     create: true
+
+- name: "Enable sudo for AAP installer user"
+  ansible.builtin.lineinfile:
+    path: "{{ containerized_installer_user_home }}/.bashrc"
+    line: 'export XDG_RUNTIME_DIR=/run/user/$EUID'
 
 - name: "Install pubkey for AAP Installer user"
   ansible.posix.authorized_key:

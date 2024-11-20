@@ -1,0 +1,15 @@
+---
+# https://issues.redhat.com/browse/AAP-35788
+# Problem is with gidmap in podman > 5 exposed by release of RHEL 9.5
+# misconfig in containerized installer
+# Due to be fixed in a point release of AAP containerized installer,
+# due out early Dec. 2024
+
+- name: Ensure versionlock is installed
+  ansible.builtin.package:
+    name: python3-dnf-plugin-versionlock
+
+- name: Versionlock podman
+  ansible.builtin.command:
+    cmd: dnf versionlock add --raw 'podman-4:4.9*'
+  changed_when: true

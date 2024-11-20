@@ -1,4 +1,6 @@
 ---
 containerized_installer_user: "aap"
 containerized_installer_user_ssh_pubkey: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-containerized_installer_user_home: "/var/lib/aap"
+containerized_installer_user_home: "/var/lib/{{ containerized_installer_user }}"
+
+use_podman_workaround: true

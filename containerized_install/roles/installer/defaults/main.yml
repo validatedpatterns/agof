@@ -1,12 +1,14 @@
 ---
-aap_version: "2.4"
-
 automation_hub: true
 eda: true
 
-# This is due to a known issue with version 1.0.7
-# of EDA in AAP 2.4.
-ci_24_eda_workaround: true
+containerized_installer_user: 'aap'
+containerized_installer_user_home: '/var/lib/{{ containerized_installer_user }}'
+
+# November 18, 2024 AAP 2.5 Containerized Install Setup (2.5-4)
+containerized_installer_shasum: 62e6bd23bd6d74e47e36f08849981e724b92056d5cd68a676f2d01f234070806
+
+containerized_installer_cleanup: true
 
 controller_fqdn: "{{ ansible_facts.fqdn }}"
 controller_admin_password: "{{ admin_password }}"
@@ -46,10 +48,12 @@ eda_pg_password: "{{ db_password }}"
 eda_workers: 2
 eda_activation_workers: 2
 
+gateway_admin_password: "{{ admin_password }}"
+gateway_pg_password: "{{ db_password }}"
+
 force_aap_reconfigure: false
 # These would be the defaults but we don't defined pattern_name to use the real FQDN
 #controller_hostname: "aap.{{ pattern_name }}.{{ pattern_dns_zone }}"
-controller_port: 8443
 
 # controller_license_src_file:
 # admin_password:

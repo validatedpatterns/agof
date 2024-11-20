@@ -1,2 +1,0 @@
-- name: Configure Hub node
-  include_tasks: "1_configureeda.yml"

@@ -3,6 +3,7 @@ containerized_install: true
 containerized_installer_user: 'aap'
 containerized_installer_user_home: '/var/lib/{{ containerized_installer_user }}'
 
-containerized_installer_shasum: '714de904596f2f3312b8804eee0d2fdce6842ac2108dbf718f2107ef61d1598d'
+# October 28, 2024 Containerized Install Setup
+containerized_installer_shasum: '15a2461d15b1b35445db673441d50b0b18dc66cf57ae803d2d8c58d8c349f768'
 
 containerized_installer_cleanup: true
