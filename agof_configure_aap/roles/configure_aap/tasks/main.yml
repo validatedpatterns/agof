@@ -13,6 +13,16 @@
     clone: true
     update: true
     recursive: true
+  register: git_checkout
+
+- name: Show Git coordinates
+  ansible.builtin.debug:
+    msg:
+      - "agof_iac_repo: {{ agof_iac_repo }}"
+      - "agof_iac_repo_version: {{ agof_iac_repo_version }}"
+      - "Checked out to: {{ agof_controller_config_dir }}"
+      - "Git SHA before checkout: {{ git_checkout.before }}"
+      - "Git SHA after checkout: {{ git_checkout.after }}"
 
 - name: Include vars from configs directory
   ansible.builtin.include_vars:
