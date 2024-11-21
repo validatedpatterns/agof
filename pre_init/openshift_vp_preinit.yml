@@ -25,6 +25,12 @@
         agof_iac_repo_version: "{{ helm_cm_values['agof']['iac_revision'] }}"
         helm_values: "{{ helm_cm_values }}"
 
+    - name: Show agof iac repo details
+      ansible.builtin.debug:
+        msg:
+          - "agof_iac_repo: {{ agof_iac_repo }}"
+          - "agof_iac_repo_version: {{ agof_iac_repo_version }}"
+
     - name: Retrieve manifest file
       kubernetes.core.k8s_info:
         kind: Secret
