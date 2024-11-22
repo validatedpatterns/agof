@@ -8,10 +8,6 @@
       - rsync
       - sudo
 
-- name: "Use podman workaround if desired"
-  ansible.builtin.include_tasks: podman_workaround.yml
-  when: use_podman_workaround | bool
-
 - name: "Manage user for AAP installer"
   ansible.builtin.user:
     name: '{{ containerized_installer_user }}'
