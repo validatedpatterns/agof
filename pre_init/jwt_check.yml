@@ -1,0 +1,73 @@
+# This playbook gets a token name, its content and and a duration as
+# parameters, looks for the iat claim and prints a warning if the token
+# is older than the duration.
+# The parameters are:
+# `local_token_name`: a name for the token that is being examined
+# `local_token`: the JWT token that is to be examined
+# `local_token_duration_days`: Duration in days 30
+#
+# If the `iat` timestamp + `local_token_duration` is > than the current time then a
+# warning is emitted.
+#
+# A jwt token is split in three base64-encoded strings separated by a '.'
+# The middle one [1] is the json with the claims. The claim we try and look up is 'iat'
+# We do not use the jwt collections as we do not want to add another non-core dependency
+---
+- name: Set local_token_duration_days when not defined
+  ansible.builtin.set_fact:
+    local_token_duration_days: 30
+  when: local_token_duration_days is not defined
+
+- name: Assert that the parameters are set
+  ansible.builtin.assert:
+    that:
+      - local_token_name is defined
+      - local_token is defined
+      - local_token_duration_days is defined
+      - local_token_duration_days | type_debug == "int"
+
+- name: Get some local facts including current time
+  ansible.builtin.setup: # Needed for ansible_date_time
+    gather_subset:
+      - min
+
+- name: Get the claims part of the JWT
+  ansible.builtin.set_fact:
+    jwt_raw: "{{ local_token.split('.')[1] }}"
+
+- name: Calculate the duration in seconds
+  ansible.builtin.set_fact:
+    local_token_duration: "{{ local_token_duration_days * 24 * 60 * 60 | int }}"
+
+- name: Add padding if needed
+  ansible.builtin.set_fact:
+    jwt_raw: "{{ jwt_raw + '=' * (4 - (jwt_raw | length) % 4) if (jwt_raw | length) % 4 != 0 else jwt_raw }}"
+
+- name: Base64 decode and parse the json
+  ansible.builtin.set_fact:
+    jwt_claims: "{{ jwt_raw | b64decode | from_json }}"
+
+- name: Set IAT variable if it exists
+  ansible.builtin.set_fact:
+    jwt_iat: "{{ jwt_claims['iat'] }}"
+  when: "'iat' in jwt_claims"
+
+- name: Set IAT timestamp + {{ local_token_duration }}
+  ansible.builtin.set_fact:
+    iat_after_duration: "{{ jwt_iat | int + local_token_duration | int }}"
+  when: "'iat' in jwt_claims"
+
+- name: Validity is still good
+  ansible.builtin.debug:
+    msg: "The {{ local_token_name }} token was issued at {{ '%Y-%m-%d %H:%M' | strftime(jwt_iat) }}, and is still good"
+  when: (iat_after_duration | int >= ansible_date_time['epoch'] | int)
+
+# Note: This is a hack because ansible does not have a simple warning statement without pulling in custom
+# callbacks, python code and what not. See https://www.github.com/ansible/ansible/issues/67260
+- name: Token is not valid any longer
+  ansible.builtin.fail:
+    msg: >
+      "The {{ local_token_name }} token was generated more than 30 days ago {{ '%Y-%m-%d %H:%M' | strftime(jwt_iat) }}, "
+      "you should renew your token. We're continuing, but chances are there might be issues with the token."
+  when: (iat_after_duration | int < ansible_date_time['epoch'] | int)
+  ignore_errors: true

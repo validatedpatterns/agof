@@ -14,6 +14,20 @@
         dest: '../ansible.cfg'
         mode: '0600'
 
+    - name: Check if offline token is older than 30 days
+      ansible.builtin.import_tasks: jwt_check.yml
+      vars:
+        local_token_name: "offline_token"
+        local_token: "{{ offline_token }}"
+      failed_when: false
+
+    - name: Check if automation_hub_token is older than 30 days
+      ansible.builtin.import_tasks: jwt_check.yml
+      vars:
+        local_token_name: "automation_hub_token"
+        local_token: "{{ automation_hub_token }}"
+      failed_when: false
+
     - name: "Install collections for ansible environment {{ 'forcefully' if init_env_collection_install_force }}"
       when: init_env_collection_install
       block:
