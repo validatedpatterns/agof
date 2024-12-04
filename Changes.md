@@ -8,3 +8,4 @@
 * Drop support for AAP versions <= 2.4. This includes dropping support for mechanisms other than containerized install.
 * Support for AAP 2.5
 * Introduce direct support for running under OpenShift Validated Patterns
+* Depend on infra.aap_utilities to handle some installation related work
