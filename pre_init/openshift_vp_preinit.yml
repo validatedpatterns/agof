@@ -7,8 +7,6 @@
   gather_facts: false
   vars:
     kubeconfig: "{{ lookup('env', 'KUBECONFIG') }}"
-    agof_controller_config_dir: "{{ '~/agofdir' | expanduser }}"
-    agof_statedir: "{{ '~/agof' | expanduser }}"
   tasks:
     - name: Retrieve IAC Repo Details
       kubernetes.core.k8s_info:
@@ -107,7 +105,7 @@
           vault_root_token: "{{ vault_data.root_token  }}"
           vault_url: https://vault.vault.svc:8200
 
-- name: Retrieve Credentials for AAP on OpenShift
+- name: Retrieve Credentials for AAP on OpenShift and write needed override files
   become: false
   connection: local
   hosts: localhost
@@ -115,6 +113,8 @@
   vars:
     kubeconfig: "{{ lookup('env', 'KUBECONFIG') }}"
     aap_entitled: false
+    agof_controller_config_dir: "{{ '~/agofdir' | expanduser }}"
+    agof_statedir: "{{ '~/agof' | expanduser }}"
   tasks:
     - name: Retrieve API hostname for AAP
       kubernetes.core.k8s_info:
