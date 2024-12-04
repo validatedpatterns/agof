@@ -7,6 +7,8 @@
   gather_facts: false
   vars:
     kubeconfig: "{{ lookup('env', 'KUBECONFIG') }}"
+    agof_controller_config_dir: "{{ '~/agofdir' | expanduser }}"
+    agof_statedir: "{{ '~/agof' | expanduser }}"
   tasks:
     - name: Retrieve IAC Repo Details
       kubernetes.core.k8s_info:
