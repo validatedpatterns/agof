@@ -18,6 +18,7 @@ agof_iac_repo_version: "{{ agof_iac_repo_version }}"
 automation_hub_token_vault: "{{ automation_hub_token_vault }}"
 
 controller_license_src_file: "{{ manifest_file_ref }}"
+manifest_content: "{{ lookup('file', controller_license_src_file) | b64encode }}"
 
 secrets: {{ secrets | to_json }}
 
