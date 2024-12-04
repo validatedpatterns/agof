@@ -20,6 +20,8 @@
         local_token_name: "offline_token"
         local_token: "{{ offline_token }}"
       failed_when: false
+      when:
+        - offline_token is defined
 
     - name: Check if automation_hub_token is older than 30 days
       ansible.builtin.import_tasks: jwt_check.yml
@@ -27,6 +29,8 @@
         local_token_name: "automation_hub_token"
         local_token: "{{ automation_hub_token }}"
       failed_when: false
+      when:
+        - automation_hub_token is defined
 
     - name: "Install collections for ansible environment {{ 'forcefully' if init_env_collection_install_force }}"
       when: init_env_collection_install

@@ -1,6 +1,9 @@
 ---
 aap_entitled: {{ aap_entitled | string | lower }}
 
+agof_controller_config_dir: "{{ agof_controller_config_dir }}"
+agof_statedir: "{{ agof_statedir }}"
+
 admin_user: admin
 admin_password: "{{ admin_password }}"
 
@@ -11,6 +14,8 @@ aap_validate_certs: false
 
 agof_iac_repo: "{{ agof_iac_repo }}"
 agof_iac_repo_version: "{{ agof_iac_repo_version }}"
+
+automation_hub_token_vault: "{{ automation_hub_token_vault }}"
 
 controller_license_src_file: "{{ manifest_file_ref }}"
 

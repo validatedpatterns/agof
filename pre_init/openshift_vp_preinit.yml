@@ -31,6 +31,20 @@
           - "agof_iac_repo: {{ agof_iac_repo }}"
           - "agof_iac_repo_version: {{ agof_iac_repo_version }}"
 
+    - name: Retrieve automation hub token
+      kubernetes.core.k8s_info:
+        kind: Secret
+        namespace: aap-config
+        name: automation-hub-token
+      register: automation_hub_token_secret
+      until: automation_hub_token_secret.resources | length == 1
+      retries: 20
+      delay: 5
+
+    - name: Set automation hub token fact
+      ansible.builtin.set_fact:
+        automation_hub_token_vault: "{{ automation_hub_token_secret.resources[0].data.token | b64decode }}"
+
     - name: Retrieve manifest file
       kubernetes.core.k8s_info:
         kind: Secret
@@ -91,7 +105,7 @@
           vault_root_token: "{{ vault_data.root_token  }}"
           vault_url: https://vault.vault.svc:8200
 
-- name: Retrieve Credentials for AAP on OpenShift
+- name: Retrieve Credentials for AAP on OpenShift and write needed override files
   become: false
   connection: local
   hosts: localhost
@@ -99,6 +113,8 @@
   vars:
     kubeconfig: "{{ lookup('env', 'KUBECONFIG') }}"
     aap_entitled: false
+    agof_controller_config_dir: "{{ '~/agofdir' | expanduser }}"
+    agof_statedir: "{{ '~/agof' | expanduser }}"
   tasks:
     - name: Retrieve API hostname for AAP
       kubernetes.core.k8s_info:
