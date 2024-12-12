@@ -43,7 +43,7 @@
 
     - name: Set automation hub token fact
       ansible.builtin.set_fact:
-        automation_hub_token_vault: "{{ automation_hub_token_secret.resources[0].data.token | b64decode }}"
+        automation_hub_token_vault: "{{ automation_hub_token_secret.resources[0].data.token | b64decode | trim }}"
 
     - name: Retrieve manifest file
       kubernetes.core.k8s_info:
