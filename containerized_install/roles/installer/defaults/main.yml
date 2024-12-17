@@ -9,7 +9,7 @@ containerized_installer_user_home: '/var/lib/{{ containerized_installer_user }}'
 # You can obtain this sha by going to the AAP download page here
 # https://access.redhat.com/downloads/content/480/ver=2.5/rhel---9/2.5/x86_64/product-software
 # Look at "Ansible Automation Platform 2.5 Containerized Setup" and copy the "SHA-256 Checksum"
-containerized_installer_shasum: e0b0511e8a6126800ce3fb413a01ed0428482469869d6c5baa6504a4aa800485
+containerized_installer_shasum: 8231a060e2d0114639fd30baa277955498cc6370075acd032ec70a997703fbed
 
 containerized_installer_cleanup: true
 
