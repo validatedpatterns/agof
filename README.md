@@ -271,7 +271,7 @@ The teardown play will terminate all VMs associated with a VPC and subnet, and r
 | ------------------------- | ------------------------------------ | -------- | ------------------ | ------- |
 | containerized_installer_user          | Unprivileged user to create to run AAP | true  | `aap` |  |
 | containerized_installer_user_home          | Directory to install containerized AAP into | true  | `/var/lib/{{ containerized_installer_user }}` |  |
-| containerized_installer_shasum          | SHA256 sum of the installer image to download | true  | `8231a060e2d0114639fd30baa277955498cc6370075acd032ec70a997703fbed` | Containerized AAP install 2.5 as of December 17, 2024 |
+| containerized_installer_shasum          | SHA256 sum of the installer image to download | true  | `13d18db4209b0d7b547403d0474f12c794ef3f2affdc0504c4f740f78adc20fe` | Containerized AAP install 2.5 as of January 15, 2024 |
 | automation_hub  | Boolean to indicate whether to install automation_hub | true  | true |  |
 | postgresql_admin_username  | Name of postgres admin for services | true  | `postgres` |  |
 | postgresql_admin_password  | Password for the postgres user for services | true  | `{{ db_password }}` |  |
