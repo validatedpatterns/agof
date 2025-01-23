@@ -5,12 +5,10 @@ eda: true
 containerized_installer_user: 'aap'
 containerized_installer_user_home: '/var/lib/{{ containerized_installer_user }}'
 
-# November 21, 2024 AAP 2.5 Containerized Install Setup (2.5-4)
-# You can obtain this sha by going to the AAP download page here
-# https://access.redhat.com/downloads/content/480/ver=2.5/rhel---9/2.5/x86_64/product-software
-# Look at "Ansible Automation Platform 2.5 Containerized Setup" and copy the "SHA-256 Checksum"
-containerized_installer_shasum: 13d18db4209b0d7b547403d0474f12c794ef3f2affdc0504c4f740f78adc20fe
 containerized_installer_cleanup: true
+
+containerized_installer_version: "2.5"
+containerized_installer_dest_dir: "{{ containerized_installer_user_home }}"
 
 controller_fqdn: "{{ ansible_facts.fqdn }}"
 controller_admin_password: "{{ admin_password }}"
