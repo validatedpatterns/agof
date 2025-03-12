@@ -21,6 +21,22 @@
             name: roles/manage_ec2_infra
           when: ec2_vpc_id is not defined
 
+        - name: Check for state vars
+          ansible.builtin.stat:
+            path: '{{ pattern_state_rootdir }}/{{ ec2_name_prefix }}/aws_state_vars.yml'
+          register: statevars
+
+        - name: Include state vars if set
+          when: statevars.stat.exists
+          block:
+            - name: Include vars if set
+              ansible.builtin.include_vars:
+                file: '{{ pattern_state_rootdir }}/{{ ec2_name_prefix }}/aws_state_vars.yml'
+
+            - name: Set ami_id
+              ansible.builtin.set_fact:
+                ami_id: imagebuilder_ami
+
         - name: Include setup code for VMs and DNS
           ansible.builtin.include_role:
             name: roles/manage_ec2_instances
