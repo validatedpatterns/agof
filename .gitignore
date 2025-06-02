@@ -12,3 +12,4 @@ init_env/buildimage/vars/sat_metadata.yml
 init_env/buildimage/vars/sat_userdata.yml
 ansible.cfg
 manifest.zip
+.ansible/
