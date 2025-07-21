@@ -14,3 +14,5 @@ aap_request_timeout: 90
 aap_configuration_async_dir: /tmp/.ansible_async
 
 aap_validate_certs: false
+
+perform_pre_config_fixups: true

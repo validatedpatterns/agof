@@ -1,0 +1,3 @@
+---
+- name: Do fixups for activation rulebooks if needed
+  ansible.builtin.include_tasks: rulebook_activations.yml

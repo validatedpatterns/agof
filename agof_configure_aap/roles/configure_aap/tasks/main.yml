@@ -112,6 +112,13 @@
   when:
     - agof_configure_aap_debug
 
+- name: Perform any necessary pre-config fixups
+  when: perform_pre_config_fixups
+  block:
+    - name: Pre-config fixes
+      ansible.builtin.include_role:
+        name: agof_configure_aap/roles/pre_config_fixups
+
 - name: "Configure AAP - Version 2.5+"
   block:
     - name: "Configure AAP"

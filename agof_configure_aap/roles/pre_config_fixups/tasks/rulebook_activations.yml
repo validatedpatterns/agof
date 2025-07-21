@@ -1,0 +1,51 @@
+---
+- name: Fixup rulebook activations if EDA config included
+  when:
+    - eda_rulebook_activations is defined
+    - (eda_rulebook_activations | length) > 0
+  block:
+    - name: Show activations configured
+      ansible.builtin.debug:
+        var: eda_rulebook_activations
+
+    - name: Default set of rulebook activations to stop to empty
+      ansible.builtin.set_fact:
+        rulebook_activations_to_disable: []
+
+    - name: Determine whether we have any enabled activations due to configure
+      ansible.builtin.set_fact:
+        enabled_activation_names: "{{ eda_rulebook_activations | activations_to_enable | list }}"
+
+    - name: Retrieve existing rulebook activation configs
+      ansible.eda.rulebook_activation_info:
+        aap_hostname: "{{ aap_hostname }}"
+        aap_username: "{{ aap_username }}"
+        aap_password: "{{ admin_password }}"
+        aap_validate_certs: "{{ aap_validate_certs }}"
+        aap_request_timeout: "{{ aap_request_timeout }}"
+      register: rbas
+
+    - name: Filter out enabled and running activations
+      ansible.builtin.set_fact:
+        enabled_running_activations: "{{ rbas.activations | selectattr('is_enabled') | map(attribute='name') }}"
+
+    - name: Work out configured and existing rulebook activations to stop
+      ansible.builtin.set_fact:
+        rulebook_activations_to_disable: "{{ rulebook_activations_to_disable + [ item ] }}"
+      when: item in enabled_running_activations
+      loop: "{{ enabled_activation_names }}"
+
+    - name: Disable selected activations for management
+      ansible.eda.rulebook_activation:
+        aap_hostname: "{{ aap_hostname }}"
+        aap_username: "{{ aap_username }}"
+        aap_password: "{{ admin_password }}"
+        aap_validate_certs: "{{ aap_validate_certs }}"
+        aap_request_timeout: "{{ aap_request_timeout }}"
+        name: "{{ item }}"
+        state: disabled
+      loop: "{{ rulebook_activations_to_disable }}"
+  rescue:
+    - name: Rescue block for error in rulebook activation check
+      ansible.builtin.debug:
+        msg: "Rescuing"
