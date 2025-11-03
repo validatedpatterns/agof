@@ -3,7 +3,7 @@ automation_hub: true
 eda: true
 
 containerized_installer_user: 'aap'
-containerized_installer_user_home: '/var/lib/{{ containerized_installer_user }}'
+containerized_installer_user_home: '/home/{{ containerized_installer_user }}'
 
 containerized_installer_cleanup: true
 
@@ -24,7 +24,7 @@ controller_postinstall_repo_ref: 'main'
 ee_extra_images: []
 de_extra_images: []
 
-controller_license_file: "/var/lib/aap/manifest.zip"
+controller_license_file: "{{ containerized_installer_user_home}}/manifest.zip"
 
 hub_admin_password: "{{ admin_password }}"
 hub_pg_password: "{{ db_password }}"
