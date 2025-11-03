@@ -13,3 +13,4 @@ init_env/buildimage/vars/sat_userdata.yml
 ansible.cfg
 manifest.zip
 .ansible/
+__pycache__/

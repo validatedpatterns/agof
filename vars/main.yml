@@ -5,6 +5,6 @@ automation_hub: true
 containerized_install: true
 
 containerized_installer_user: 'aap'
-containerized_installer_user_home: '/var/lib/aap'
+containerized_installer_user_home: '/home/aap'
 
 init_env_collection_install_force: false

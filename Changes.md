@@ -2,6 +2,7 @@
 
 ## Changes for v2 (initially released November 2024)
 
+* Default homedir to /home from /var/lib due to https://access.redhat.com/solutions/7133297
 * Drop undocumented "extra" features in code derived from ansible-workshops (i.e. `build_idm`, `build_sat`).
 * Drop rpm-based installation scheme (hosts/ subdirectory).
 * Drop "legacy" Makefile targets (they were for the non-containerized install)
