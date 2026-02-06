@@ -48,7 +48,7 @@ The thinking behind this effort is documented in the [Ansible Pattern Theory](ht
 - **Podman** (version 4.3.0 or later): All commands are run inside a utility container via `pattern.sh`.
 - **An `~/agof_vault.yml` file**: Contains credentials, configuration variables, and secrets for the installation. See the [agof_vault.yml Configuration](#agof_vault.ymlConfiguration) section for details.
 - **A Red Hat subscription**: Needed for RHEL entitlement and access to AAP content.
-- **An AAP manifest file**: Required to entitle the AAP Controller (see `manifest_content` in the configuration section).
+- **An [AAP manifest file](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/installing_on_openshift_container_platform/assembly-gateway-licensing-operator-copy#assembly-aap-obtain-manifest-files)**: Required to entitle the AAP Controller (see `manifest_content` in the configuration section).
 - **An Automation Hub token**: For downloading certified and validated Ansible content from [console.redhat.com](https://console.redhat.com).
 - **AWS credentials** (for the Default Install only): An AWS account with permissions to create VPCs, subnets, security groups, and EC2 instances.
 
@@ -66,7 +66,7 @@ The default installation will provide an AAP 2.5 installation deployed via the C
 
 Automation Hub and EDA are enabled by default, but they can be turned off if desired (see the `automation_hub` and `eda` variables).
 
-By default, the framework will apply license content specified by the `manifest_content` variable, but will not further configure Controller or Automation Hub beyond the defaults.
+By default, the framework will apply license content specified by the `manifest_content` variable (see [obtaining a manifest file](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/installing_on_openshift_container_platform/assembly-gateway-licensing-operator-copy#assembly-aap-obtain-manifest-files)), but will not further configure Controller or Automation Hub beyond the defaults.
 
 From there, a minimal example pattern is available to download and run [here](https://github.com/validatedpatterns-demos/agof_minimal_config.git). To use this example, set the following variables in your `agof_vault.yml`.
 `agof_statedir` is where the config repo will be checked out by the process. Any repo that can be used with the controller_configuration collection can be used as the `agof_iac_repo`.
@@ -102,7 +102,7 @@ This is a framework for building Validated Patterns that use Ansible Automation 
 ./pattern.sh make api_install
 ```
 
-In this model, you provide an (already provisioned) AAP endpoint. It does not need to be entitled, it just needs to be running the AAP Controller. You supply the manifest contents, endpoint hostname, admin username (defaults to "admin"), and admin password, and then the installation hands off to a `agof_controller_config_dir` you define. This is provided for users who have their own AAP installations on bare metal or on-prem or do not want to run on AWS. It is also useful in situations where the AAP deployment topology is more complex than what we provide in the pattern provisioner.
+In this model, you provide an (already provisioned) AAP endpoint. It does not need to be entitled, it just needs to be running the AAP Controller. You supply the [manifest](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/installing_on_openshift_container_platform/assembly-gateway-licensing-operator-copy#assembly-aap-obtain-manifest-files) contents, endpoint hostname, admin username (defaults to "admin"), and admin password, and then the installation hands off to a `agof_controller_config_dir` you define. This is provided for users who have their own AAP installations on bare metal or on-prem or do not want to run on AWS. It is also useful in situations where the AAP deployment topology is more complex than what we provide in the pattern provisioner.
 
 ### 3.2. <a name='FromOSInstall'></a>"From OS" Install
 
@@ -185,7 +185,7 @@ Additional VM targets (such as IdM and Satellite) can be defined using the `ec2_
 | redhat_password | Red Hat Subscriber Password (for RHEL entitlement) | true | | |
 | redhat_registry_username_vault | Red Hat Registry Username (for registry.redhat.io container images) | true | | |
 | redhat_registry_password_vault | Red Hat Registry Password (for registry.redhat.io container images) | true | | |
-| manifest_content | Base64 encoded Manifest to Entitle | true | | Can be loaded directly from a file using a construct like this: `"{{ lookup('file', '~/Downloads/manifest.zip') | b64encode }}"` |
+| manifest_content | Base64 encoded [Manifest](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/installing_on_openshift_container_platform/assembly-gateway-licensing-operator-copy#assembly-aap-obtain-manifest-files) to Entitle | true | | Can be loaded directly from a file using a construct like this: `"{{ lookup('file', '~/Downloads/manifest.zip') | b64encode }}"` |
 | automation_hub_certified_url | URL for Certified Content | false | <https://console.redhat.com/api/automation-hub/content/published/> | This refers to the automation hub section on [https://console.redhat.com](https://console.redhat.com). It is the endpoint that is used to download Certified Content in addition to any public Galaxy content needed |
 | automation_hub_validated_url | URL for Validated Content | false | <https://console.redhat.com/api/automation-hub/content/validated/> | This refers to the automation hub section on [https://console.redhat.com](https://console.redhat.com). It is the endpoint that is used to download Validated Content in addition to any public Galaxy content needed |
 | automation_hub_token_vault| Subscriber-specific token for Content | true | |
@@ -315,7 +315,7 @@ The teardown play will terminate all VMs associated with a VPC and subnet, and r
 
 First, we run the [Installer Prereqs](containerized_install/roles/installer_prereqs/) role. This sets up a user (default: `aap`) to run AAP as, sets up password-less sudo for that user, and installs the pattern user's `~/.ssh/id_rsa.pub` as an authorized_key for the user. The sudo rule simplifies the process of running the containerized installer, and by default is removed in the cleanup stage. This role also sets `linger` on the AAP user so that services will start at boot time under the AAP user.
 
-Next, we run the [Containerized Installer](containerized_install/roles/installer/) role. This runs the containerized installer as the designated user. This user *cannot* be root (because of how it uses and configures containerized services). This role downloads and executes the installer, and also places a manifest file (designated by the `manifest_content` variable) as `manifest.zip` to entitle the controller. It runs the containerized installer.
+Next, we run the [Containerized Installer](containerized_install/roles/installer/) role. This runs the containerized installer as the designated user. This user *cannot* be root (because of how it uses and configures containerized services). This role downloads and executes the installer, and also places a [manifest file](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/installing_on_openshift_container_platform/assembly-gateway-licensing-operator-copy#assembly-aap-obtain-manifest-files) (designated by the `manifest_content` variable) as `manifest.zip` to entitle the controller. It runs the containerized installer.
 
 Finally, we run the [cleanup](containerized_install/roles/installer_cleanup/) role if it is enabled (which it is by default). This removed the sudo rule from the AAP user, and removes the manifest.zip file. The installation is now ready for you to use.
 
@@ -325,7 +325,7 @@ This play is really the heart and focus of this framework. The rest of the frame
 
 ###### Entitle AAP
 
-The play uses the same technique and variables to entitle AAP as the role above does; but since we want to preserve the option to call it outside that role, it is duplicated. The key thing is to populate `manifest_contents` with a suitable manifest file.
+The play uses the same technique and variables to entitle AAP as the role above does; but since we want to preserve the option to call it outside that role, it is duplicated. The key thing is to populate `manifest_contents` with a suitable [manifest file](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/installing_on_openshift_container_platform/assembly-gateway-licensing-operator-copy#assembly-aap-obtain-manifest-files).
 
 ###### Configure AAP
 
