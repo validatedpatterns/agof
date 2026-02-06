@@ -2,11 +2,11 @@
 
 # Ansible GitOps Framework (AGOF)
 <!-- vscode-markdown-toc -->
-* 1. [How to Use It](#HowtoUseIt)
-	* 1.1. [Installation](#Installation)
-	* 1.2. [Uninstallation](#Uninstallation)
-* 2. [Entry Points](#EntryPoints)
-* 3. [Using the Containerized Installer vs. The traditional one](#UsingtheContainerizedInstallervs.Thetraditionalone)
+* 1. [Prerequisites](#Prerequisites)
+* 2. [How to Use It](#HowtoUseIt)
+	* 2.1. [Installation](#Installation)
+	* 2.2. [Uninstallation](#Uninstallation)
+* 3. [Installation Modes](#InstallationModes)
 	* 3.1. ["API" Install (aka "Bare")](#APIInstallakaBare)
 	* 3.2. ["From OS" Install](#FromOSInstall)
 	* 3.3. [Default Install](#DefaultInstall)
@@ -40,7 +40,20 @@ Platform, and as such to provide useful facilities for developing Patterns (comm
 
 The thinking behind this effort is documented in the [Ansible Pattern Theory](https://github.com/mhjacks/ansible-pattern-theory) repository.
 
-##  1. <a name='HowtoUseIt'></a>How to Use It
+##  1. <a name='Prerequisites'></a>Prerequisites
+
+* **Podman** (version 4.3.0 or later): All commands are run inside a utility container via `pattern.sh`.
+* **An `~/agof_vault.yml` file**: Contains credentials, configuration variables, and secrets for the installation. See the [agof_vault.yml Configuration](#agof_vault.ymlConfiguration) section for details.
+* **A Red Hat subscription**: Needed for RHEL entitlement and access to AAP content.
+* **An AAP manifest file**: Required to entitle the AAP Controller (see `manifest_content` in the configuration section).
+* **An Automation Hub token**: For downloading certified and validated Ansible content from [console.redhat.com](https://console.redhat.com).
+* **AWS credentials** (for the Default Install only): An AWS account with permissions to create VPCs, subnets, security groups, and EC2 instances.
+
+### About `pattern.sh`
+
+`pattern.sh` is the main entry point for running framework commands. It is a wrapper script that launches a utility container (via podman) with your home directory mounted, ensuring a consistent and reproducible execution environment. All `make` targets are run through it, e.g. `./pattern.sh make install`.
+
+##  2. <a name='HowtoUseIt'></a>How to Use It
 
 The default installation will provide an AAP 2.5 installation deployed via the Containerized Installer, with services deployed this way:
 
@@ -60,7 +73,7 @@ agof_statedir: "{{ '~/agof' | expanduser }}"
 agof_iac_repo: "https://github.com/validatedpatterns-demos/agof_minimal_config.git"
 ```
 
-###  1.1. <a name='Installation'></a>Installation
+###  2.1. <a name='Installation'></a>Installation
 
 ```shell
 ./pattern.sh make install
@@ -68,7 +81,7 @@ agof_iac_repo: "https://github.com/validatedpatterns-demos/agof_minimal_config.g
 
 This builds the default pattern configuration on AWS, which (by default) includes a containerized install of AAP 2.5 on a single AWS VM. Various add-ons can be included by adding variables to the `~/agof_vault.yml` file as described below - these options will all be honored as the pattern installs itself.
 
-###  1.2. <a name='Uninstallation'></a>Uninstallation
+###  2.2. <a name='Uninstallation'></a>Uninstallation
 
 ```shell
 ./pattern.sh make aws_uninstall
@@ -76,13 +89,9 @@ This builds the default pattern configuration on AWS, which (by default) include
 
 This destroys all of the AWS infrastructure built for the pattern - starting with the VPC it creates for the pattern and all of the resources attached to it.
 
-##  2. <a name='EntryPoints'></a>Entry Points
+##  3. <a name='InstallationModes'></a>Installation Modes
 
-This is a framework for building Validated Patterns that use Ansible Automation Platform (AAP) as their underlying GitOps engine. To that end, the framework has these deployment models (in increasing level of complexity):
-
-##  3. <a name='UsingtheContainerizedInstallervs.Thetraditionalone'></a>Using the Containerized Installer vs. The traditional one
-
-In AAP 2.5, the containerized install feature has reached General Availability and is the preferred way to install AAP on non-OpenShift environments.
+This is a framework for building Validated Patterns that use Ansible Automation Platform (AAP) as their underlying GitOps engine. The framework supports several installation modes (listed below in increasing level of complexity). In AAP 2.5, the containerized install feature has reached General Availability and is the preferred way to install AAP on non-OpenShift environments.
 
 ###  3.1. <a name='APIInstallakaBare'></a>"API" Install (aka "Bare")
 
