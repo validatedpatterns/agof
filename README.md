@@ -120,7 +120,7 @@ The reason for making this a separate option is to make it easy for those who ar
 
 It is not possible to test all possible scenarios in this mode, and we do not try.
 
-Note that INVENTORY defaults to '~/inventory_agof' if you do not specify one.
+Note that INVENTORY defaults to `~/inventory_agof` if you do not specify one.
 
 Your inventory *must* define an `aap_controllers` group (which will be configured as the AAP node) and an `automation_hub` group which will be configured as the automation hub, if you want one. You must also specify `username` if you want it to be something besides the default 'ec2-user' (which it does not create or otherwise manage). Similarly, you should set `controller_hostname` (including the 'https://' schema) because that will default to something AWS-specific otherwise. As with all Ansible inventory files, you can set other variables here and the plays will use them.
 
@@ -259,7 +259,7 @@ The next thing the pre-init play does is install dependency collections based on
 
 Environment initialization includes the steps necessary to build the environment (VMs) to install AAP and related tooling; currently the framework can do this on AWS. This step is optional if you wish to provide either an AAP controller API endpoint OR else bring your own inventory/VMs to install AAP Controller and (optionally) Automation Hub on.
 
-##### [image build (optional)](buildimage/main.yml) (optional)
+##### [Image build (optional)](init_env/buildimage/main.yml) (optional)
 
 This play builds an image using the Red Hat Console's imagebuilder service; the end result of this process is an image that will serve as an AMI in AWS. (ImageBuilder can build other types of images as well.) The key aspects of this image are that they include the cloud-init package (which helps with certain aspects of initialization), but more importantly, they include the organization number and activation key so that images that are instantiated with this AMI are automatically registered and enabled to install content via the Red Hat CDN.
 
@@ -321,7 +321,7 @@ Finally, we run the [cleanup](containerized_install/roles/installer_cleanup/) ro
 
 ##### [AAP Configuration](configure_aap.yml) (mandatory for non-containerized install; `make api_install` entry point)
 
-This play is really the heart and focus of this framework. The rest of the framework exists to facilitate running this play, and providing additional capabilities to the environment in which the play runs. The logic for the play is contained in the [configure_aap](hosts/roles/configure_aap/) role. The `make api_install` entry point uses just the variables related to controller installation as desribed [here](#api-install-aka-bare). Otherwise, it is called inline from the `make install` entry point. It is safe to run multiple times.
+This play is really the heart and focus of this framework. The rest of the framework exists to facilitate running this play, and providing additional capabilities to the environment in which the play runs. The logic for the play is contained in the [configure_aap](agof_configure_aap/roles/configure_aap/) role. The `make api_install` entry point uses just the variables related to controller installation as desribed [here](#APIInstallakaBare). Otherwise, it is called inline from the `make install` entry point. It is safe to run multiple times.
 
 ###### Entitle AAP
 
