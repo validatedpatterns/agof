@@ -49,7 +49,7 @@ The thinking behind this effort is documented in the [Ansible Pattern Theory](ht
 - **An `~/agof_vault.yml` file**: Contains credentials, configuration variables, and secrets for the installation. See the [agof_vault.yml Configuration](#agof_vault.ymlConfiguration) section for details.
 - **A Red Hat subscription**: Needed for RHEL entitlement and access to AAP content.
 - **An [AAP manifest file](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/installing_on_openshift_container_platform/assembly-gateway-licensing-operator-copy#assembly-aap-obtain-manifest-files)**: Required to entitle the AAP Controller (see `manifest_content` in the configuration section).
-- **An Automation Hub token**: For downloading certified and validated Ansible content from [console.redhat.com](https://console.redhat.com).
+- **An Automation Hub token**: For downloading certified and validated Ansible content from [console.redhat.com](https://console.redhat.com/ansible/automation-hub/token).
 - **AWS credentials** (for the Default Install only): An AWS account with permissions to create VPCs, subnets, security groups, and EC2 instances.
 
 ### About `pattern.sh`
@@ -188,7 +188,7 @@ Additional VM targets (such as IdM and Satellite) can be defined using the `ec2_
 | manifest_content | Base64 encoded [Manifest](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/installing_on_openshift_container_platform/assembly-gateway-licensing-operator-copy#assembly-aap-obtain-manifest-files) to Entitle | true | | Can be loaded directly from a file using a construct like this: `"{{ lookup('file', '~/Downloads/manifest.zip') | b64encode }}"` |
 | automation_hub_certified_url | URL for Certified Content | false | <https://console.redhat.com/api/automation-hub/content/published/> | This refers to the automation hub section on [https://console.redhat.com](https://console.redhat.com). It is the endpoint that is used to download Certified Content in addition to any public Galaxy content needed |
 | automation_hub_validated_url | URL for Validated Content | false | <https://console.redhat.com/api/automation-hub/content/validated/> | This refers to the automation hub section on [https://console.redhat.com](https://console.redhat.com). It is the endpoint that is used to download Validated Content in addition to any public Galaxy content needed |
-| automation_hub_token_vault| Subscriber-specific token for Content | true | |
+| automation_hub_token_vault| Subscriber-specific token for Content | true | <https://console.redhat.com/ansible/automation-hub/token> |
 | automation_hub | Flag to build and enable Automation Hub | false | false | | Building a Private Automation Hub is necessary if your pattern builds an Execution Environment that is not hosted on a public container registry. |
 | eda | Flag to build and enable Event Driven Automation controller | false | true | | |
 | agof_controller_config_dir | Directory to pass to controller_configuration | false | | This directory is the key one to load all other AAP Controller configuration. The framework will populate it by checking out the `agof_iac_repo` version `agof_iac_repo_version` (default: `main`) |
@@ -243,13 +243,13 @@ Additional VM targets (such as IdM and Satellite) can be defined using the `ec2_
 
 ### 5.1. <a name='Pre-GitOpsSteps'></a>Pre-GitOps Steps
 
-#### 5.1.1. <a name='Pre-init'></a>[Pre-init](init_env/pre_init_env.yml) (mandatory)
+#### 5.1.1. <a name='Pre-init'></a>Pre-init (mandatory)
 
 Pre-initialization, for our purposes, refers to things that have to be installed on the installation workstation/provisioner node to set up the Ansible environment to deploy the rest of the pattern.
 
 ##### Build ansible.cfg
 
-Because ansible.cfg needs to be configured with the automation hub endpoint, we generate it from a template. The ansible.cfg includes endpoints for both public and Automation Hub galaxy servers and a vault password path (for `ansible-vault`). The template used is [here](init_env/templates/ansible.cfg.j2). The automation hub token is read from the vault and injected into the environment for the collection installation phase.
+Because ansible.cfg needs to be configured with the automation hub endpoint, we generate it from a template. The ansible.cfg includes endpoints for both public and Automation Hub galaxy servers and a vault password path (for `ansible-vault`). The template used is [here](pre_init/templates/ansible.cfg.j2). The automation hub token is read from the vault and injected into the environment for the collection installation phase.
 
 ##### Collection dependency install
 
