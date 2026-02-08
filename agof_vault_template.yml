@@ -17,7 +17,7 @@ redhat_password: 'Red Hat Subscription password, used to login to registry.redha
 
 admin_password: 'An admin password for AAP Controller and Automation Hub'
 
-# https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.4/html-single/red_hat_ansible_automation_platform_operations_guide/index#proc-create-subscription-allocation_obtain-manifest
+# https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/installing_on_openshift_container_platform/assembly-gateway-licensing-operator-copy
 manifest_content: "Content for a manifest file to entitle AAP Controller. See below for an example of how to point to a local file"
 #manifest_content: "{{ lookup('file', '~/Downloads/manifest_AVP_20230510T202608Z.zip') | b64encode }}"
 
