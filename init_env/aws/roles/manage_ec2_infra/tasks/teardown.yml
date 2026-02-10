@@ -24,14 +24,11 @@
     ec2_security_group: "{{ ec2_name_prefix }}-insecure_all"
   when: ec2_security_group is undefined
 
-- name: debug ec2_vpc_id
+- name: debug ec2 variables
   debug:
-    var: ec2_vpc_id
-  when: debug_teardown
-
-- name: debug ec2_security_group
-  debug:
-    var: ec2_security_group
+    msg:
+      - "ec2_vpc_id: {{ ec2_vpc_id | default('UNDEFINED') }}"
+      - "ec2_security_group: {{ ec2_security_group | default('UNDEFINED') }}"
   when: debug_teardown
 
 # retrieve instances for VPC 1
