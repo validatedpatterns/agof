@@ -7,8 +7,6 @@ aap_hostname: 'aap.{{ pattern_name }}.{{ pattern_dns_zone }}'
 
 api_prefix: api/controller/v2
 
-controller_state: present
-
 agof_configure_aap_debug: false
 aap_request_timeout: 90
 aap_configuration_async_dir: /tmp/.ansible_async
