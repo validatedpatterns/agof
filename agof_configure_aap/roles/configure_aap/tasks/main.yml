@@ -1,5 +1,5 @@
 ---
-- name: Debug
+- name: Show AAP hostname
   ansible.builtin.debug:
     msg:
       - "aap_hostname: {{ aap_hostname }}"
