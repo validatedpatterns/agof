@@ -87,10 +87,7 @@
   debug:
     var: whoami
 
-- name: save username of AWS user
+- name: save AWS user details
   set_fact:
     aws_user: '{{ whoami.arn.split("/")[-1] }}'
-
-- name: save account id of AWS user
-  set_fact:
     aws_account: '{{ whoami.account }}'
