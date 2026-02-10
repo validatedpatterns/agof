@@ -114,7 +114,6 @@
     kubeconfig: "{{ lookup('env', 'KUBECONFIG') }}"
     aap_entitled: false
     agof_controller_config_dir: "{{ '~/agofdir' | expanduser }}"
-    agof_statedir: "{{ '~/agof' | expanduser }}"
   tasks:
     - name: Retrieve API hostname for AAP
       kubernetes.core.k8s_info:
