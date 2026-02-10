@@ -12,13 +12,12 @@ class FilterModule(object):
             return enabled_activations
 
         for a in activations:
-            enabled = False
-            try:
-                a.get('enabled')
+            if 'enabled' in a:
+                enabled = bool(a['enabled'])
+            elif a.get('state', 'present') in ["present", "enabled"]:
                 enabled = True
-            except IndexError:
-                if a.get('state', 'present') in ["present", "enabled"]:
-                    enabled = True
+            else:
+                enabled = False
 
             if enabled:
                 enabled_activations.append(a.get('name'))
