@@ -1,6 +1,8 @@
 ---
 automation_hub: false
 
+ec2_name_prefix: "agof-vp-{{ (ansible_user_id | default('user'))[:5] }}"
+
 pattern_name: '{{ ec2_name_prefix }}'
 
 aap_hostname: 'aap.{{ pattern_name }}.{{ pattern_dns_zone }}'
