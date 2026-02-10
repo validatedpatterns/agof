@@ -15,7 +15,7 @@
   retries: 5
 
 - name: Create file for all AWS security group rules
-  template:
+  ansible.builtin.template:
     src: vpc_rules.j2
     dest: "{{pattern_state_rootdir}}/{{ec2_name_prefix}}/aws_rules.yml"
   delegate_to: localhost
@@ -92,7 +92,7 @@
   retries: 5
 
 - name: set variables for instance creation
-  set_fact:
+  ansible.builtin.set_fact:
     ec2_vpc_id: "{{ create_vpc.vpc.id }}"
     ec2_security_group: "{{ ec2_name_prefix }}-insecure_all"
     ec2_vpc_subnet_id: "{{ create_subnet.subnet.id }}"
