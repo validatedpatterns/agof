@@ -1,19 +1,19 @@
 ---
 - name: make sure we are running correct Ansible Version
-  assert:
+  ansible.builtin.assert:
     that:
       - ansible_version.major >= 2
       - ansible_version.minor >= 11
 
 - name: make sure dns_type is set to a correct value
-  assert:
+  ansible.builtin.assert:
     that:
       - dns_type is defined
       - dns_type in valid_dns_type
     msg: "dns_type must be defined and be one of: {{ valid_dns_type }}"
 
 - name: make sure we are not running with TESTPATTERN as the name so no overlap
-  assert:
+  ansible.builtin.assert:
     that:
       - ec2_name_prefix != "TESTPATTERN"
     msg:
@@ -21,7 +21,7 @@
       - "please set a unique name for your pattern"
 
 - name: make sure we are not using `ansible` as the password
-  assert:
+  ansible.builtin.assert:
     that:
       - admin_password != "ansible"
     msg:
@@ -35,7 +35,7 @@
   when: dns_type == "aws"
   block:
     - name: check for underscores in pattern name
-      fail:
+      ansible.builtin.fail:
         msg: "Amazon AWS does not allow underscores _ for s3 websites, please see https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html"
       when:
         - "'_' in ec2_name_prefix"
@@ -48,7 +48,7 @@
       register: test
 
     - name: make sure pattern_dns_zone is owned by your account
-      assert:
+      ansible.builtin.assert:
         that:
           - test.zone_id is not none
         msg:
@@ -62,7 +62,7 @@
   until: az_names is not failed
 
 - name: Remove any AZs in the aws_az_deny_list when defined
-  set_fact:
+  ansible.builtin.set_fact:
     availability_zones: >-
       {{ az_names.availability_zones | json_query(__filter_query) }}
   vars:
@@ -70,12 +70,12 @@
       [?!contains(`{{ (aws_az_deny_list | default([])) | to_json }}`, zone_name)]
 
 - name: Output AWS Availability Zones (AZs)
-  debug:
+  ansible.builtin.debug:
     var: availability_zones
     verbosity: 2
 
 - name: SET AZ ZONE TO FIRST AVAILABLE
-  set_fact:
+  ansible.builtin.set_fact:
     ec2_az: "{{ availability_zones[0].zone_name }}"
 
 - name: grab information about AWS user
@@ -84,10 +84,10 @@
   register: whoami
 
 - name: print whoami
-  debug:
+  ansible.builtin.debug:
     var: whoami
 
 - name: save AWS user details
-  set_fact:
+  ansible.builtin.set_fact:
     aws_user: '{{ whoami.arn.split("/")[-1] }}'
     aws_account: '{{ whoami.account }}'
