@@ -103,10 +103,6 @@
     region: "{{ ec2_region }}"
   register: create_key
 
-#- name: Debug create key
-#  ansible.builtin.debug:
-#    var: create_key
-
 - name: Save private key
   ansible.builtin.copy:
     content: "{{ create_key.key.private_key }}"
