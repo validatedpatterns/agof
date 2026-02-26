@@ -6,10 +6,14 @@
 - name: "Retrieve an access token"
   ansible.builtin.include_tasks: retrieve_composer_access_token.yml
 
+- name: "Set image file location"
+  ansible.builtin.set_fact:
+    image_file_location: "{{ image_file_directory }}/{{ image_definition_file }}"
+
 - name: "Create the build configuration from template"
   ansible.builtin.template:
     src: "template.request-base-image.json.j2"
-    dest: "{{ image_file_directory }}/{{ image_definition_file }}"
+    dest: "{{ image_file_location }}"
     mode: 0644
 
 - name: "Create the image from the configuration"
@@ -19,7 +23,7 @@
     headers:
       Authorization: "Bearer {{ access_token }}"
       Content-Type: "application/json"
-    body: "{{ lookup('ansible.builtin.file', '{{ image_file_directory }}/{{ image_definition_file }}') }}"
+    body: "{{ lookup('ansible.builtin.file', image_file_location) | from_json }}"
     body_format: json
     status_code: 201
     validate_certs: true
