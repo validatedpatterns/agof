@@ -57,7 +57,7 @@
     wait_timeout: "{{ 600 | int}}"
   register: result_ec2_destroy
   when:
-    - all_workshop_vpc_nodes.instances
+    - (all_workshop_vpc_nodes.instances | length) >= 1
     - not aws_cli_destroy_ec2|default(false)|bool
 
 - name: debug result_ec2_destroy
