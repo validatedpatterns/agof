@@ -8,8 +8,8 @@ admin_user: admin
 admin_password: "{{ admin_password }}"
 
 aap_username: admin
-aap_password: {{ admin_password }}
-aap_hostname: {{ ansible_host }}
+aap_password: "{{ admin_password }}"
+aap_hostname: "{{ ansible_host }}"
 aap_validate_certs: false
 
 agof_iac_repo: "{{ agof_iac_repo }}"

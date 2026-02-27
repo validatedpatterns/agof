@@ -10,7 +10,6 @@ ansible_cfg_log_path: '~/lab_builder_ansible.log'
 ansible_cfg_collections_path: '~/.ansible/collections/ansible_collections:/usr/share/ansible/collections/ansible_collections'
 ansible_cfg_patch_collection_dir: '~/.ansible/collections/ansible_collections'
 
-automation_hub_url: '{{ automation_hub_url_vault }}'
 automation_hub_token: '{{ automation_hub_token_vault }}'
 
 init_env_collection_install: true

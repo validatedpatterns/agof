@@ -145,17 +145,12 @@
       ansible.builtin.set_fact:
         admin_password: "{{ admin_pw.resources[0].data.password | b64decode }}"
 
-    - name: Report AAP Endpoint
+    - name: Report AAP connection details
       ansible.builtin.debug:
-        msg: "AAP Endpoint: https://{{ ansible_host }}"
-
-    - name: Report AAP User
-      ansible.builtin.debug:
-        msg: "AAP Admin User: admin"
-
-    - name: Report AAP Admin Password
-      ansible.builtin.debug:
-        msg: "AAP Admin Password: {{ admin_password }}"
+        msg:
+          - "AAP Endpoint: https://{{ ansible_host }}"
+          - "AAP Admin User: admin"
+          - "AAP Admin Password: {{ admin_password }}"
 
     - name: Check on current API status
       ansible.builtin.uri:
