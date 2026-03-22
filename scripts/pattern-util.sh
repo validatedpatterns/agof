@@ -8,7 +8,9 @@ function version {
     echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'
 }
 
-if [ -z "$PATTERN_UTILITY_CONTAINER" ]; then
+if [ -n "$AGOF_COLLECTIONS_CONTAINER" ]; then
+	PATTERN_UTILITY_CONTAINER="$AGOF_COLLECTIONS_CONTAINER"
+elif [ -z "$PATTERN_UTILITY_CONTAINER" ]; then
 	PATTERN_UTILITY_CONTAINER="quay.io/validatedpatterns/utility-container:v1.0.2"
 fi
 # If PATTERN_DISCONNECTED_HOME is set it will be used to populate both PATTERN_UTILITY_CONTAINER

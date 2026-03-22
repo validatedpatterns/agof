@@ -23,32 +23,21 @@
       when:
         - offline_token is defined
 
-    - name: Check if automation_hub_token is older than 30 days
-      ansible.builtin.import_tasks: jwt_check.yml
-      vars:
-        local_token_name: "automation_hub_token"
-        local_token: "{{ automation_hub_token }}"
-      failed_when: false
-      when:
-        - automation_hub_token is defined
-
-    - name: "Install collections for ansible environment {{ 'forcefully' if init_env_collection_install_force }}"
-      when: init_env_collection_install
+    - name: "Verify pre-built collections are available"
       block:
-        - name: "Install local patched files"
-          ansible.builtin.command:
-            cmd: "ansible-galaxy collection install {{ '--force' if init_env_collection_install_force }} -p '{{ ansible_cfg_patch_collection_dir }}' '{{ item }}'"
-            chdir: ".."
-          loop: '{{ special_collection_installs }}'
+        - name: "Check that pre-built collections directory exists"
+          ansible.builtin.stat:
+            path: "/usr/share/ansible/collections/ansible_collections"
+          register: prebuilt_collections_dir
 
-        - name: "Install requirements file based collections {{ 'forcefully' if init_env_collection_install_force }}"
-          ansible.builtin.command:
-            cmd: |-
-              ansible-galaxy collection install {{ '--force' if init_env_collection_install_force }} -p '{{ ansible_cfg_patch_collection_dir }}' -r requirements.yml
-            chdir: ".."
-          environment:
-            ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_CERTIFIED_TOKEN: "{{ automation_hub_token }}"
-            ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_VALIDATED_TOKEN: "{{ automation_hub_token }}"
+        - name: "Assert pre-built collections are present"
+          ansible.builtin.assert:
+            that:
+              - prebuilt_collections_dir.stat.exists
+              - prebuilt_collections_dir.stat.isdir
+            fail_msg: >
+              Pre-built collections not found at /usr/share/ansible/collections/ansible_collections.
+              Are you running inside the agof-collections container?
 
     - name: "Assert that we have a valid target platform"
       ansible.builtin.assert:

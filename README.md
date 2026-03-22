@@ -17,6 +17,7 @@
 	* 4.3. [Automation Hub Specific Configuration](#AutomationHubSpecificConfiguration)
 	* 4.4. [AWS-Specific Configuration](#AWS-SpecificConfiguration)
 	* 4.5. [ImageBuilder-Specific Configuration](#ImageBuilder-SpecificConfiguration)
+* 6. [Pre-built Collections Container](#PrebuiltCollectionsContainer)
 * 5. [What the Framework Does, Step-by-Step](#WhattheFrameworkDoesStep-by-Step)
 	* 5.1. [Pre-GitOps Steps](#Pre-GitOpsSteps)
 		* 5.1.1. [[Pre-init](init_env/pre_init_env.yml) (mandatory)](#Pre-initinit_envpre_init_env.ymlmandatory)
@@ -172,9 +173,6 @@ The variables to include builds for the extra components are all Ansible boolean
 | redhat_registry_username_vault  | Red Hat Subscriber Username    | true    |           |  |
 | redhat_registry_password_vault  | Red Hat Subscriber Password    | true    |           |  |
 | manifest_content          | Base64 encoded Manifest to Entitle   | true    |           | Can be loaded directly from a file using a construct like this: `"{{ lookup('file', '~/Downloads/manifest.zip') | b64encode }}"` |
-| automation_hub_certified_url | URL for Certified Content  | false    | <https://console.redhat.com/api/automation-hub/content/published/>   | This refers to the automation hub section on [https://console.redhat.com](https://console.redhat.com).  It is the endpoint that is used to download Validated Content in addition to any public Galaxy content needed |
-| automation_hub_validated_url | URL for Validated Content  | false    | <https://console.redhat.com/api/automation-hub/content/validated/> | This refers to the automation hub section on [https://console.redhat.com](https://console.redhat.com).  It is the endpoint that is used to download Certified Content in addition to any public Galaxy content needed |
-| automation_hub_token_vault| Subscriber-specific token for Content | true    |                    |
 | automation_hub            | Flag to build and enable Automation Hub | false     | false |  | Building a Private Automation Hub is necessary if your pattern builds an Execution Environment that is not hosted on a public container registry. |
 | eda            | Flag to build and enable Event Driven Automation controller | false     | true |  |  |
 | agof_controller_config_dir    | Directory to pass to controller_configuration | false  |  | This directory is the key one to load all other AAP Controller configuration. The framework will populate it by checking out the `agof_iac_repo` version `agof_iac_repo_version` (default: `main`) |
@@ -184,9 +182,6 @@ The variables to include builds for the extra components are all Ansible boolean
 
 | Name                      | Description                          | Required | Default  | Notes |
 | ------------------------- | ------------------------------------ | -------- | -------- | ------------------ |
-| init_env_collection_install | Whether to install collections required by the framework | false | true |  |
-| init_env_collection_install_force | Whether to use the `force` argument when installing collections | false | false | Forces the installation of declared dependencies if true |
-| special_collection_installs | "Bundled" collection installations (references files in repodir) | false | `[]` | A mechanism to allow the installation of collections bundled into the pattern, if the ones published in galaxy and/or Automation Hub are not sufficient |
 | offline_token             | Red Hat Offline Token                | false    |          | Used to build the imagebuilder image |
 
 ###  4.3. <a name='AutomationHubSpecificConfiguration'></a>Automation Hub Specific Configuration
@@ -233,11 +228,11 @@ Pre-initialization, for our purposes, refers to things that have to be installed
 
 ##### Build ansible.cfg
 
-Because ansible.cfg needs to be configured with the automation hub endpooint, we generate it from a template. The ansible.cfg includes endpoints for both public and Automation Hub galaxy servers and a vault password path (for `ansible-vault`). The template used is [here](init_env/templates/ansible.cfg.j2). The automation hub token is read from the vault and injected into the environment for the collection installation phase.
+The ansible.cfg is generated from a template to configure collection paths and other Ansible settings. The template used is [here](init_env/templates/ansible.cfg.j2).
 
-##### Collection dependency install
+##### Pre-built collections
 
-The next thing the pre-init play does is install dependency collections based on what's contained in [requirements.yml](requirements.yml). If there are any "special" collections contained in the root of the framework they can also be installed at this time. When the framework was under development this was necessary with redhat.satellite but the necessary changes have been upstreamed as of 3.11; 3.12 has been released since then, so this mechanism is no longer needed but is left in as it might be necessary in the future.
+Ansible collections required by the framework are pre-installed in the `agof-collections` container image (see [Pre-built Collections Container](#PrebuiltCollectionsContainer)). The pre-init play verifies that the collections are available at `/usr/share/ansible/collections/ansible_collections`. This eliminates the need for Automation Hub tokens at runtime.
 
 ####  5.1.2. <a name='EnvironmentInitializationinit_envmain.ymloptionalenabledbydefaultmakeinstallentrypoint'></a>[Environment Initialization](init_env/main.yml) (optional; enabled by default; `make install` entry point)
 
@@ -347,7 +342,34 @@ Meanwhile, the helm values that have been passed into the aap-config application
 
 The framework is only truly in GitOps mode once the configuration has been fully applied to the AAP controller and the AAP controller has taken responsibility for managing the environment. Prior to that point, there are many opportunities (by design) to inject non-declarative elements into the environment. Beyond that point, changes should be made to the environment or the workflows that configure it by pushing git commits to the repositories the pattern uses.
 
-##  6. <a name='Acknowledgements'></a>Acknowledgements
+##  6. <a name='PrebuiltCollectionsContainer'></a>Pre-built Collections Container
+
+All required Ansible collections (listed in [requirements.yml](requirements.yml)) are shipped pre-installed in the `agof-collections` container image. This eliminates the need for Automation Hub tokens at runtime.
+
+### Using the Container
+
+Set the `AGOF_COLLECTIONS_CONTAINER` environment variable to use the pre-built image:
+
+```shell
+export AGOF_COLLECTIONS_CONTAINER=quay.io/validatedpatterns/agof-collections:latest
+```
+
+### Building the Container (for maintainers)
+
+Requires a valid Automation Hub token:
+
+```shell
+export AUTOMATION_HUB_TOKEN="your-token-here"
+make build-collections-image
+```
+
+To build and push to the registry:
+
+```shell
+AUTOMATION_HUB_TOKEN="your-token" collections-container/build.sh latest --push
+```
+
+##  7. <a name='Acknowledgements'></a>Acknowledgements
 
 This repository represents an interpretation of GitOps principles, as developed in the Hybrid Cloud Patterns GitOps framework for Kubernetes, and an adaptation and fusion of two previous ongoing efforts at Red Hat: [Ansible-Workshops](https://github.com/ansible/workshops) and [LabBuilder2/RHISbuilder](https://github.com/parmstro/labbuilder2).
 

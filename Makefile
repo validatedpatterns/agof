@@ -6,7 +6,10 @@ help: ## This help message
 	@echo "Pattern: $(NAME)"
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^(\s|[a-zA-Z_0-9-])+:.*?##/ { printf "  \033[36m%-35s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-preinit: ## Setup ansible environemnt - configure ansible.cfg and download collections
+build-collections-image: ## Build the pre-built collections container image
+	collections-container/build.sh
+
+preinit: ## Setup ansible environment - configure ansible.cfg and verify pre-built collections
 	ansible-playbook pre_init/main.yml $(EXTRA_PLAYBOOK_OPTS)
 
 fix_aws_dns: ## Update public DNS for AWS - needed when a VM cold starts

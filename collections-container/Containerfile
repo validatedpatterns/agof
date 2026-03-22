@@ -1,0 +1,22 @@
+# Stage 1: Install collections (this stage is discarded — token never in final image)
+FROM quay.io/validatedpatterns/utility-container:v1.0.2 AS builder
+
+ARG AUTOMATION_HUB_TOKEN
+
+COPY requirements.yml /tmp/requirements.yml
+COPY collections-container/ansible.cfg.build /etc/ansible/ansible.cfg
+
+ENV ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_CERTIFIED_TOKEN=${AUTOMATION_HUB_TOKEN}
+ENV ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_VALIDATED_TOKEN=${AUTOMATION_HUB_TOKEN}
+
+RUN ansible-galaxy collection install \
+    -p /usr/share/ansible/collections \
+    -r /tmp/requirements.yml
+
+# Stage 2: Clean image with only the collections
+FROM quay.io/validatedpatterns/utility-container:v1.0.2
+
+LABEL maintainer="Validated Patterns Team"
+LABEL description="AGOF utility container with pre-installed Ansible collections"
+
+COPY --from=builder /usr/share/ansible/collections /usr/share/ansible/collections
