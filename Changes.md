@@ -12,3 +12,8 @@
 * Depend on infra.aap_utilities to handle some installation related work
 * Add mechanism to disable eda_rulebook_activations prior to configuring them to prevent crash of aap configuration
   playbook while trying to manage running rulebook activations
+
+## Update to v2 (April 22026)
+
+* Note that AGOFv2 Also support AAP 2.6
+* Add a parameter to the openshift pre-init playbook to allow skipping the local vault load.

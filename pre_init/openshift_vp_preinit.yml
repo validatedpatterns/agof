@@ -7,6 +7,7 @@
   gather_facts: false
   vars:
     kubeconfig: "{{ lookup('env', 'KUBECONFIG') }}"
+    do_auto_hub_vault_config: true
   tasks:
     - name: Retrieve IAC Repo Details
       kubernetes.core.k8s_info:
@@ -24,6 +25,11 @@
         agof_iac_repo: "{{ helm_cm_values['agof']['iac_repo'] }}"
         agof_iac_repo_version: "{{ helm_cm_values['agof']['iac_revision'] }}"
         helm_values: "{{ helm_cm_values }}"
+
+    - name: Determine whether to do Hub Vault Config magic
+      ansible.builtin.set_fact:
+        do_auto_hub_vault_config: "{{ helm_values.agof.doAutoHubVaultConfig }}"
+      when: helm_values.agof.doAutoHubVaultConfig is defined
 
     - name: Show agof iac repo details
       ansible.builtin.debug:
@@ -75,35 +81,44 @@
         dest: "{{ manifest_file_ref }}"
         mode: "0644"
 
-    - name: Parse out vault configmap data
-      kubernetes.core.k8s_info:
-        kind: ConfigMap
-        namespace: vault
-        name: openshift-service-ca.crt
-      register: vault_ca_cm
+    - name: Do local Vault Hub Secret Extraction magic
+      when: do_auto_hub_vault_config
+      block:
+        - name: Parse out vault configmap data
+          kubernetes.core.k8s_info:
+            kind: ConfigMap
+            namespace: vault
+            name: openshift-service-ca.crt
+          register: vault_ca_cm
 
-    - name: Retrieve CA field
-      ansible.builtin.set_fact:
-        vault_ca: "{{ vault_ca_cm.resources[0].data['service-ca.crt'] }}"
+        - name: Retrieve CA field
+          ansible.builtin.set_fact:
+            vault_ca: "{{ vault_ca_cm.resources[0].data['service-ca.crt'] }}"
 
-    - name: Retrieve config details about vault
-      kubernetes.core.k8s_info:
-        name: vaultkeys
-        namespace: imperative
-        kind: Secret
-      register: vault_secret
+        - name: Retrieve config details about vault
+          kubernetes.core.k8s_info:
+            name: vaultkeys
+            namespace: imperative
+            kind: Secret
+          register: vault_secret
 
-    - name: Parse out vault secret data
-      ansible.builtin.set_fact:
-        vault_data: "{{ vault_secret.resources[0].data.vault_data_json | b64decode | from_json }}"
+        - name: Parse out vault secret data
+          ansible.builtin.set_fact:
+            vault_data: "{{ vault_secret.resources[0].data.vault_data_json | b64decode | from_json }}"
 
-    - name: Set secrets for use in load AAP playbook
-      ansible.builtin.set_fact:
-        secrets:
-          manifest_file_ref: "{{ manifest_file_ref }}"
-          vault_ca: "{{ vault_ca }}"
-          vault_root_token: "{{ vault_data.root_token  }}"
-          vault_url: https://vault.vault.svc:8200
+        - name: Set Vault-enriched secrets for use in load AAP playbook
+          ansible.builtin.set_fact:
+            secrets:
+              manifest_file_ref: "{{ manifest_file_ref }}"
+              vault_ca: "{{ vault_ca }}"
+              vault_root_token: "{{ vault_data.root_token  }}"
+              vault_url: https://vault.vault.svc:8200
+
+      - name: Set secret for use in load AAP playbook
+        ansible.builtin.set_fact:
+          secrets:
+            manifest_file_ref: "{{ manifest_file_ref }}"
+        when: do_auto_hub_vault_config is false
 
 - name: Retrieve Credentials for AAP on OpenShift and write needed override files
   become: false
