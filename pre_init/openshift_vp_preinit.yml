@@ -114,11 +114,11 @@
               vault_root_token: "{{ vault_data.root_token  }}"
               vault_url: https://vault.vault.svc:8200
 
-      - name: Set secret for use in load AAP playbook
-        ansible.builtin.set_fact:
-          secrets:
-            manifest_file_ref: "{{ manifest_file_ref }}"
-        when: do_auto_hub_vault_config is false
+    - name: Set secret for use in load AAP playbook
+      ansible.builtin.set_fact:
+        secrets:
+          manifest_file_ref: "{{ manifest_file_ref }}"
+      when: do_auto_hub_vault_config is false
 
 - name: Retrieve Credentials for AAP on OpenShift and write needed override files
   become: false
