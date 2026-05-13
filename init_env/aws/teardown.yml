@@ -12,11 +12,11 @@
     - name: collection final check
       block:
         - name: run AWS check setup if using AWS
-          include_role:
+          ansible.builtin.include_role:
             name: roles/aws_check_setup
       rescue:
         - name: Error with setup
-          fail:
+          ansible.builtin.fail:
             msg: The provisioner has failed during initial check_setup, please scroll up to see exact error.  Open an issue on https://github.com/validatedpatterns/agof/issues
 
 - name: "Get info on the elements built"
@@ -74,6 +74,6 @@
       loop: "{{ built_instances }}"
 
     - name: Remove pattern local files
-      file:
+      ansible.builtin.file:
         dest: "{{ pattern_state_rootdir }}/{{ ec2_name_prefix }}"
         state: absent

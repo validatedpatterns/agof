@@ -1,10 +1,10 @@
 ---
 - name: ensure workshop folder {{ ec2_name_prefix }} exists
-  file:
+  ansible.builtin.file:
     path: "{{ pattern_state_rootdir }}/{{ ec2_name_prefix }}"
     state: directory
 
 ## These AWS resources are used for every workshop type
 ## This includes VPC, subnet, Security Group, Internet Gateway and route table
 - name: provision aws resources
-  include_tasks: resources/resources.yml
+  ansible.builtin.include_tasks: resources/resources.yml

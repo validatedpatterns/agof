@@ -8,12 +8,9 @@
       ansible.builtin.debug:
         var: eda_rulebook_activations
 
-    - name: Default set of rulebook activations to stop to empty
+    - name: Initialize activation tracking variables
       ansible.builtin.set_fact:
         rulebook_activations_to_disable: []
-
-    - name: Determine whether we have any enabled activations due to configure
-      ansible.builtin.set_fact:
         enabled_activation_names: "{{ eda_rulebook_activations | activations_to_enable | list }}"
 
     - name: Retrieve existing rulebook activation configs
