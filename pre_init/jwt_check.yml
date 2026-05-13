@@ -69,5 +69,6 @@
     msg: >
       "The {{ local_token_name }} token was generated more than 30 days ago {{ '%Y-%m-%d %H:%M' | strftime(jwt_iat) }}, "
       "you should renew your token. We're continuing, but chances are there might be issues with the token."
+      "You can renew your offline RHSM token at: https://access.redhat.com/management/api"
   when: (iat_after_duration | int < ansible_date_time['epoch'] | int)
   ignore_errors: true
