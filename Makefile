@@ -6,6 +6,9 @@ help: ## This help message
 	@echo "Pattern: $(NAME)"
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^(\s|[a-zA-Z_0-9-])+:.*?##/ { printf "  \033[36m%-35s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
+check: ## Validate that all required variables are set and provide guidance for missing ones
+	ANSIBLE_CALLBACK_RESULT_FORMAT=yaml ansible-playbook check_vars.yml $(EXTRA_PLAYBOOK_OPTS)
+
 preinit: ## Setup ansible environemnt - configure ansible.cfg and download collections
 	ansible-playbook pre_init/main.yml $(EXTRA_PLAYBOOK_OPTS)
 

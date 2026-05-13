@@ -1,0 +1,221 @@
+---
+- name: "Validate required variables for AGOF"
+  hosts: localhost
+  connection: local
+  become: false
+  gather_facts: false
+  vars_files:
+    - "vars/main.yml"
+    - "~/agof_vault.yml"
+  vars:
+    # Track all errors so we can report them all at once
+    _validation_errors: []
+    _validation_warnings: []
+
+    # ---- AWS-specific variables (warning only, not required for non-AWS deploys) ----
+    _aws_vars:
+      - name: aws_access_key_vault
+        description: "AWS access key"
+        hint: "Set in ~/agof_vault.yml. Get it from the AWS IAM console: https://console.aws.amazon.com/iam/ -> Users -> Security credentials -> Access keys"
+
+      - name: aws_secret_key_vault
+        description: "AWS secret key"
+        hint: "Set in ~/agof_vault.yml. Get it from the AWS IAM console (shown only at access key creation time)"
+
+      - name: aws_account_nbr_vault
+        description: "AWS account number"
+        hint: "Set in ~/agof_vault.yml. Find it in the AWS console top-right menu, or run: aws sts get-caller-identity"
+
+      - name: ec2_name_prefix
+        description: "Unique prefix for AWS resources (used as pattern name and in DNS entries)"
+        hint: "Set in ~/agof_vault.yml. Choose a unique short name (no underscores). See agof_vault_template.yml for reference"
+
+      - name: ec2_region
+        description: "AWS region (e.g. us-east-1)"
+        hint: "Set in ~/agof_vault.yml. Pick a region your account has access to. See agof_vault_template.yml for reference"
+
+      - name: pattern_prefix
+        description: "A name to distinguish this pattern from others on the same infrastructure"
+        hint: "Set in ~/agof_vault.yml. See agof_vault_template.yml for reference"
+
+      - name: pattern_dns_zone
+        description: "A public DNS zone managed by AWS Route53"
+        hint: "Set in ~/agof_vault.yml. Must be a Route53 hosted zone in your AWS account"
+
+    # ---- Required variables (~/agof_vault.yml) ----
+    _vault_vars:
+      - name: offline_token
+        description: "Red Hat offline token (used for RHEL image builds on console.redhat.com)"
+        hint: "Set in ~/agof_vault.yml. Generate at https://access.redhat.com/management/api"
+
+      - name: redhat_username
+        description: "Red Hat Subscription username (used to login to registry.redhat.io)"
+        hint: "Set in ~/agof_vault.yml. This is your Red Hat Customer Portal login"
+
+      - name: redhat_password
+        description: "Red Hat Subscription password (used to login to registry.redhat.io)"
+        hint: "Set in ~/agof_vault.yml. This is your Red Hat Customer Portal password"
+
+      - name: admin_password
+        description: "Admin password for AAP Controller, Hub, and EDA"
+        hint: "Set in ~/agof_vault.yml. Choose a strong password (cannot be 'ansible')"
+
+      - name: manifest_content
+        description: "Base64-encoded manifest file to entitle AAP Controller"
+        hint: !unsafe >-
+          Set in ~/agof_vault.yml. Download a manifest from
+          https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/installing_on_openshift_container_platform/assembly-gateway-licensing-operator-copy#assembly-aap-obtain-manifest-files
+          Then set: manifest_content: "{{ lookup('file', '~/path/to/manifest.zip') | b64encode }}"
+
+      - name: org_number_vault
+        description: "Red Hat Organization Number for RHEL subscription"
+        hint: "Set in ~/agof_vault.yml. Find it at https://access.redhat.com/management -> Overview (top-left)"
+
+      - name: activation_key_vault
+        description: "Activation Key name for the imagebuilder RHEL image"
+        hint: "Set in ~/agof_vault.yml. Create one at https://access.redhat.com/management/activation_keys"
+
+      - name: automation_hub_token_vault
+        description: "Token for retrieving Ansible Automation Hub content"
+        hint: "Set in ~/agof_vault.yml. Get it from https://console.redhat.com/ansible/automation-hub/token"
+
+  tasks:
+    - name: "Check that vault file exists"
+      ansible.builtin.stat:
+        path: "~/agof_vault.yml"
+      register: _vault_file
+
+    - name: "Fail early if vault file is missing"
+      ansible.builtin.fail:
+        msg: |-
+          ========================================================
+          ERROR: ~/agof_vault.yml not found
+          ========================================================
+
+          The vault file is required for AGOF configuration.
+
+          To get started:
+            1. Copy the template:
+               cp agof_vault_template.yml ~/agof_vault.yml
+            2. Edit ~/agof_vault.yml and fill in your values
+            3. (Optional) Encrypt it:
+               ansible-vault encrypt ~/agof_vault.yml
+
+          See agof_vault_template.yml for descriptions of each variable.
+          ========================================================
+      when: not _vault_file.stat.exists
+
+    # ---- Check AWS-specific variables (warn only) ----
+    - name: "Check AWS-specific variables"
+      ansible.builtin.set_fact:
+        _validation_warnings: >-
+          {{ _validation_warnings + [
+            {
+              'variable': item.name,
+              'description': item.description,
+              'hint': item.hint
+            }
+          ] }}
+      when: >-
+        lookup('vars', item.name, default='') | length == 0
+      loop: "{{ _aws_vars }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "Report AWS warnings"
+      ansible.builtin.debug:
+        msg: |-
+          WARNING: {{ item.variable }} is not set.
+          {{ item.description }}
+          -> {{ item.hint }}
+          (Only required for AWS deployments)
+      loop: "{{ _validation_warnings }}"
+      loop_control:
+        label: "{{ item.variable }}"
+      when: _validation_warnings | length > 0
+
+    # ---- Check required variables ----
+    - name: "Validate required variables"
+      ansible.builtin.set_fact:
+        _validation_errors: >-
+          {{ _validation_errors + [
+            {
+              'variable': item.name,
+              'description': item.description,
+              'hint': item.hint
+            }
+          ] }}
+      when: >-
+        lookup('vars', item.name, default='') | length == 0
+      loop: "{{ _vault_vars }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    # ---- Value-specific checks (only if the variable is defined) ----
+    - name: "Check ec2_name_prefix is not TESTPATTERN"
+      ansible.builtin.debug:
+        msg: |-
+          WARNING: ec2_name_prefix is set to 'TESTPATTERN'.
+          Set a unique name for your pattern in ~/agof_vault.yml.
+          (Only required for AWS deployments)
+      when:
+        - ec2_name_prefix is defined
+        - ec2_name_prefix == "TESTPATTERN"
+
+    - name: "Check ec2_name_prefix has no underscores"
+      ansible.builtin.debug:
+        msg: |-
+          WARNING: ec2_name_prefix contains underscores.
+          Amazon AWS does not allow underscores for S3 websites.
+          -> See https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html
+          (Only required for AWS deployments)
+      when:
+        - ec2_name_prefix is defined
+        - "'_' in ec2_name_prefix"
+
+    - name: "Check admin_password is not 'ansible'"
+      ansible.builtin.set_fact:
+        _validation_errors: >-
+          {{ _validation_errors + [
+            {
+              'variable': 'admin_password',
+              'description': 'admin_password cannot be set to "ansible"',
+              'hint': 'Choose a stronger password in ~/agof_vault.yml'
+            }
+          ] }}
+      when:
+        - admin_password is defined
+        - admin_password == "ansible"
+
+    # ---- Report results ----
+    - name: "All variables validated successfully"
+      ansible.builtin.debug:
+        msg: |-
+          ========================================================
+          All required variables are present and valid.
+          {% if _validation_warnings | length > 0 %}
+          ({{ _validation_warnings | length }} AWS-specific warning(s) above)
+          {% endif %}
+          ========================================================
+      when: _validation_errors | length == 0
+
+    - name: "Report missing or invalid variables"
+      ansible.builtin.fail:
+        msg: |-
+          ========================================================
+          AGOF VARIABLE VALIDATION FAILED
+          ========================================================
+
+          Found {{ _validation_errors | length }} issue(s):
+
+          {% for err in _validation_errors %}
+          {{ loop.index }}. {{ err.variable }}
+             {{ err.description }}
+             -> {{ err.hint }}
+
+          {% endfor %}
+          ========================================================
+          Template file: agof_vault_template.yml
+          Vault file:    ~/agof_vault.yml
+          ========================================================
+      when: _validation_errors | length > 0
