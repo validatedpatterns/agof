@@ -69,10 +69,9 @@ Automation Hub and EDA are enabled by default, but they can be turned off if des
 By default, the framework will apply license content specified by the `manifest_content` variable (see [obtaining a manifest file](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/installing_on_openshift_container_platform/assembly-gateway-licensing-operator-copy#assembly-aap-obtain-manifest-files)), but will not further configure Controller or Automation Hub beyond the defaults.
 
 From there, a minimal example pattern is available to download and run [here](https://github.com/validatedpatterns-demos/agof_minimal_config.git). To use this example, set the following variables in your `agof_vault.yml`.
-`agof_statedir` is where the config repo will be checked out by the process. Any repo that can be used with the controller_configuration collection can be used as the `agof_iac_repo`.
+Any repo that can be used with the controller_configuration collection can be used as the `agof_iac_repo`.
 
 ```yaml
-agof_statedir: "{{ '~/agof' | expanduser }}"
 agof_iac_repo: "https://github.com/validatedpatterns-demos/agof_minimal_config.git"
 ```
 
