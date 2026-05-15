@@ -20,9 +20,9 @@
       vars:
         aap_setup_down_offline_token: "{{ offline_token }}"
         aap_setup_down_version: "{{ containerized_installer_version }}"
-        aap_setup_down_type: containerized-setup
-        aap_setup_down_dest_dir: "{{ containerized_installer_user_home }}"
+        aap_setup_down_type: setup
         aap_setup_containerized: true
+        aap_setup_down_dest_dir: "{{ containerized_installer_user_home }}"
 
     - name: Extract containerized installer
       ansible.builtin.unarchive:
