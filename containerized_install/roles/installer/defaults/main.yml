@@ -7,7 +7,7 @@ containerized_installer_user_home: '/home/{{ containerized_installer_user }}'
 
 containerized_installer_cleanup: true
 
-containerized_installer_version: "2.5"
+containerized_installer_version: "2.6"
 containerized_installer_dest_dir: "{{ containerized_installer_user_home }}"
 
 controller_fqdn: "{{ ansible_facts.fqdn }}"

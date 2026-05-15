@@ -58,7 +58,7 @@ The thinking behind this effort is documented in the [Ansible Pattern Theory](ht
 
 ## 2. <a name='HowtoUseIt'></a>How to Use It
 
-The default installation will provide an AAP 2.5 installation deployed via the Containerized Installer, with the following services available on the AAP node (where `aapnode.fqdn` is the fully qualified domain name of your AAP host):
+The default installation will provide an AAP 2.6 installation deployed via the Containerized Installer, with the following services available on the AAP node (where `aapnode.fqdn` is the fully qualified domain name of your AAP host):
 
 | URL Pattern | Service |
 |-------------|---------|
@@ -81,7 +81,7 @@ agof_iac_repo: "https://github.com/validatedpatterns-demos/agof_minimal_config.g
 ./pattern.sh make install
 ```
 
-This builds the default pattern configuration on AWS, which (by default) includes a containerized install of AAP 2.5 on a single AWS VM. Various add-ons can be included by adding variables to the `~/agof_vault.yml` file as described below - these options will all be honored as the pattern installs itself.
+This builds the default pattern configuration on AWS, which (by default) includes a containerized install of AAP 2.6 on a single AWS VM. Various add-ons can be included by adding variables to the `~/agof_vault.yml` file as described below - these options will all be honored as the pattern installs itself.
 
 ### 2.2. <a name='Uninstallation'></a>Uninstallation
 
@@ -286,7 +286,7 @@ The teardown play will terminate all VMs associated with a VPC and subnet, and r
 | ------------------------- | ------------------------------------ | -------- | ------------------ | ------- |
 | containerized_installer_user | Unprivileged user to create to run AAP | true | `aap` | |
 | containerized_installer_user_home | Directory to install containerized AAP into | true | `/home/{{ containerized_installer_user }}` | |
-| containerized_installer_version | Minor version of AAP to install | false | "2.5" | |
+| containerized_installer_version | Minor version of AAP to install | false | "2.6" | |
 | automation_hub | Boolean to indicate whether to install automation_hub | true | true | |
 | postgresql_admin_username | Name of postgres admin for services | true | `postgres` | |
 | postgresql_admin_password | Password for the postgres user for services | true | `{{ db_password }}` | |
