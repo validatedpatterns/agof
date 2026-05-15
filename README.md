@@ -58,7 +58,7 @@ The thinking behind this effort is documented in the [Ansible Pattern Theory](ht
 
 ## 2. <a name='HowtoUseIt'></a>How to Use It
 
-The default installation will provide an AAP 2.5 installation deployed via the Containerized Installer, with the following services available on the AAP node (where `aapnode.fqdn` is the fully qualified domain name of your AAP host):
+The default installation will provide an AAP 2.6 installation deployed via the Containerized Installer, with the following services available on the AAP node (where `aapnode.fqdn` is the fully qualified domain name of your AAP host):
 
 | URL Pattern | Service |
 |-------------|---------|
@@ -81,7 +81,7 @@ agof_iac_repo: "https://github.com/validatedpatterns-demos/agof_minimal_config.g
 ./pattern.sh make install
 ```
 
-This builds the default pattern configuration on AWS, which (by default) includes a containerized install of AAP 2.5 on a single AWS VM. Various add-ons can be included by adding variables to the `~/agof_vault.yml` file as described below - these options will all be honored as the pattern installs itself.
+This builds the default pattern configuration on AWS, which (by default) includes a containerized install of AAP 2.6 on a single AWS VM. Various add-ons can be included by adding variables to the `~/agof_vault.yml` file as described below - these options will all be honored as the pattern installs itself.
 
 ### 2.2. <a name='Uninstallation'></a>Uninstallation
 
