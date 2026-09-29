@@ -31,21 +31,34 @@
   tags:
     - always
 
-- name: Wait for Automation Controller to be up
+- name: Wait for Automation Controller to be up 1/2
   ansible.builtin.uri:
     url: "https://{{ aap_hostname }}/{{ api_prefix }}/ping/"
+    method: GET
+    validate_certs: false
+  register: _aap_ping
+  until: _aap_ping.json is defined and _aap_ping.json.version | length > 0
+  retries: 60
+  delay: 10
+
+- name: Wait for Automation Controller to be up 2/2
+  ansible.builtin.uri:
+    url: "https://{{ aap_hostname }}/{{ api_prefix }}/instances/"
     method: GET
     user: '{{ admin_user | default("admin") }}'
     password: "{{ admin_password }}"
     validate_certs: false
-  register: check2
-  until: check2.json is defined and check2.json.instances[0].capacity > 0 and check2.json.instance_groups[0].capacity > 0
+    force_basic_auth: true
+  register: _aap_instances
+  until: _aap_instances.json is defined and _aap_instances.json.results[0].capacity > 0 and _aap_instances.json.results[0].enabled == true
   retries: 60
   delay: 10
 
 - name: Display api ping results
   ansible.builtin.debug:
-    msg: '{{ check2.json }}'
+    msg:
+      ping: "{{ _aap_ping.json }}"
+      aap_instances: "{{ _aap_instances.json }}"
 
 - name: Default to entitlement
   ansible.builtin.set_fact:
